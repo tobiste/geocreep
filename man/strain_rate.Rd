@@ -31,10 +31,7 @@ strain_rate(
 \item{model}{character. Flow law.}
 }
 \value{
-list. Strain rate in 1/s given as median of the Monte Carlo
-simulations \code{median}, mean (\code{mean}), standard error range (\code{sde}), 95\% and
-68\% interpercentile range (\code{ir_95} and \code{ir_68}), and the Monte Carlo
-simulation (\code{samples}).
+list. Strain rate in 1/s given as median of the Monte Carlo simulations \code{median}, mean (\code{mean}), standard error of \code{log(samples)} (\code{stderr_log}), the 95\% confidence interval of the mean (\code{conf.int}), and the Monte Carlo simulation (\code{samples})
 }
 \description{
 Calculates strain rate from stress, temperature, and grain size.

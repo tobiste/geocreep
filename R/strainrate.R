@@ -1,61 +1,63 @@
-flow_models <- function(){
+flow_models <- function() {
+  ci2sd <- 1 / 1.96  # convert 95% CI to SD
+
   list(
-  Kronenberg1984 = list(
-    H = min_max_std(120, 150), H_std = min_max_std(120, 150)[2], n = min_max_std(2.9, 3.2)[1], n_std = min_max_std(2.9, 3.2)[2], m = 0.18
-  ),
-  Paterson1990 = list(
-    A = 6.5e-8, H = 135, n = 3
-  ),
-  Luan1992 = list(
-    A = 4e-10, H = 152, H_std = 71, n = 4, n_std = 0.8
-  ),
-  Gleason2004 = list(
-    A = 1.1e-4, H = 223, H_std = 56, n = 4, n_std = 0.9
-  ),
-  Rutter2004 = list(
-    A = 1.2e-5, H = 242, H_std = 24, n = 2.97, n_std = 0.29, r = 1
-  ),
-  Fukuda2018 = list(
-    H = 129, H_std = 33, n = min_max_std(2.9, 5.2)[1], n_std = min_max_std(2.9, 5.2)[2], r = 1
-  ),
-  Fukuda2018_2 = list(
-    A = exp(-2.97), H = 183, H_std = 25, n = 1.7, n_std = 0.2, m = 0.51, m_std = 0.51, r = 1, r_std = 0.2
-  ),
-  Richter2018 = list(
-    A = 3.1e-4, H = min_max_std(168, 170)[1], H_std = min_max_std(168, 170)[2], n = 1.9, n_std = 0.6, m = 1.08
-  ),
-  Hirth2001 = list(
-    log_A = -11.2, log_A_std = 0.6, # prefactor in MPa^{-n} / s
-    H = 135, # Activation enthalpy in kJ/mol
-    H_std = 15,
-    n = 4, # stress exponent
-    r = 1 # water fugacity exponent
-  ),
-  Lu2019 = list(
-    A = 6e-15, H = 132, H_std = 5, V = 35.3, n = 4, r = 2.7
-  ),
-  Tokle2019 = list(
-    A = 8e-12, H = 140, H_std = 15, n = 4, n_std = 0.3, r = 1
-  ),
-  Tokle2019_2 = list(
-    A = 5.e-12, H = 105, H_std = 15, n = 2.7, n_std = 0.3, r = 1.1
-  ),
-  Lusk2021 = list( # "low-pressure" <560 MPa
-    log_A = -9.3, # MPa^(-n-r) s^-1
-    log_A_std = 0.66,
-    n = 3.5, n_std = 0.2,
-    r = 0.49, r_std = 0.13,
-    Q = 118, Q_std = 5, # kJ mol-1
-    V = 2.59, V_std = 2.45 # cm3 mol-1
-  ),
-  Lusk2021_HP = list( # “high-pressure” 700–1600 MPa
-    log_A = -7.90, log_A_std = 0.34, # MPa−n−r s−1;
-    n = 2.0, n_std = 0.1,
-    r = 0.49, r_std = 0.13,
-    Q = 77, Q_std = 8, # kJ mol−1;
-    V = 2.59, V_std = 2.45 # cm3 mol−1
+    Kronenberg1984 = list(
+      H = min_max_std(120, 150), H_std = min_max_std(120, 150)[2], n = min_max_std(2.9, 3.2)[1], n_std = min_max_std(2.9, 3.2)[2], m = 0.18
+    ),
+    Paterson1990 = list(
+      A = 6.5e-8, H = 135, n = 3
+    ),
+    Luan1992 = list(
+      A = 4e-10, H = 152, H_std = 71 * ci2sd, n = 4, n_std = 0.8 * ci2sd
+    ),
+    Gleason2004 = list(
+      A = 1.1e-4, H = 223, H_std = 56 * ci2sd, n = 4, n_std = 0.9 * ci2sd
+    ),
+    Rutter2004 = list(
+      A = 1.2e-5, H = 242, H_std = 24 * ci2sd, n = 2.97, n_std = 0.29 * ci2sd, r = 1
+    ),
+    Fukuda2018 = list(
+      H = 129, H_std = 33 * ci2sd, n = min_max_std(2.9, 5.2)[1], n_std = min_max_std(2.9, 5.2)[2], r = 1
+    ),
+    Fukuda2018_2 = list(
+      A = exp(-2.97), H = 183, H_std = 25 * ci2sd, n = 1.7, n_std = 0.2 * ci2sd, m = 0.51, m_std = 0.51 * ci2sd, r = 1, r_std = 0.2 * ci2sd
+    ),
+    Richter2018 = list(
+      A = 3.1e-4, H = min_max_std(168, 170)[1], H_std = min_max_std(168, 170)[2], n = 1.9, n_std = 0.6 * ci2sd, m = 1.08
+    ),
+    Hirth2001 = list(
+      log_A = -11.2, log_A_std = 0.6 * ci2sd, # prefactor in MPa^{-n} / s
+      H = 135, # Activation enthalpy in kJ/mol
+      H_std = 15 * ci2sd,
+      n = 4, # stress exponent
+      r = 1 # water fugacity exponent
+    ),
+    Lu2019 = list(
+      A = 6e-15, H = 132, H_std = 5 * ci2sd, V = 35.3, n = 4, r = 2.7
+    ),
+    Tokle2019 = list(
+      A = 8e-12, H = 140, H_std = 15 * ci2sd, n = 4, n_std = 0.3 * ci2sd, r = 1
+    ),
+    Tokle2019_2 = list(
+      A = 5.e-12, H = 105, H_std = 15 * ci2sd, n = 2.7, n_std = 0.3 * ci2sd, r = 1.1
+    ),
+    Lusk2021 = list( # "low-pressure" <560 MPa
+      log_A = -9.3, # MPa^(-n-r) s^-1
+      log_A_std = 0.66 * ci2sd,
+      n = 3.5, n_std = 0.2 * ci2sd,
+      r = 0.49, r_std = 0.13,
+      Q = 118, Q_std = 5 * ci2sd, # kJ mol-1
+      V = 2.59, V_std = 2.45 * ci2sd # cm3 mol-1
+    ),
+    Lusk2021_HP = list( # “high-pressure” 700–1600 MPa
+      log_A = -7.90, log_A_std = 0.34 * ci2sd, # MPa−n−r s−1;
+      n = 2.0, n_std = 0.1 * ci2sd,
+      r = 0.49, r_std = 0.13 * ci2sd,
+      Q = 77, Q_std = 8 * ci2sd, # kJ mol−1;
+      V = 2.59, V_std = 2.45 * ci2sd # cm3 mol−1
+    )
   )
-)
 }
 #' Strain rate
 #'
@@ -72,10 +74,7 @@ flow_models <- function(){
 #'
 #' @details General flow law: \deqn{\dot{\epsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
 #'
-#' @returns list. Strain rate in 1/s given as median of the Monte Carlo
-#' simulations `median`, mean (`mean`), standard error range (`sde`), 95% and
-#' 68% interpercentile range (`ir_95` and `ir_68`), and the Monte Carlo
-#' simulation (`samples`).
+#' @returns list. Strain rate in 1/s given as median of the Monte Carlo simulations `median`, mean (`mean`), standard error of `log(samples)` (`stderr_log`), the 95% confidence interval of the mean (`conf.int`), and the Monte Carlo simulation (`samples`)
 #'
 #' @references
 #'  Hirth, G., Teyssier, C., & Dunlap, W. J. (2001). An evaluation of quartzite flow laws based on comparisons between experimentally and naturally deformed rocks. International Journal of Earth Sciences, 90(1), 77–87. https://doi.org/10.1007/s005310000152

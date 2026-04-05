@@ -2,7 +2,7 @@
 % Please edit documentation in R/grainsize.R
 \name{grainsize_piezometry}
 \alias{grainsize_piezometry}
-\title{Grain size piezometry}
+\title{Grain Size Piezometry}
 \usage{
 grainsize_piezometry(
   d,
@@ -14,23 +14,28 @@ grainsize_piezometry(
 \arguments{
 \item{d}{numeric. Grain size in micrometer or units object}
 
-\item{sd}{(optional) numeric. Standard deviation of \code{d}}
+\item{sd}{(optional) Standard deviation of \code{d}}
 
 \item{method}{character. One of
 \describe{
 \item{Stipp-reg2-3"}{Piezometer for dislocation creep regime 2 and 3 after Stipp and Tullis (2003)}
 \item{"Stripp-reg1"}{Piezometer for dislocation creep regime 1 after Stipp and Tullis (2003)}
-\item{"Cross-1"}{Piezmeter after Cross et al. (2017) for 1 um step size resolution in EBSD data}
+\item{"Cross-1"}{Piezometer after Cross et al. (2017) for 1 um step size resolution in EBSD data}
 \item{"Cross-sliding"}{Sliding resolution piezometer after Cross et al. 2017. According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
 }}
 
 \item{sim}{non-negative integer. Number of Monte Carlo simulations}
 }
 \value{
-list. Stress in MPa given as median of the Monte Carlo simulations \code{median}, mean (\code{mean}), standard error range (\code{sde}), 95\% and 68\% interpercentile range (\code{ir_95} and \code{ir_68}), and the Monte Carlo simulation (\code{samples}).
+list. Stress in MPa given as median of the Monte Carlo simulations \code{median}, mean (\code{mean}), standard error of \code{log(samples)} (\code{stderr_log}), the 95\% confidence interval of the mean (\code{conf.int}), and the Monte Carlo simulation (\code{samples}).
 }
 \description{
-Grain size piezometry
+Calculates deviatoric stress from grain size. Estimates are based on Monte Carlo Simulations.
+}
+\details{
+General formula for grain size piezometer is:
+\deqn{\sigma = \left(\frac{d}{k}\right)^\frac{1}{n}}
+where \eqn{\sigma} is the deviatoric stress, \eqn{d} is the grain size, and \eqn{k} and \eqn{n} are empirical parameters.
 }
 \examples{
 set.seed(20250411)
@@ -44,4 +49,7 @@ quartz. Geophysical Research Letters, 30(21), 1–5. https://doi.org/10.1029/200
 Cross, A. J., Prior, D. J., Stipp, M., & Kidder, S. (2017). The
 recrystallized grain size piezometer for quartz: An EBSD-based calibration.
 Geophysical Research Letters, 44(13), 6667–6674. https://doi.org/10.1002/2017GL073836
+}
+\seealso{
+\code{\link[=subgrainsize_piezometry]{subgrainsize_piezometry()}}
 }
