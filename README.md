@@ -30,7 +30,6 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(geocreep)
 library(units) # load this package to define your units
-#> udunits database from C:/Users/tstephan/AppData/Local/R/win-library/4.5/units/share/udunits/udunits2.xml
 
 # Set seed for reproducibility
 set.seed(20250411)
