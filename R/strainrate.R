@@ -1,3 +1,4 @@
+#' @noRd
 #' @importFrom stats rnorm runif
 #' @importFrom units set_units
 flow_models <- function() {
@@ -207,7 +208,7 @@ flow_models <- function() {
 }
 
 
-#' Strain rate
+#' Strain Rate
 #'
 #' Calculates strain rate from stress, temperature, and grain size.
 #' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
@@ -218,8 +219,7 @@ flow_models <- function() {
 #' @param grainsize Grain size in \eqn{\mu}m or `units` object
 #' @param pressure Pressure in MPa or `units` object
 #' @param sim non-negative number. Number of Monte Carlo simulations
-#' @param model character specifying the flow law to be used:
-#' \describe{
+#' @param model character specifying the flow law to be used: \describe{
 #' \item{`"Hirth2001"`}{Hirth and Tullis (2001), dislocation creep}
 #' \item{`"Paterson1990"`}{Paterson and Luan (1990): dislocation creep; axial compression}
 #' \item{`"Kronenberg1984"`}{Kronenberg and Tullis (1984): deformation mechanism: dislocation creep and grain-size sensitive creep; strain geometry: axial compression}
@@ -231,7 +231,7 @@ flow_models <- function() {
 #' \item{`"Richter2018"`}{Richter et al. (2018): dislocation creep and grain-size sensitive creep; general shear}
 #' \item{`"Lu2019"`}{Lu and Jiang (2019): dislocation creep}
 #' \item{`"Tokle2019"`}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep}
-#' \item{`"Tokle2019_2"`}{{Tokle et al. (2019): dislocation creep and grain-size sensitive creep}
+#' \item{`"Tokle2019_2"`}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep}
 #' \item{`"Lusk2021"`}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for low pressures (less than 560 MPa)}
 #' \item{`"Lusk2021_HP"`}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for high pressures (700-1600 MPa)}
 #' }
@@ -272,16 +272,16 @@ strain_rate <- function(stress, temperature, fugacity = NULL,
   model <- match.arg(model)
 
   # stress, pressure and fugacity in Mega-Pascal, temperature in Kelvins
-  temperature <- units::set_units(temperature, K) |> as.numeric()
-  stress <- units::set_units(stress, MPa) |> as.numeric()
+  temperature <- units::set_units(temperature, "K") |> as.numeric()
+  stress <- units::set_units(stress, "MPa") |> as.numeric()
 
   args <- list(stress = stress, temperature = temperature, sim = sim)
 
-  if (!is.null(fugacity)) args$fugacity <- units::set_units(fugacity, MPa) |> as.numeric()
+  if (!is.null(fugacity)) args$fugacity <- units::set_units(fugacity, "MPa") |> as.numeric()
 
-  if (!is.null(pressure)) args$pressure <- units::set_units(pressure, MPa) |> as.numeric()
+  if (!is.null(pressure)) args$pressure <- units::set_units(pressure, "MPa") |> as.numeric()
 
-  if (!is.null(grainsize))  args$grainsize <- units::set_units(grainsize, um) |> as.numeric()
+  if (!is.null(grainsize))  args$grainsize <- units::set_units(grainsize, "um") |> as.numeric()
 
   # Validate model name
   fm <- flow_models()

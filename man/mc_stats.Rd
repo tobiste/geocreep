@@ -12,7 +12,7 @@ mc_stats(x, unit = NULL)
 \item{unit}{(optional) object of class \code{units} or \code{symbolic_units}, or in the case of \code{set_units} expression with symbols.}
 }
 \value{
-list.
+\code{'MC_sim'} object, i.e. a list.
 \describe{
 \item{\code{median}}{median of the Monte Carlo simulations}
 \item{\code{mean}}{geometric mean the Monte Carlo simulations}
@@ -26,5 +26,5 @@ list.
 Estimates from Monte Carlo Simulation
 }
 \examples{
-mc_stats(rnorm(100), 'Pa')
+mc_stats(rnorm(100), "Pa")
 }

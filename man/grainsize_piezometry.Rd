@@ -7,7 +7,7 @@
 grainsize_piezometry(
   d,
   sd = NULL,
-  method = c("Stipp-reg2-3", "Stripp-reg1", "Cross-1", "Cross-sliding"),
+  model = c("Stipp-reg2-3", "Stripp-reg1", "Cross-1", "Cross-sliding"),
   sim = 1e+06
 )
 }
@@ -16,12 +16,12 @@ grainsize_piezometry(
 
 \item{sd}{(optional) Standard deviation of \code{d}}
 
-\item{method}{character. One of
+\item{model}{character. One of
 \describe{
-\item{Stipp-reg2-3"}{Piezometer for dislocation creep regime 2 and 3 after Stipp and Tullis (2003)}
-\item{"Stripp-reg1"}{Piezometer for dislocation creep regime 1 after Stipp and Tullis (2003)}
-\item{"Cross-1"}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m step size resolution in EBSD data}
-\item{"Cross-sliding"}{Sliding resolution piezometer after Cross et al. 2017. According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
+\item{\code{"Stipp-reg2-3"}}{Piezometer for dislocation creep regime 2 and 3 after Stipp and Tullis (2003)}
+\item{\code{"Stripp-reg1"}}{Piezometer for dislocation creep regime 1 after Stipp and Tullis (2003)}
+\item{\code{"Cross-1"}}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m step size resolution in EBSD data}
+\item{\code{"Cross-sliding"}}{Sliding resolution piezometer after Cross et al. 2017. According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
 }}
 
 \item{sim}{non-negative integer. Number of Monte Carlo simulations}

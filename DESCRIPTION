@@ -1,5 +1,5 @@
 Package: geocreep
-Title: Strain, Stress, and Fugacity Calculations fro Geology
+Title: Strain, Stress, and Fugacity Calculations for Geology
 Version: 0.0.0.9000
 Authors@R: 
     person("Tobias", "Stephan", , "tstephan@lakeheadu.ca", role = c("aut", "cre"))

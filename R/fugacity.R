@@ -36,9 +36,9 @@ ps_eos <- function(volume, temperature, targetP) {
       coeff[i, 6] * temperature^2
   }
   pressure <- (den + cv[1] * den^2 - den^2 * ((cv[3] + 2 * cv[4] * den + 3 * cv[5] * den^2
-                                               + 4 * cv[6] * den^3) / (cv[2] + cv[3] * den + cv[4] * den^2 + cv[5] * den^3
-                                                                       + cv[6] * den^4)^2) + cv[7] * den^2 * exp(-cv[8] * den)
-               + cv[9] * den^2 * exp(-cv[10] * den)) * R_const * temperature / 1e5
+    + 4 * cv[6] * den^3) / (cv[2] + cv[3] * den + cv[4] * den^2 + cv[5] * den^3
+    + cv[6] * den^4)^2) + cv[7] * den^2 * exp(-cv[8] * den)
+    + cv[9] * den^2 * exp(-cv[10] * den)) * R_const * temperature / 1e5
   return(pressure - targetP) # bars
 }
 
@@ -82,19 +82,23 @@ NULL
 #' @export
 ps_volume <- function(pressure, temperature) {
   # pressure in bars, temperature in Kelvins
-  pressure <- units::set_units(pressure, bar) |> as.numeric()
-  temperature <- units::set_units(temperature, K) |> as.numeric()
+  pressure <- units::set_units(pressure, "bar") |>
+    as.numeric()
+  temperature <- units::set_units(temperature, "K") |>
+    as.numeric()
 
   result <- nleqslv::nleqslv(10, ps_eos, temperature = temperature, targetP = pressure)
-  units::set_units(result$x, cm3 / mol)
+  units::set_units(result$x, "cm3 / mol")
 }
 
 #' @rdname pitzer
 #' @export
 ps_fugacity <- function(pressure, temperature) {
   # pressure in bars, temperature in Kelvins
-  pressure <- units::set_units(pressure, bar) |> as.numeric()
-  temperature <- units::set_units(temperature, K) |> as.numeric()
+  pressure <- units::set_units(pressure, "bar") |>
+    as.numeric()
+  temperature <- units::set_units(temperature, "K") |>
+    as.numeric()
 
   R_const <- 8314462.61815324 # ideal gas constant: Pa*cm3/K/mol
 
@@ -108,13 +112,14 @@ ps_fugacity <- function(pressure, temperature) {
       coeff[i, 5] * temperature +
       coeff[i, 6] * temperature^2
   }
-  volume <- ps_volume(pressure, temperature) |> as.numeric()
+  volume <- ps_volume(pressure, temperature) |>
+    as.numeric()
   den <- 1 / volume
   fug <- exp(log(den) + cv[1] * den + (1 / (cv[2] + cv[3] * den + cv[4] * den^2
-                                            + cv[5] * den^3 + cv[6] * den^4) - 1 / cv[2])
-             - cv[7] / cv[8] * (exp(-cv[8] * den) - 1)
-             - cv[9] / cv[10] * (exp(-cv[10] * den) - 1)
-             + pressure * 1e5 / (den * R_const * temperature)
-             + log(R_const * temperature) - 1) / 1e5
-  units::set_units(fug, bar) # bars
+    + cv[5] * den^3 + cv[6] * den^4) - 1 / cv[2])
+  - cv[7] / cv[8] * (exp(-cv[8] * den) - 1)
+    - cv[9] / cv[10] * (exp(-cv[10] * den) - 1)
+    + pressure * 1e5 / (den * R_const * temperature)
+    + log(R_const * temperature) - 1) / 1e5
+  units::set_units(fug, "bar") # bars
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/strainrate.R
 \name{strain_rate}
 \alias{strain_rate}
-\title{Strain rate}
+\title{Strain Rate}
 \usage{
 strain_rate(
   stress,
@@ -27,6 +27,23 @@ strain_rate(
 \item{pressure}{Pressure in MPa or \code{units} object}
 
 \item{sim}{non-negative number. Number of Monte Carlo simulations}
+
+\item{model}{character specifying the flow law to be used: \describe{
+\item{\code{"Hirth2001"}}{Hirth and Tullis (2001), dislocation creep}
+\item{\code{"Paterson1990"}}{Paterson and Luan (1990): dislocation creep; axial compression}
+\item{\code{"Kronenberg1984"}}{Kronenberg and Tullis (1984): deformation mechanism: dislocation creep and grain-size sensitive creep; strain geometry: axial compression}
+\item{\code{"Luan1992"}}{Luan and Paterson (1990): dislocation creep; axial compression}
+\item{\code{"Gleason2004"}}{Gleason and Tullis (1995): dislocation creep; axial compression}
+\item{\code{"Rutter2004"}}{Rutter and Brodie (2004): dislocation creep; axial compression}
+\item{\code{"Fukuda2018"}}{Fukada et al. (2018): dislocation creep; axial compression}
+\item{\code{"Fukuda2018_2"}}{Fukada et al. (2018): dislocation creep and grain-size sensitive creep; axial compression}
+\item{\code{"Richter2018"}}{Richter et al. (2018): dislocation creep and grain-size sensitive creep; general shear}
+\item{\code{"Lu2019"}}{Lu and Jiang (2019): dislocation creep}
+\item{\code{"Tokle2019"}}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep}
+\item{\code{"Tokle2019_2"}}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep}
+\item{\code{"Lusk2021"}}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for low pressures (less than 560 MPa)}
+\item{\code{"Lusk2021_HP"}}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for high pressures (700-1600 MPa)}
+}}
 }
 \value{
 list. Strain rate in 1/s. If Monte Carlo Simulation was used, see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output.

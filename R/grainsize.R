@@ -5,12 +5,12 @@
 #'
 #' @param d numeric. Grain size in \eqn{\mu}m or `units` object
 #' @param sd (optional) Standard deviation of `d`
-#' @param method character. One of
+#' @param model character. One of
 #' \describe{
-#' \item{Stipp-reg2-3"}{Piezometer for dislocation creep regime 2 and 3 after Stipp and Tullis (2003)}
-#' \item{"Stripp-reg1"}{Piezometer for dislocation creep regime 1 after Stipp and Tullis (2003)}
-#' \item{"Cross-1"}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m step size resolution in EBSD data}
-#' \item{"Cross-sliding"}{Sliding resolution piezometer after Cross et al. 2017. According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
+#' \item{`"Stipp-reg2-3"`}{Piezometer for dislocation creep regime 2 and 3 after Stipp and Tullis (2003)}
+#' \item{`"Stripp-reg1"`}{Piezometer for dislocation creep regime 1 after Stipp and Tullis (2003)}
+#' \item{`"Cross-1"`}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m step size resolution in EBSD data}
+#' \item{`"Cross-sliding"`}{Sliding resolution piezometer after Cross et al. 2017. According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
 #' }
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
@@ -39,30 +39,31 @@
 #' set.seed(20250411)
 #' grainsize_piezometry(12.2) # 92
 #' grainsize_piezometry(31) # 44
-grainsize_piezometry <- function(d, sd = NULL, method = c("Stipp-reg2-3", "Stripp-reg1", "Cross-1", "Cross-sliding"), sim = 1e6) {
+grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp-reg1", "Cross-1", "Cross-sliding"), sim = 1e6) {
   # d in micrometre
   if (!is.null(sd)) d <- rnorm(sim, d, sd)
 
-  d <- units::set_units(d, um) |> as.numeric()
+  d <- units::set_units(d, "um") |>
+    as.numeric()
 
-  method <- match.arg(method)
+  model <- match.arg(model)
 
-  if (method == "Stipp-reg2-3") {
+  if (model == "Stipp-reg2-3") {
     log_k <- 3.56
     log_k_ci95 <- 0.27
     n <- -1.26
     n_ci95 <- 0.13
-  } else if (method == "Stripp-reg1") {
+  } else if (model == "Stripp-reg1") {
     log_k <- 1.89
     log_k_ci95 <- 0.11
     n <- -0.61
     n_ci95 <- 0.04
-  } else if (method == "Cross-1") {
+  } else if (model == "Cross-1") {
     log_k <- 3.91
     log_k_ci95 <- 0.41
     n <- -1.41
     n_ci95 <- 0.21
-  } else if (method == "Cross-sliding") {
+  } else if (model == "Cross-sliding") {
     log_k <- 4.22
     log_k_ci95 <- 0.51
     n <- -1.59
@@ -123,18 +124,20 @@ subgrainsize_piezometry <- function(lambda, sd = NULL, calibrated = TRUE, min = 
 
   if (!is.null(sd)) lambda <- stats::rnorm(sim, lambda, sd)
 
-  lambda <- units::set_units(lambda, "um") |> units::set_units("m") |> as.numeric()
+  lambda <- units::set_units(lambda, "um") |>
+    units::set_units("m") |>
+    as.numeric()
 
   b_q <- 5.1e-4
   b_ol <- 5.0e-4
   b <- c(q = b_q, "fo90" = b_ol, "fo50" = b_ol) |>
-    units::set_units(um) |>
-    units::set_units(m)
+    units::set_units("um") |>
+    units::set_units("m")
   burgers <- as.numeric(b[min])
 
   s <- c(q = 42.0, "fo90" = 77.8, "fo50" = 62.6) |>
-    units::set_units(GPa) |>
-    units::set_units(MPa)
+    units::set_units("GPa") |>
+    units::set_units("MPa")
   shear_m <- as.numeric(s[min])
 
   if (isTRUE(calibrated)) {
@@ -148,5 +151,5 @@ subgrainsize_piezometry <- function(lambda, sd = NULL, calibrated = TRUE, min = 
   stress <- shear_m * (lambda / (burgers * 10^a))^(1 / b)
   stress <- stress * 10 # to match the values as published in Goddard
 
-  mc_stats(stress, MPa)
+  mc_stats(stress, "MPa")
 }

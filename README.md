@@ -55,7 +55,7 @@ Tullis perometer):
 
 ``` r
 grainsize <- units::set_units(11, um)
-stress <- grainsize_piezometry(grainsize, method = "Stipp-reg2-3")
+stress <- grainsize_piezometry(grainsize, model = "Stipp-reg2-3")
 
 # Median
 print(stress$median)

@@ -6,8 +6,8 @@
 # }
 
 #' @importFrom units set_units as_units
-set_units_if <- function(x, unit){
-  if(is.null(unit)){
+set_units_if <- function(x, unit) {
+  if (is.null(unit)) {
     x
   } else {
     units::set_units(x, units::as_units(unit), mode = "standard")
@@ -19,7 +19,7 @@ set_units_if <- function(x, unit){
 #' @param x numeric vector. The values from n Monte Carlo Simulations
 #' @param unit (optional) object of class `units` or `symbolic_units`, or in the case of `set_units` expression with symbols.
 #'
-#' @returns list.
+#' @returns `'MC_sim'` object, i.e. a list.
 #' \describe{
 #' \item{`median`}{median of the Monte Carlo simulations}
 #' \item{`mean`}{geometric mean the Monte Carlo simulations}
@@ -34,11 +34,11 @@ set_units_if <- function(x, unit){
 #' @export
 #'
 #' @examples
-#' mc_stats(rnorm(100), 'Pa')
-mc_stats <- function(x, unit = NULL){
-  median_s  <- stats::median(x)
-  ir_95    <- stats::quantile(x, c(0.025, 0.975))
-  ir_68    <- stats::quantile(x, c(0.16, 0.84))
+#' mc_stats(rnorm(100), "Pa")
+mc_stats <- function(x, unit = NULL) {
+  median_s <- stats::median(x)
+  ir_95 <- stats::quantile(x, c(0.025, 0.975))
+  ir_68 <- stats::quantile(x, c(0.16, 0.84))
 
   log_s <- log10(x)
 
@@ -65,8 +65,7 @@ mc_stats <- function(x, unit = NULL){
     stderr_log = stderr_log,
     samples = x |> set_units_if(unit)
   )
-  class(out) <- append(class(out), 'MC_sim')
+  class(out) <- append(class(out), "MC_sim")
 
   return(out)
 }
-
