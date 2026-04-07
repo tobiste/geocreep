@@ -37,6 +37,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(geocreep)
+library(units) # load this package to define your units
 
 # Set seed for reproducibility
 set.seed(20250411)
@@ -46,23 +47,29 @@ set.seed(20250411)
 
 Calculate water fugacity from temperature and pressures using the Pitzer and Sterner (1994) equation:
 ```{r fug}
+#Define temperature and pressure
 temperature <- units::set_units(300, degC)
 pressure <- units::set_units(400, MPa)
 
+# Calculate fugacity
 fugacity <- ps_fugacity(pressure, temperature)
+
 print(fugacity)
 ```
 ### Grain-size piezometry
 Calculating deviatoric stress from grain size (using the Stipp and Tullis perometer):
 
 ```{r gs}
+# Define grain size
 grainsize <- units::set_units(11, um)
+
+# Calculate equivalent deviatoric stress
 stress <- grainsize_piezometry(grainsize, model = "Stipp-reg2-3")
 
-# Median
+# Median deviatoric stress
 print(stress$median)
 
-# 68% Interpercentile range
+# 68% Interpercentile range of MC estimates
 print(stress$ir_68)
 ```
 
@@ -70,11 +77,23 @@ print(stress$ir_68)
 Calculate strain rate using a defined flow law from stress, temperature, and fugacity: 
 
 ```{r edot}
+# Calculate strain rate using stress, temperature and fugacity defined and calculated before
 edot <- strain_rate(stress = stress$median, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
 
-# Median
+# Median strain rate
 print(edot$median)
 
-# 68% Interpercentile range
+# 68% Interpercentile range of MC estimates
 print(edot$ir_68)
 ```
+
+## Author
+
+Tobias Stephan ([tstephan\@lakeheadu.ca](mailto:tstephan@lakeheadu.ca){.email})
+
+## Feedback, issues, and contributions
+
+I welcome feedback, suggestions, issues, and contributions! If you have found a bug, please file [here](https://github.com/tobiste/geocreep/issues) with minimal code to reproduce the issue.
+
+## License
+GPL-3.0 License

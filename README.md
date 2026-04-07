@@ -29,6 +29,8 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(geocreep)
+library(units) # load this package to define your units
+#> udunits database from C:/Users/tstephan/AppData/Local/R/win-library/4.5/units/share/udunits/udunits2.xml
 
 # Set seed for reproducibility
 set.seed(20250411)
@@ -40,10 +42,13 @@ Calculate water fugacity from temperature and pressures using the Pitzer
 and Sterner (1994) equation:
 
 ``` r
+#Define temperature and pressure
 temperature <- units::set_units(300, degC)
 pressure <- units::set_units(400, MPa)
 
+# Calculate fugacity
 fugacity <- ps_fugacity(pressure, temperature)
+
 print(fugacity)
 #> 371.3371 [bar]
 ```
@@ -54,14 +59,17 @@ Calculating deviatoric stress from grain size (using the Stipp and
 Tullis perometer):
 
 ``` r
+# Define grain size
 grainsize <- units::set_units(11, um)
+
+# Calculate equivalent deviatoric stress
 stress <- grainsize_piezometry(grainsize, model = "Stipp-reg2-3")
 
-# Median
+# Median deviatoric stress
 print(stress$median)
 #> 99.79369 [MPa]
 
-# 68% Interpercentile range
+# 68% Interpercentile range of MC estimates
 print(stress$ir_68)
 #> Units: [MPa]
 #>       16%       84% 
@@ -74,15 +82,31 @@ Calculate strain rate using a defined flow law from stress, temperature,
 and fugacity:
 
 ``` r
+# Calculate strain rate using stress, temperature and fugacity defined and calculated before
 edot <- strain_rate(stress = stress$median, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
 
-# Median
+# Median strain rate
 print(edot$median)
 #> 1.152363e-14 [1/s]
 
-# 68% Interpercentile range
+# 68% Interpercentile range of MC estimates
 print(edot$ir_68)
 #> Units: [1/s]
 #>          16%          84% 
 #> 2.018063e-15 6.615589e-14
 ```
+
+## Author
+
+Tobias Stephan (<tstephan@lakeheadu.ca>)
+
+## Feedback, issues, and contributions
+
+I welcome feedback, suggestions, issues, and contributions! If you have
+found a bug, please file
+[here](https://github.com/tobiste/geocreep/issues) with minimal code to
+reproduce the issue.
+
+## License
+
+GPL-3.0 License
