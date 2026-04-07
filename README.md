@@ -75,6 +75,9 @@ print(stress$ir_68)
 #>  71.35424 143.20101
 ```
 
+Note: There is also a subgrain-size piezometer (Goddard et al. 2021):
+`subgrain_piezometer()`
+
 ### Flow laws
 
 Calculate strain rate using a defined flow law from stress, temperature,
