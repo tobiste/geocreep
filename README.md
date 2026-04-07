@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/tobiste/geocreep/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tobiste/geocreep/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of geocreep is to quick and easy calculate strain rates, water
@@ -29,7 +30,7 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(geocreep)
 
-# Set a sedd for reproducibility
+# Set seed for reproducibility
 set.seed(20250411)
 ```
 
@@ -41,6 +42,7 @@ and Sterner (1994) equation:
 ``` r
 temperature <- units::set_units(300, degC)
 pressure <- units::set_units(400, MPa)
+
 fugacity <- ps_fugacity(pressure, temperature)
 print(fugacity)
 #> 371.3371 [bar]
