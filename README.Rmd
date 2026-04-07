@@ -56,7 +56,12 @@ Calculating deviatoric stress from grain size (using the Stipp and Tullis perome
 ```{r gs}
 grainsize <- units::set_units(11, um)
 stress <- grainsize_piezometry(grainsize, method = "Stipp-reg2-3")
+
+# Median
 print(stress$median)
+
+# 68% Interpercentile range
+print(stress$ir_68)
 ```
 
 ### Flow laws
@@ -64,5 +69,10 @@ Calculate strain rate using a defined flow law from stress, temperature, and fug
 
 ```{r edot}
 edot <- strain_rate(stress = stress$median, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
+
+# Median
 print(edot$median)
+
+# 68% Interpercentile range
+print(edot$ir_68)
 ```

@@ -15,6 +15,7 @@
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
 #' @returns list. Stress in MPa. If Monte Carlo Simulation was used, see [mc_stats()] for detailed description of output.
+#' The piezometer produce log-normal distributed estimates considering the uncertainties in the equation parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
 #'
 #' @details
 #' General formula for grain size piezometer is:
@@ -94,6 +95,7 @@ grainsize_piezometry <- function(d, sd = NULL, method = c("Stipp-reg2-3", "Strip
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
 #' @returns list. Stress in MPa. If Monte Carlo Simulation was used, see [mc_stats()] for detailed description of output.
+#' The piezometer produce log-normal distributed estimates considering the uncertainties in the equation parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
 #'
 #' @details The sub-grain size piezometer is
 #' \deqn{\frac{\lambda}{b} = 10^a \left(\frac{\sigma}{\mu}\right)^b}

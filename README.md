@@ -54,8 +54,16 @@ Tullis perometer):
 ``` r
 grainsize <- units::set_units(11, um)
 stress <- grainsize_piezometry(grainsize, method = "Stipp-reg2-3")
+
+# Median
 print(stress$median)
 #> 99.79369 [MPa]
+
+# 68% Interpercentile range
+print(stress$ir_68)
+#> Units: [MPa]
+#>       16%       84% 
+#>  71.35424 143.20101
 ```
 
 ### Flow laws
@@ -65,6 +73,14 @@ and fugacity:
 
 ``` r
 edot <- strain_rate(stress = stress$median, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
+
+# Median
 print(edot$median)
 #> 1.152363e-14 [1/s]
+
+# 68% Interpercentile range
+print(edot$ir_68)
+#> Units: [1/s]
+#>          16%          84% 
+#> 2.018063e-15 6.615589e-14
 ```

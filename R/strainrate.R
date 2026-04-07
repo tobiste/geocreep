@@ -239,6 +239,7 @@ flow_models <- function() {
 #' @details General flow law: \deqn{\dot{\epsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
 #'
 #' @returns list. Strain rate in 1/s. If Monte Carlo Simulation was used, see [mc_stats()] for detailed description of output.
+#' The flow laws produce log-normal distributed estimates considering the uncertainties in the parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
 #'
 #' @references
 #'  Hirth, G., Teyssier, C., & Dunlap, W. J. (2001). An evaluation of quartzite flow laws based on comparisons between experimentally and naturally deformed rocks. International Journal of Earth Sciences, 90(1), 77–87. https://doi.org/10.1007/s005310000152

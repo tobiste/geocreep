@@ -28,6 +28,7 @@ grainsize_piezometry(
 }
 \value{
 list. Stress in MPa. If Monte Carlo Simulation was used, see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output.
+The piezometer produce log-normal distributed estimates considering the uncertainties in the equation parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
 }
 \description{
 Calculates deviatoric stress from grain size.

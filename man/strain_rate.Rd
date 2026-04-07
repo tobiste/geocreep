@@ -30,6 +30,7 @@ strain_rate(
 }
 \value{
 list. Strain rate in 1/s. If Monte Carlo Simulation was used, see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output.
+The flow laws produce log-normal distributed estimates considering the uncertainties in the parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
 }
 \description{
 Calculates strain rate from stress, temperature, and grain size.
