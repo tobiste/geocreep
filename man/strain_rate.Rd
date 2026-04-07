@@ -16,26 +16,24 @@ strain_rate(
 )
 }
 \arguments{
-\item{stress}{Deviatoric stress in MPa or units object}
+\item{stress}{Deviatoric stress in MPa or \code{units} object}
 
-\item{temperature}{Temperature in Kelvin or units object}
+\item{temperature}{Temperature in Kelvin or \code{units} object}
 
-\item{fugacity}{Water fugacity in MPa or units object}
+\item{fugacity}{Water fugacity in MPa or \code{units} object}
 
-\item{grainsize}{Grainsize in cm  or units object}
+\item{grainsize}{Grain size in \eqn{\mu}m or \code{units} object}
 
-\item{pressure}{Pressure in MPa or units object}
+\item{pressure}{Pressure in MPa or \code{units} object}
 
 \item{sim}{non-negative number. Number of Monte Carlo simulations}
-
-\item{model}{character. Flow law.}
 }
 \value{
-list. Strain rate in 1/s given as median of the Monte Carlo simulations \code{median}, mean (\code{mean}), standard error of \code{log(samples)} (\code{stderr_log}), the 95\% confidence interval of the mean (\code{conf.int}), and the Monte Carlo simulation (\code{samples})
+list. Strain rate in 1/s. If Monte Carlo Simulation was used, see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output.
 }
 \description{
 Calculates strain rate from stress, temperature, and grain size.
-Uses Monte Carlo sampling if flow model parameters contain uncertainties.
+Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 }
 \details{
 General flow law: \deqn{\dot{\epsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
@@ -57,4 +55,7 @@ Hirth, G., Teyssier, C., & Dunlap, W. J. (2001). An evaluation of quartzite flow
 Tokle, L., Hirth, G., & Behr, W. M. (2019). Flow laws and fabric transitions in wet quartzite. Earth and Planetary Science Letters, 505, 152–161. https://doi.org/10.1016/j.epsl.2018.10.017
 
 Lusk, A. D. J., Platt, J. P., & Platt, J. A. (2021). Natural and Experimental Constraints on a Flow Law for Dislocation‐Dominated Creep in Wet Quartz. Journal of Geophysical Research: Solid Earth, 126(5), 1–25. https://doi.org/10.1029/2020JB021302
+}
+\seealso{
+\code{\link[units:units]{units::set_units()}}
 }

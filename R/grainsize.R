@@ -1,19 +1,20 @@
-#' Grain Size Piezometry
+#' Grain-Size Piezometry
 #'
-#' Calculates deviatoric stress from grain size. Estimates are based on Monte Carlo Simulations.
+#' Calculates deviatoric stress from grain size.
+#' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 #'
-#' @param d numeric. Grain size in micrometer or units object
+#' @param d numeric. Grain size in \eqn{\mu}m or `units` object
 #' @param sd (optional) Standard deviation of `d`
 #' @param method character. One of
 #' \describe{
 #' \item{Stipp-reg2-3"}{Piezometer for dislocation creep regime 2 and 3 after Stipp and Tullis (2003)}
 #' \item{"Stripp-reg1"}{Piezometer for dislocation creep regime 1 after Stipp and Tullis (2003)}
-#' \item{"Cross-1"}{Piezometer after Cross et al. (2017) for 1 um step size resolution in EBSD data}
+#' \item{"Cross-1"}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m step size resolution in EBSD data}
 #' \item{"Cross-sliding"}{Sliding resolution piezometer after Cross et al. 2017. According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
 #' }
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
-#' @returns list. Stress in MPa given as median of the Monte Carlo simulations `median`, mean (`mean`), standard error of `log(samples)` (`stderr_log`), the 95% confidence interval of the mean (`conf.int`), and the Monte Carlo simulation (`samples`).
+#' @returns list. Stress in MPa. If Monte Carlo Simulation was used, see [mc_stats()] for detailed description of output.
 #'
 #' @details
 #' General formula for grain size piezometer is:
@@ -29,7 +30,7 @@
 #' recrystallized grain size piezometer for quartz: An EBSD-based calibration.
 #' Geophysical Research Letters, 44(13), 6667–6674. https://doi.org/10.1002/2017GL073836
 #'
-#' @seealso [subgrainsize_piezometry()]
+#' @seealso [subgrainsize_piezometry()], [units::set_units()]
 #'
 #' @export
 #'
@@ -84,24 +85,25 @@ grainsize_piezometry <- function(d, sd = NULL, method = c("Stipp-reg2-3", "Strip
 #' Subgrain‐Size Piezometer Calibrated for EBSD
 #'
 #' Calculates deviatoric stress using the Subgrain‐Size Piezometer of Goddard et al. (2020).
-#' Estimates are based on Monte Carlo Simulations
+#' #' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 #'
-#' @param lambda mean line intercept length in um or units object.
+#' @param lambda mean line intercept length in \eqn{\mu}m or `units` object.
 #' @param sd (optional) Standard deviation of `lambda`
 #' @param calibrated logical. Whether the calibration of Holyoke and Kronenberg (2010) is considered or not.
 #' @param min character. The Mineral uses. one of `"q"` for quartz, `"fo90"` for Olive with 90% Forsterite, or `"fo50"` for Olivine with 50% Forsterite.
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
-#' @returns list. Stress in MPa given as median of the Monte Carlo simulations `median`, mean (`mean`), standard error of `log(samples)` (`stderr_log`), the 95% confidence interval of the mean (`conf.int`), and the Monte Carlo simulation (`samples`)
+#' @returns list. Stress in MPa. If Monte Carlo Simulation was used, see [mc_stats()] for detailed description of output.
 #'
 #' @details The sub-grain size piezometer is
 #' \deqn{\frac{\lambda}{b} = 10^a \left(\frac{\sigma}{\mu}\right)^b}
 #' where \eqn{\lambda} is the mean line intercept length, \eqn{b} is the Burgers vector,
 #' \eqn{\sigma} is the deviatoric stress, \eqn{\mu} is the shear modulus, and \eqn{a} and \eqn{b} are the empirical exponents.
 #'
-#' @seealso [grainsize_piezometry()]
+#' @seealso [grainsize_piezometry()], [units::set_units()]
 #'
 #' @importFrom stats rnorm
+#' @importFrom units set_units
 #'
 #' @references Goddard, R. M., Hansen, L. N., Wallis, D., Stipp, M., Holyoke,
 #' C. W., Kumamoto, K. M., & Kohlstedt, D. L. (2020). A Subgrain‐Size Piezometer

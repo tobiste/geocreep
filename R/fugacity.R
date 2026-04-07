@@ -43,9 +43,9 @@ ps_eos <- function(volume, temperature, targetP) {
 }
 
 
-#' Water fugacity and H2O molar volume
+#' Water fugacity and H\eqn{_2}O molar volume
 #'
-#' calculate H2O molar volume and fugacity using the Pitzer and Sterner (1994)
+#' calculate H\eqn{_2}O molar volume and fugacity using the Pitzer and Sterner (1994)
 #' equation of state.
 #'
 #' @param pressure numeric. Pressure either in bar or as `units` object
@@ -56,7 +56,7 @@ ps_eos <- function(volume, temperature, targetP) {
 #' Journal of Chemical Physics. 101: 3111-3116.
 #'
 #' @source This is modified version of the `fugacity.py` script: https://github.com/forsterite/fugacity/tree/master
-#' This R version uses a more precise gas constant, and accepts inputs in different units.
+#' This R version uses a precise gas constant and accepts inputs in different units.
 #'
 #' @returns units object
 #'
@@ -64,9 +64,11 @@ ps_eos <- function(volume, temperature, targetP) {
 #' @importFrom units set_units
 #' @name pitzer
 #'
-#' @examples
-#' pressure <- set_units(1, atm)
-#' temperature <- set_units(25, degC)
+#' @seealso [units::set_units()]
+#'
+#' @examplesIf require(units)
+#' pressure <- units::set_units(1, atm)
+#' temperature <- units::set_units(25, degC)
 #' ps_volume(pressure, temperature) # 18.7231
 #' ps_fugacity(pressure, temperature) # 0.04946
 #'

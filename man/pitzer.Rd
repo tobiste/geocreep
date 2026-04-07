@@ -4,10 +4,10 @@
 \alias{pitzer}
 \alias{ps_volume}
 \alias{ps_fugacity}
-\title{Water fugacity and H2O molar volume}
+\title{Water fugacity and H\eqn{_2}O molar volume}
 \source{
 This is modified version of the \code{fugacity.py} script: https://github.com/forsterite/fugacity/tree/master
-This R version uses a more precise gas constant, and accepts inputs in different units.
+This R version uses a precise gas constant and accepts inputs in different units.
 }
 \usage{
 ps_volume(pressure, temperature)
@@ -23,12 +23,13 @@ ps_fugacity(pressure, temperature)
 units object
 }
 \description{
-calculate H2O molar volume and fugacity using the Pitzer and Sterner (1994)
+calculate H\eqn{_2}O molar volume and fugacity using the Pitzer and Sterner (1994)
 equation of state.
 }
 \examples{
-pressure <- set_units(1, atm)
-temperature <- set_units(25, degC)
+\dontshow{if (require(units)) withAutoprint(\{ # examplesIf}
+pressure <- units::set_units(1, atm)
+temperature <- units::set_units(25, degC)
 ps_volume(pressure, temperature) # 18.7231
 ps_fugacity(pressure, temperature) # 0.04946
 
@@ -36,9 +37,13 @@ temperature2 <- units::set_units(300, degC)
 pressure2 <- units::set_units(400, MPa)
 ps_fugacity(pressure2, temperature2) # 37 MPa
 ps_volume(pressure2, temperature2)
+\dontshow{\}) # examplesIf}
 }
 \references{
 Pitzer, K.S. and Sterner, S.M., 1994. Equations of state valid
 continuously from zero to extreme pressures for H2O and CO2.
 Journal of Chemical Physics. 101: 3111-3116.
+}
+\seealso{
+\code{\link[units:units]{units::set_units()}}
 }

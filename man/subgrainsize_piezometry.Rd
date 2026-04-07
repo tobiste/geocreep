@@ -13,7 +13,7 @@ subgrainsize_piezometry(
 )
 }
 \arguments{
-\item{lambda}{mean line intercept length in um or units object.}
+\item{lambda}{mean line intercept length in \eqn{\mu}m or \code{units} object.}
 
 \item{sd}{(optional) Standard deviation of \code{lambda}}
 
@@ -24,11 +24,11 @@ subgrainsize_piezometry(
 \item{sim}{non-negative integer. Number of Monte Carlo simulations}
 }
 \value{
-list. Stress in MPa given as median of the Monte Carlo simulations \code{median}, mean (\code{mean}), standard error of \code{log(samples)} (\code{stderr_log}), the 95\% confidence interval of the mean (\code{conf.int}), and the Monte Carlo simulation (\code{samples})
+list. Stress in MPa. If Monte Carlo Simulation was used, see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output.
 }
 \description{
 Calculates deviatoric stress using the Subgrain‐Size Piezometer of Goddard et al. (2020).
-Estimates are based on Monte Carlo Simulations
+#' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 }
 \details{
 The sub-grain size piezometer is
@@ -48,5 +48,5 @@ Calibrated for EBSD. Geophysical Research Letters, 47(23).
 https://doi.org/10.1029/2020GL090056
 }
 \seealso{
-\code{\link[=grainsize_piezometry]{grainsize_piezometry()}}
+\code{\link[=grainsize_piezometry]{grainsize_piezometry()}}, \code{\link[units:units]{units::set_units()}}
 }
