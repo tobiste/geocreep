@@ -67,7 +67,8 @@ ps_eos <- function(volume, temperature, targetP, phase = c("H2O", "CO2")) {
 #'
 #' @param pressure numeric. Pressure either in bar or as `units` object
 #' @param temperature numeric. Temperature either in Kelvin or as `units` object
-#' @param phase character. Fluid phase, one of `"H2O"` (the default) and `"CO2"`.
+#' @param phase character. Fluid phase for which fugacity or volume should be calculated for;
+#'  one of `"H2O"` (the default) and `"CO2"`.
 #'
 #' @references Pitzer, K.S. and Sterner, S.M., 1994. Equations of state valid
 #' continuously from zero to extreme pressures for H2O and CO2.

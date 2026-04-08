@@ -20,7 +20,8 @@ ps_fugacity(pressure, temperature, phase = c("H2O", "CO2"))
 
 \item{temperature}{numeric. Temperature either in Kelvin or as \code{units} object}
 
-\item{phase}{character. Fluid phase, one of \code{"H2O"} (the default) and \code{"CO2"}.}
+\item{phase}{character. Fluid phase for which fugacity or volume should be calculated for;
+one of \code{"H2O"} (the default) and \code{"CO2"}.}
 }
 \value{
 units object
