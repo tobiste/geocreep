@@ -4,27 +4,30 @@
 \alias{pitzer}
 \alias{ps_volume}
 \alias{ps_fugacity}
-\title{Water fugacity and H\eqn{_2}O molar volume}
+\title{Fugacity and molar volume for H\eqn{_2}O or CO\eqn{_2}}
 \source{
 This is modified version of the \code{fugacity.py} script: https://github.com/forsterite/fugacity/tree/master
-This R version uses a precise gas constant and accepts inputs in different units.
+This R version uses a precise gas constant, accepts inputs in different units,
+and adds the CO2 parameters.
 }
 \usage{
-ps_volume(pressure, temperature)
+ps_volume(pressure, temperature, phase = c("H2O", "CO2"))
 
-ps_fugacity(pressure, temperature)
+ps_fugacity(pressure, temperature, phase = c("H2O", "CO2"))
 }
 \arguments{
 \item{pressure}{numeric. Pressure either in bar or as \code{units} object}
 
 \item{temperature}{numeric. Temperature either in Kelvin or as \code{units} object}
+
+\item{phase}{character. Fluid phase, one of \code{"H2O"} (the default) and \code{"CO2"}.}
 }
 \value{
 units object
 }
 \description{
-calculate H\eqn{_2}O molar volume and fugacity using the Pitzer and Sterner (1994)
-equation of state.
+calculate  molar volume and fugacity for H\eqn{_2}O  or CO\eqn{_2} using
+the Pitzer and Sterner (1994) equation of state.
 }
 \examples{
 \dontshow{if (require(units)) withAutoprint(\{ # examplesIf}
