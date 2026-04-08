@@ -8,9 +8,9 @@
 [![R-CMD-check](https://github.com/tobiste/geocreep/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tobiste/geocreep/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of geocreep is to quick and easy calculate strain rates, water
+The goal of geocreep is to quick and easy calculate strain rates,
 fugacities and deviatoric stress from grain sizes using R. The codes use
-Monte Carlo simulations to propagate uncertainites of the flow
+Monte Carlo simulations to propagate uncertainties of the flow
 parameters into the final estimate.
 
 ## Installation
