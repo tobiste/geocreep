@@ -25,6 +25,10 @@ mc_stats(x, unit = NULL)
 \description{
 Estimates from Monte Carlo Simulation
 }
+\details{
+Equations of the form \eqn{X = A b^{n \pm \sigma}} create non-normal, left-skewed distributions.
+Thus, it is recommended to report median and percentiles instead of mean, standard deviation and confidence intervals.
+}
 \examples{
 mc_stats(rnorm(100), "Pa")
 }

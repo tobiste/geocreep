@@ -54,7 +54,22 @@ Calculates strain rate from stress, temperature, and grain size.
 Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 }
 \details{
-General flow law: \deqn{\dot{\epsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
+General flow law giving the strain rate is  \deqn{\dot{\epsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
+
+where \eqn{\sigma} is the deviatoric stess, \eqn{d} is the grain size,
+\eqn{f_{H_2O}} is the water fugacity, \eqn{T} is the temperature,
+\eqn{H} is the enthalpy, and \eqn{R} is the ideal gas constant. The flow
+parameters are the prefactor \eqn{A}, and the exponents \eqn{n}, \eqn{m}, and \eqn{r}.
+
+To propagate the uncertainties of the flow parameters Monte Carlo simulation is used here.
+\itemize{
+\item{ If the flow law parameters are given by a mean value and a marginal error (\eqn{\mu \pm z}),
+the Monte Carlo simulation assumes a normal distribution given by
+\eqn{X = N\left(\mu, \sigma^2\right)}, where \eqn{\mu} is the mean and \eqn{\sigma^2}
+is the standard deviation of the mean (\eqn{\sigma^2 = \text{z}/1.96}).}
+\item{ If the parameter is given by a range of possible values \eqn{\left[x_\text{min}, x_\text{max}\right]},
+the Monte Carlo simulation assumes an uniform distribution given by \eqn{X = U\left(x_\text{min}, x_\text{max}\right)}.}
+}
 }
 \examples{
 set.seed(20250411)

@@ -29,6 +29,9 @@ set_units_if <- function(x, unit) {
 #' \item{`samples`}{the Monte Carlo simulation}
 #' }
 #'
+#' @details Equations of the form \eqn{X = A b^{n \pm \sigma}} create non-normal, left-skewed distributions.
+#' Thus, it is recommended to report median and percentiles instead of mean, standard deviation and confidence intervals.
+#'
 #' @importFrom stats median quantile t.test
 #'
 #' @export

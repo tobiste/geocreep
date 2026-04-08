@@ -54,8 +54,8 @@ print(fugacity)
 
 ### Grain-size piezometry
 
-Calculating deviatoric stress from grain size (using the Stipp and
-Tullis perometer):
+Calculating deviatoric stress from grain size (e.g. using the Stipp and
+Tullis piezometer):
 
 ``` r
 # Define grain size
@@ -76,7 +76,7 @@ print(stress$ir_68)
 ```
 
 Note: There is also a subgrain-size piezometer (Goddard et al. 2021):
-`subgrain_piezometer()`
+`subgrainsize_piezometer()`
 
 ### Flow laws
 

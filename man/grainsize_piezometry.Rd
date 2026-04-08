@@ -18,17 +18,24 @@ grainsize_piezometry(
 
 \item{model}{character. One of
 \describe{
-\item{\code{"Stipp-reg2-3"}}{Piezometer for dislocation creep regime 2 and 3 after Stipp and Tullis (2003)}
-\item{\code{"Stripp-reg1"}}{Piezometer for dislocation creep regime 1 after Stipp and Tullis (2003)}
-\item{\code{"Cross-1"}}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m step size resolution in EBSD data}
-\item{\code{"Cross-sliding"}}{Sliding resolution piezometer after Cross et al. 2017. According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
+\item{\code{"Stipp-reg2-3"}}{Piezometer for dislocation creep regime 2 and 3 after
+Stipp and Tullis (2003)}
+\item{\code{"Stripp-reg1"}}{Piezometer for dislocation creep regime 1 after
+Stipp and Tullis (2003)}
+\item{\code{"Cross-1"}}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m
+step size resolution in EBSD data}
+\item{\code{"Cross-sliding"}}{Sliding resolution piezometer after Cross et al. 2017.
+According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
 }}
 
 \item{sim}{non-negative integer. Number of Monte Carlo simulations}
 }
 \value{
-list. Stress in MPa. If Monte Carlo Simulation was used, see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output.
-The piezometer produce log-normal distributed estimates considering the uncertainties in the equation parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
+list. Stress in MPa. If Monte Carlo Simulation was used, see
+\code{\link[=mc_stats]{mc_stats()}} for detailed description of output.
+The piezometer produce log-normal distributed estimates considering the
+uncertainties in the equation parameter. Hence it is recommended to report
+the median (or geometric mean), and the interpercentile range.
 }
 \description{
 Calculates deviatoric stress from grain size.
@@ -37,7 +44,8 @@ Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 \details{
 General formula for grain size piezometer is:
 \deqn{\sigma = \left(\frac{d}{k}\right)^\frac{1}{n}}
-where \eqn{\sigma} is the deviatoric stress, \eqn{d} is the grain size, and \eqn{k} and \eqn{n} are empirical parameters.
+where \eqn{\sigma} is the deviatoric stress, \eqn{d} is the grain size, and
+\eqn{k} and \eqn{n} are empirical parameters.
 }
 \examples{
 set.seed(20250411)

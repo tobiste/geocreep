@@ -236,7 +236,22 @@ flow_models <- function() {
 #' \item{`"Lusk2021_HP"`}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for high pressures (700-1600 MPa)}
 #' }
 #'
-#' @details General flow law: \deqn{\dot{\epsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
+#' @details General flow law giving the strain rate is  \deqn{\dot{\epsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
+#'
+#' where \eqn{\sigma} is the deviatoric stess, \eqn{d} is the grain size,
+#' \eqn{f_{H_2O}} is the water fugacity, \eqn{T} is the temperature,
+#' \eqn{H} is the enthalpy, and \eqn{R} is the ideal gas constant. The flow
+#' parameters are the prefactor \eqn{A}, and the exponents \eqn{n}, \eqn{m}, and \eqn{r}.
+#'
+#' To propagate the uncertainties of the flow parameters Monte Carlo simulation is used here.
+#' \itemize{
+#' \item{ If the flow law parameters are given by a mean value and a marginal error (\eqn{\mu \pm z}),
+#' the Monte Carlo simulation assumes a normal distribution given by
+#' \eqn{X = N\left(\mu, \sigma^2\right)}, where \eqn{\mu} is the mean and \eqn{\sigma^2}
+#'  is the standard deviation of the mean (\eqn{\sigma^2 = \text{z}/1.96}).}
+#'  \item{ If the parameter is given by a range of possible values \eqn{\left[x_\text{min}, x_\text{max}\right]},
+#'  the Monte Carlo simulation assumes an uniform distribution given by \eqn{X = U\left(x_\text{min}, x_\text{max}\right)}.}
+#' }
 #'
 #' @returns list. Strain rate in 1/s. If Monte Carlo Simulation was used, see [mc_stats()] for detailed description of output.
 #' The flow laws produce log-normal distributed estimates considering the uncertainties in the parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
