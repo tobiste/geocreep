@@ -24,18 +24,22 @@ subgrainsize_piezometry(
 \item{sim}{non-negative integer. Number of Monte Carlo simulations}
 }
 \value{
-list. Stress in MPa. If Monte Carlo Simulation was used, see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output.
-The piezometer produce log-normal distributed estimates considering the uncertainties in the equation parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
+list. Differential stress in MPa. If Monte Carlo Simulation was used,
+and object of class \code{"MC_sim"} is returned (see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output).
+The piezometer produce log-normal distributed estimates considering the
+uncertainties in the equation parameter. Hence it is recommended to report
+the median (or geometric mean), and the interpercentile range.
 }
 \description{
-Calculates deviatoric stress using the Subgrain‐Size Piezometer of Goddard et al. (2020).
-#' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
+Calculates differential stress using the Subgrain‐Size Piezometer of Goddard et al. (2020).
+Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 }
 \details{
 The sub-grain size piezometer is
 \deqn{\frac{\lambda}{b} = 10^a \left(\frac{\sigma}{\mu}\right)^b}
 where \eqn{\lambda} is the mean line intercept length, \eqn{b} is the Burgers vector,
-\eqn{\sigma} is the deviatoric stress, \eqn{\mu} is the shear modulus, and \eqn{a} and \eqn{b} are the empirical exponents.
+\eqn{\sigma} is the differential stress, \eqn{\mu} is the shear modulus, and
+\eqn{a} and \eqn{b} are the empirical exponents.
 }
 \examples{
 set.seed(20250411)

@@ -1,15 +1,15 @@
 #' Grain-Size Piezometry
 #'
-#' Calculates deviatoric stress from grain size.
+#' Calculates differential stress from grain size.
 #' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 #'
 #' @param d numeric. Grain size in \eqn{\mu}m or `units` object
 #' @param sd (optional) Standard deviation of `d`
 #' @param model character. One of
 #' \describe{
-#' \item{`"Stipp-reg2-3"`}{Piezometer for dislocation creep regime 2 and 3 after
+#' \item{`"Stipp-reg2-3"`}{Piezometer for dislocation creep regime 2 and 3 (deviatoric stress <368 MPa) after
 #' Stipp and Tullis (2003)}
-#' \item{`"Stripp-reg1"`}{Piezometer for dislocation creep regime 1 after
+#' \item{`"Stripp-reg1"`}{Piezometer for dislocation creep regime 1 (deviatoric stress \eqn{\ge}368 MPa) after
 #' Stipp and Tullis (2003)}
 #' \item{`"Cross-1"`}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m
 #' step size resolution in EBSD data}
@@ -18,16 +18,16 @@
 #' }
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
-#' @returns list. Stress in MPa. If Monte Carlo Simulation was used, see
-#' [mc_stats()] for detailed description of output.
+#' @returns list. Differential stress in MPa. If Monte Carlo Simulation was used,
+#' and object of class `"MC_sim"` is returned (see [mc_stats()] for detailed description of output).
 #' The piezometer produce log-normal distributed estimates considering the
 #' uncertainties in the equation parameter. Hence it is recommended to report
 #' the median (or geometric mean), and the interpercentile range.
 #'
 #' @details
-#' General formula for grain size piezometer is:
+#' General formula for grain-size piezometer is:
 #' \deqn{\sigma = \left(\frac{d}{k}\right)^\frac{1}{n}}
-#' where \eqn{\sigma} is the deviatoric stress, \eqn{d} is the grain size, and
+#' where \eqn{\sigma} is the differential stress, \eqn{d} is the grain size, and
 #' \eqn{k} and \eqn{n} are empirical parameters.
 #'
 #'
@@ -94,8 +94,8 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
 
 #' Subgrain‐Size Piezometer Calibrated for EBSD
 #'
-#' Calculates deviatoric stress using the Subgrain‐Size Piezometer of Goddard et al. (2020).
-#' #' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
+#' Calculates differential stress using the Subgrain‐Size Piezometer of Goddard et al. (2020).
+#' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 #'
 #' @param lambda mean line intercept length in \eqn{\mu}m or `units` object.
 #' @param sd (optional) Standard deviation of `lambda`
@@ -103,13 +103,17 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
 #' @param min character. The Mineral uses. one of `"q"` for quartz, `"fo90"` for Olive with 90% Forsterite, or `"fo50"` for Olivine with 50% Forsterite.
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
-#' @returns list. Stress in MPa. If Monte Carlo Simulation was used, see [mc_stats()] for detailed description of output.
-#' The piezometer produce log-normal distributed estimates considering the uncertainties in the equation parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
+#' @returns list. Differential stress in MPa. If Monte Carlo Simulation was used,
+#' and object of class `"MC_sim"` is returned (see [mc_stats()] for detailed description of output).
+#' The piezometer produce log-normal distributed estimates considering the
+#' uncertainties in the equation parameter. Hence it is recommended to report
+#' the median (or geometric mean), and the interpercentile range.
 #'
 #' @details The sub-grain size piezometer is
 #' \deqn{\frac{\lambda}{b} = 10^a \left(\frac{\sigma}{\mu}\right)^b}
 #' where \eqn{\lambda} is the mean line intercept length, \eqn{b} is the Burgers vector,
-#' \eqn{\sigma} is the deviatoric stress, \eqn{\mu} is the shear modulus, and \eqn{a} and \eqn{b} are the empirical exponents.
+#' \eqn{\sigma} is the differential stress, \eqn{\mu} is the shear modulus, and
+#' \eqn{a} and \eqn{b} are the empirical exponents.
 #'
 #' @seealso [grainsize_piezometry()], [units::set_units()]
 #'

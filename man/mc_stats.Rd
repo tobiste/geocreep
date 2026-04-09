@@ -7,7 +7,7 @@
 mc_stats(x, unit = NULL)
 }
 \arguments{
-\item{x}{numeric vector. The values from n Monte Carlo Simulations}
+\item{x}{numeric vector of vector of class \code{units}. The values from n Monte Carlo Simulations}
 
 \item{unit}{(optional) object of class \code{units} or \code{symbolic_units}, or in the case of \code{set_units} expression with symbols.}
 }
@@ -21,6 +21,7 @@ mc_stats(x, unit = NULL)
 \item{\code{ir_68}}{the 68\% interpercentile range}
 \item{\code{samples}}{the Monte Carlo simulation}
 }
+Values will be in the unit specified by parameter \code{unit} or be equal to the unit of \code{x} if \code{x} is a \code{units} object.
 }
 \description{
 Estimates from Monte Carlo Simulation
@@ -30,5 +31,5 @@ Equations of the form \eqn{X = A b^{n \pm \sigma}} create non-normal, left-skewe
 Thus, it is recommended to report median and percentiles instead of mean, standard deviation and confidence intervals.
 }
 \examples{
-mc_stats(rnorm(100), "Pa")
+mc_stats(rnorm(100, mean = 100), "MPa")
 }

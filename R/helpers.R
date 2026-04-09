@@ -16,7 +16,7 @@ set_units_if <- function(x, unit) {
 
 #' Estimates from Monte Carlo Simulation
 #'
-#' @param x numeric vector. The values from n Monte Carlo Simulations
+#' @param x numeric vector of vector of class `units`. The values from n Monte Carlo Simulations
 #' @param unit (optional) object of class `units` or `symbolic_units`, or in the case of `set_units` expression with symbols.
 #'
 #' @returns `'MC_sim'` object, i.e. a list.
@@ -28,17 +28,24 @@ set_units_if <- function(x, unit) {
 #' \item{`ir_68`}{the 68% interpercentile range}
 #' \item{`samples`}{the Monte Carlo simulation}
 #' }
+#' Values will be in the unit specified by parameter `unit` or be equal to the unit of `x` if `x` is a `units` object.
 #'
 #' @details Equations of the form \eqn{X = A b^{n \pm \sigma}} create non-normal, left-skewed distributions.
 #' Thus, it is recommended to report median and percentiles instead of mean, standard deviation and confidence intervals.
 #'
 #' @importFrom stats median quantile t.test
+#' @importFrom units drop_units
 #'
 #' @export
 #'
 #' @examples
-#' mc_stats(rnorm(100), "Pa")
+#' mc_stats(rnorm(100, mean = 100), "MPa")
 mc_stats <- function(x, unit = NULL) {
+  if(inherits(x, "units")) {
+    unit <- units(x)
+    x <- units::drop_units(x)
+  }
+
   median_s <- stats::median(x)
   ir_95 <- stats::quantile(x, c(0.025, 0.975))
   ir_68 <- stats::quantile(x, c(0.16, 0.84))
@@ -71,4 +78,8 @@ mc_stats <- function(x, unit = NULL) {
   class(out) <- append(class(out), "MC_sim")
 
   return(out)
+}
+
+gas_const <- function(){
+  units::set_units(8.31446261815324, J * K^-1 * mol^-1)
 }

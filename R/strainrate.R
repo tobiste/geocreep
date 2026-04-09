@@ -2,7 +2,7 @@
 #' @importFrom stats rnorm runif
 #' @importFrom units set_units
 flow_models <- function() {
-  R <- units::set_units(8.31446261815324, J * K^-1 * mol^-1) |>
+  R <- gas_const() |>
     # set_units(MPa*cm3*K^-1*mol^-1) |>
     units::set_units(kJ * K^-1 * mol^-1) |>
     as.numeric()
@@ -208,12 +208,13 @@ flow_models <- function() {
 }
 
 
-#' Strain Rate
+#' Strain Rates for Creep in Quartz
 #'
-#' Calculates strain rate from stress, temperature, and grain size.
-#' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
+#' Calculates strain rates of deforming quartz from stress, temperature, and grain size from
+#' experimentally determined creep law parameters.
+#' Monte Carlo sampling is used for propagating parameter uncertainties in to creep estimate.
 #'
-#' @param stress Deviatoric stress in MPa or `units` object
+#' @param stress Differential stress in MPa or `units` object
 #' @param temperature Temperature in Kelvin or `units` object
 #' @param fugacity Water fugacity in MPa or `units` object
 #' @param grainsize Grain size in \eqn{\mu}m or `units` object
@@ -238,7 +239,7 @@ flow_models <- function() {
 #'
 #' @details General flow law giving the strain rate is  \deqn{\dot{\epsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
 #'
-#' where \eqn{\sigma} is the deviatoric stess, \eqn{d} is the grain size,
+#' where \eqn{\sigma} is the differential stress, \eqn{d} is the grain size,
 #' \eqn{f_{H_2O}} is the water fugacity, \eqn{T} is the temperature,
 #' \eqn{H} is the enthalpy, and \eqn{R} is the ideal gas constant. The flow
 #' parameters are the prefactor \eqn{A}, and the exponents \eqn{n}, \eqn{m}, and \eqn{r}.
@@ -253,8 +254,11 @@ flow_models <- function() {
 #'  the Monte Carlo simulation assumes an uniform distribution given by \eqn{X = U\left(x_\text{min}, x_\text{max}\right)}.}
 #' }
 #'
-#' @returns list. Strain rate in 1/s. If Monte Carlo Simulation was used, see [mc_stats()] for detailed description of output.
-#' The flow laws produce log-normal distributed estimates considering the uncertainties in the parameter. Hence it is recommended to report the median (or geometric mean), and the interpercentile range.
+#' @returns list. Strain rate in 1/s. If Monte Carlo Simulation was used, and
+#' object of class `"MC_sim"` is returned (see [mc_stats()] for detailed description of output).
+#' The flow laws produce log-normal distributed estimates considering the
+#' uncertainties in the parameter. Hence it is recommended to report the median
+#' (or geometric mean), and the interpercentile range.
 #'
 #' @references
 #'  Hirth, G., Teyssier, C., & Dunlap, W. J. (2001). An evaluation of quartzite flow laws based on comparisons between experimentally and naturally deformed rocks. International Journal of Earth Sciences, 90(1), 77–87. https://doi.org/10.1007/s005310000152
@@ -276,11 +280,11 @@ flow_models <- function() {
 #' temperature <- units::set_units(300, degC)
 #' pressure <- units::set_units(400, MPa)
 #' fugacity <- ps_fugacity(pressure, temperature)
-#' strain_rate(stress = stress, temperature = temperature, model = "Paterson1990")
-#' strain_rate(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
-#' strain_rate(stress = stress, temperature = temperature, fugacity = fugacity, model = "Rutter2004")
-#' strain_rate(stress = stress, temperature = temperature, fugacity = fugacity, model = "Lu2019")
-strain_rate <- function(stress, temperature, fugacity = NULL,
+#' creep_quartz(stress = stress, temperature = temperature, model = "Paterson1990")
+#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
+#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Rutter2004")
+#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Lu2019")
+creep_quartz <- function(stress, temperature, fugacity = NULL,
                         grainsize = NULL, pressure = NULL,
                         sim = 1e6,
                         model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason2004", "Rutter2004", "Fukuda2018", "Richter2018", "Lu2019", "Tokle2019", "Lusk2021")) {
@@ -310,11 +314,12 @@ strain_rate <- function(stress, temperature, fugacity = NULL,
   # Load model parameters and function
   fm_FUN <- fm[[model]]
 
-  edot <- do.call(fm_FUN, args = args)
+  edot <- do.call(fm_FUN, args = args) |>
+    units::set_units("1/s")
 
-  if (length(edot) == 1) {
-    units::set_units(edot, "1/s")
+  if(length(edot)>1){
+    mc_stats(edot)
   } else {
-    mc_stats(edot, "1/s")
+    edot
   }
 }

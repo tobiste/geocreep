@@ -9,8 +9,8 @@
 <!-- badges: end -->
 
 The goal of geocreep is to quick and easy calculate strain rates,
-fugacities and deviatoric stress from grain sizes using R. The codes use
-Monte Carlo simulations to propagate uncertainties of the flow
+fugacities and differential stress from grain sizes using R. The codes
+use Monte Carlo simulations to propagate uncertainties of the flow
 parameters into the final estimate.
 
 ## Installation
@@ -54,17 +54,17 @@ print(fugacity)
 
 ### Grain-size piezometry
 
-Calculating deviatoric stress from grain size (e.g. using the Stipp and
-Tullis piezometer):
+Calculating differential stress from grain size (e.g. using the Stipp
+and Tullis piezometer):
 
 ``` r
 # Define grain size
 grainsize <- units::set_units(11, um)
 
-# Calculate equivalent deviatoric stress
+# Calculate equivalent differential stress
 stress <- grainsize_piezometry(grainsize, model = "Stipp-reg2-3")
 
-# Median deviatoric stress
+# Median differential stress
 print(stress$median)
 #> 99.79369 [MPa]
 
@@ -80,12 +80,12 @@ Note: There is also a subgrain-size piezometer (Goddard et al. 2021):
 
 ### Flow laws
 
-Calculate strain rate using a defined flow law from stress, temperature,
-and fugacity:
+Calculate strain rates using a defined flow law for quartz from
+differential stress, temperature, and fugacity:
 
 ``` r
-# Calculate strain rate using stress, temperature and fugacity defined and calculated before
-edot <- strain_rate(stress = stress$median, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
+# Calculate strain rates using differential stress, temperature and fugacity defined and calculated before
+edot <- creep_quartz(stress = stress$median, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
 
 # Median strain rate
 print(edot$median)
