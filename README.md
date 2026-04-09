@@ -75,6 +75,13 @@ print(stress$ir_68)
 #>  71.35424 143.20101
 ```
 
+By default, the functions create 100,000 samples for each parameter with
+uncertainties, creating 1e6 results. The results do not follow a normal
+(symmetric) distribution because some parameters are exponents in the
+power laws. Therefore, the median and interpercentile range provide the
+best estimators for average and disperson, rather than mean and standard
+deviation.
+
 Note: There is also a subgrain-size piezometer (Goddard et al. 2021):
 `subgrainsize_piezometer()`
 
