@@ -84,18 +84,18 @@ Calculate strain rates using a defined flow law for quartz from
 differential stress, temperature, and fugacity:
 
 ``` r
-# Calculate strain rates using differential stress, temperature and fugacity defined and calculated before
-edot <- creep_quartz(stress = stress$median, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
+# Calculate strain rates using temperature, the fugacity, and the MC estimates for differential stress calculated before
+edot <- creep_quartz(stress = stress$samples, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
 
 # Median strain rate
 print(edot$median)
-#> 1.152363e-14 [1/s]
+#> 1.188639e-14 [1/s]
 
 # 68% Interpercentile range of MC estimates
 print(edot$ir_68)
 #> Units: [1/s]
 #>          16%          84% 
-#> 2.018063e-15 6.615589e-14
+#> 1.300882e-15 1.140643e-13
 ```
 
 ## Author
