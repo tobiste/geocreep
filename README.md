@@ -25,8 +25,6 @@ pak::pak("tobiste/geocreep")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
 ``` r
 library(geocreep)
 library(units) # load this package to define your units
@@ -60,6 +58,17 @@ summary(fugacity)
 #> Student's t-Test:            p<0.05
 ```
 
+By default, the functions create 100,000 samples for each parameter with
+uncertainties, creating 1e6 results. Here, a small number has been
+chosen just for demonstration purpose. In practice, however, you would
+use a number \>\>1e5.
+
+In general, the Monte Carlo simulations results do not follow a normal
+(symmetric) distribution because some parameters are exponents in the
+power laws. Therefore, the median and interpercentile range provide the
+best estimators for average and dispersion, rather than mean and
+standard deviation.
+
 ### Grain-size piezometry
 
 Calculating differential stress from grain size (e.g. using the Stipp
@@ -81,13 +90,6 @@ summary(stress)
 #> Standard error in log-space: 0.00481395
 #> Student's t-Test:            p<0.05
 ```
-
-By default, the functions create 100,000 samples for each parameter with
-uncertainties, creating 1e6 results. The results do not follow a normal
-(symmetric) distribution because some parameters are exponents in the
-power laws. Therefore, the median and interpercentile range provide the
-best estimators for average and disperson, rather than mean and standard
-deviation.
 
 Note: There is also a subgrain-size piezometer (Goddard et al. 2021):
 `subgrainsize_piezometer()`
