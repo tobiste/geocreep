@@ -248,14 +248,14 @@ flow_models <- function() {
 #' \itemize{
 #' \item{ If the flow law parameters are given by a mean value and a marginal error (\eqn{\mu \pm z}),
 #' the Monte Carlo simulation assumes a normal distribution given by
-#' \eqn{X = N\left(\mu, \sigma^2\right)}, where \eqn{\mu} is the mean and \eqn{\sigma^2}
-#'  is the standard deviation of the mean (\eqn{\sigma^2 = \text{z}/1.96}).}
+#' \eqn{X = N\left(\mu, \sigma\right)}, where \eqn{\mu} is the mean and \eqn{\sigma}
+#'  is the standard deviation of the mean (\eqn{\sigma = \text{z}/1.96}).}
 #'  \item{ If the parameter is given by a range of possible values \eqn{\left[x_\text{min}, x_\text{max}\right]},
 #'  the Monte Carlo simulation assumes an uniform distribution given by \eqn{X = U\left(x_\text{min}, x_\text{max}\right)}.}
 #' }
 #'
 #' @returns list. Strain rate in 1/s. If Monte Carlo Simulation was used, and
-#' object of class `"MC_sim"` is returned (see [mc_stats()] for detailed description of output).
+#' object of class `"MCS"` is returned (see [summary()] for detailed description of output).
 #' The flow laws produce log-normal distributed estimates considering the
 #' uncertainties in the parameter. Hence it is recommended to report the median
 #' (or geometric mean), and the interpercentile range.
@@ -318,8 +318,7 @@ creep_quartz <- function(stress, temperature, fugacity = NULL,
     units::set_units("1/s")
 
   if(length(edot)>1){
-    mc_stats(edot)
-  } else {
-    edot
+    class(edot) <- append('MCS_log', class(edot))
   }
+  return(edot)
 }

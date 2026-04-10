@@ -7,7 +7,7 @@
 #' @param sd (optional) Standard deviation of `d`
 #' @param model character. One of
 #' \describe{
-#' \item{`"Stipp-reg2-3"`}{Piezometer for dislocation creep regime 2 and 3 (deviatoric stress <368 MPa) after
+#' \item{`"Stipp-reg2-3"`}{Piezometer for dislocation creep regime 2 and 3 (for deviatoric stress <368 MPa) after
 #' Stipp and Tullis (2003)}
 #' \item{`"Stripp-reg1"`}{Piezometer for dislocation creep regime 1 (deviatoric stress \eqn{\ge}368 MPa) after
 #' Stipp and Tullis (2003)}
@@ -19,7 +19,7 @@
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
 #' @returns list. Differential stress in MPa. If Monte Carlo Simulation was used,
-#' and object of class `"MC_sim"` is returned (see [mc_stats()] for detailed description of output).
+#' and object of class `"MCS"` is returned (see [summary()] for detailed description of output).
 #' The piezometer produce log-normal distributed estimates considering the
 #' uncertainties in the equation parameter. Hence it is recommended to report
 #' the median (or geometric mean), and the interpercentile range.
@@ -89,7 +89,9 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
   # stress_samples <- (k_samples / d)^(-1 / n_samples) # in MPa
   stress_samples <- (d / k_samples)^(1 / n_samples)
 
-  mc_stats(stress_samples, "MPa")
+  stress <- units::set_units(stress_samples, "MPa")
+  class(stress) <- append('MCS_log', class(stress))
+  return(stress)
 }
 
 #' Subgrain‐Size Piezometer Calibrated for EBSD
@@ -104,7 +106,7 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
 #' @returns list. Differential stress in MPa. If Monte Carlo Simulation was used,
-#' and object of class `"MC_sim"` is returned (see [mc_stats()] for detailed description of output).
+#' and object of class `"MCS"` is returned (see [summary()] for detailed description of output).
 #' The piezometer produce log-normal distributed estimates considering the
 #' uncertainties in the equation parameter. Hence it is recommended to report
 #' the median (or geometric mean), and the interpercentile range.
@@ -161,7 +163,8 @@ subgrainsize_piezometry <- function(lambda, sd = NULL, calibrated = TRUE, min = 
   }
 
   stress <- shear_m * (lambda / (burgers * 10^a))^(1 / b)
-  stress <- stress * 10 # to match the values as published in Goddard
-
-  mc_stats(stress, "MPa")
+  stress <- stress * 10 |> # to match the values as published in Goddard
+    units::set_units("MPa")
+  class(stress) <- append('MCS_log', class(stress))
+  return(stress)
 }

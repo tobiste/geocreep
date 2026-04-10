@@ -25,7 +25,7 @@ subgrainsize_piezometry(
 }
 \value{
 list. Differential stress in MPa. If Monte Carlo Simulation was used,
-and object of class \code{"MC_sim"} is returned (see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output).
+and object of class \code{"MCS"} is returned (see \code{\link[=summary]{summary()}} for detailed description of output).
 The piezometer produce log-normal distributed estimates considering the
 uncertainties in the equation parameter. Hence it is recommended to report
 the median (or geometric mean), and the interpercentile range.

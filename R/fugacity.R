@@ -83,6 +83,7 @@ ps_eos <- function(volume, temperature, targetP, phase = c("H2O", "CO2")) {
 #'
 #' @importFrom nleqslv nleqslv
 #' @importFrom units set_units
+#' @importFrom future.apply future_mapply
 #' @name pitzer
 #'
 #' @seealso [units::set_units()]
@@ -116,7 +117,14 @@ ps_volume <- function(pressure, temperature, phase = c("H2O", "CO2")) {
 
 #' @rdname pitzer
 #' @export
-ps_fugacity <- function(pressure, temperature, phase = c("H2O", "CO2")) {
+ps_fugacity <-  function(pressure, temperature, phase = c("H2O", "CO2")) {
+  edot <- future.apply::future_mapply(ps_fugacity1, pressure = pressure, temperature = temperature, MoreArgs = list(phase = c("H2O", "CO2"))) |>
+    units::set_units("bar") # bars
+  class(edot) <- append('MCS_log', class(edot))
+  return(edot)
+}
+
+ps_fugacity1 <- function(pressure, temperature, phase = c("H2O", "CO2")) {
   phase <- match.arg(phase)
   # pressure in bars, temperature in Kelvins
   pressure <- units::set_units(pressure, "bar") |>
@@ -146,5 +154,5 @@ ps_fugacity <- function(pressure, temperature, phase = c("H2O", "CO2")) {
     - cv[9] / cv[10] * (exp(-cv[10] * den) - 1)
     + pressure * 1e5 / (den * R_const * temperature)
     + log(R_const * temperature) - 1) / 1e5
-  units::set_units(fug, "bar") # bars
+  return(fug)
 }

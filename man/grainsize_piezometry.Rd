@@ -18,7 +18,7 @@ grainsize_piezometry(
 
 \item{model}{character. One of
 \describe{
-\item{\code{"Stipp-reg2-3"}}{Piezometer for dislocation creep regime 2 and 3 (deviatoric stress <368 MPa) after
+\item{\code{"Stipp-reg2-3"}}{Piezometer for dislocation creep regime 2 and 3 (for deviatoric stress <368 MPa) after
 Stipp and Tullis (2003)}
 \item{\code{"Stripp-reg1"}}{Piezometer for dislocation creep regime 1 (deviatoric stress \eqn{\ge}368 MPa) after
 Stipp and Tullis (2003)}
@@ -32,7 +32,7 @@ According to authors, more accurately estimates stress in fine-grained (<10 μm)
 }
 \value{
 list. Differential stress in MPa. If Monte Carlo Simulation was used,
-and object of class \code{"MC_sim"} is returned (see \code{\link[=mc_stats]{mc_stats()}} for detailed description of output).
+and object of class \code{"MCS"} is returned (see \code{\link[=summary]{summary()}} for detailed description of output).
 The piezometer produce log-normal distributed estimates considering the
 uncertainties in the equation parameter. Hence it is recommended to report
 the median (or geometric mean), and the interpercentile range.

@@ -33,6 +33,9 @@ library(units) # load this package to define your units
 
 # Set seed for reproducibility
 set.seed(20250411)
+
+# define a number of Monte Carlo simulations
+nmc <- 1e3 # here a small number has been chosen just for demonstration. In practice you would use a number >>1e5
 ```
 
 ### Water fugacity
@@ -42,37 +45,41 @@ and Sterner (1994) equation:
 
 ``` r
 #Define temperature and pressure
-temperature <- units::set_units(300, degC)
-pressure <- units::set_units(400, MPa)
+temperature <- units::set_units(rnorm(nmc, 300, 50), degC)
+pressure <- units::set_units(rnorm(nmc, 400, 10), MPa)
 
 # Calculate fugacity
 fugacity <- ps_fugacity(pressure, temperature)
 
-print(fugacity)
-#> 371.3371 [bar]
+summary(fugacity)
+#> Statistical summary of 1000 Monte Carlo simulations
+#> 
+#> Median:                      370 bar 
+#> 95% interpercentile range:   94 - 850 bar 
+#> Standard error in log-space: 0.00764469
+#> Student's t-Test:            p<0.05
 ```
 
 ### Grain-size piezometry
 
 Calculating differential stress from grain size (e.g. using the Stipp
-and Tullis piezometer):
+and Tullis, 2003, piezometer):
 
 ``` r
 # Define grain size
 grainsize <- units::set_units(11, um)
 
 # Calculate equivalent differential stress
-stress <- grainsize_piezometry(grainsize, model = "Stipp-reg2-3")
+stress <- grainsize_piezometry(grainsize, model = "Stipp-reg2-3", sim = nmc)
 
-# Median differential stress
-print(stress$median)
-#> 99.79369 [MPa]
-
-# 68% Interpercentile range of MC estimates
-print(stress$ir_68)
-#> Units: [MPa]
-#>       16%       84% 
-#>  71.35424 143.20101
+# Summary stats of Monte Carlo simulation
+summary(stress)
+#> Statistical summary of 1000 Monte Carlo simulations
+#> 
+#> Median:                      100 MPa 
+#> 95% interpercentile range:   52 - 200 MPa 
+#> Standard error in log-space: 0.00481395
+#> Student's t-Test:            p<0.05
 ```
 
 By default, the functions create 100,000 samples for each parameter with
@@ -92,17 +99,16 @@ differential stress, temperature, and fugacity:
 
 ``` r
 # Calculate strain rates using temperature, the fugacity, and the MC estimates for differential stress calculated before
-edot <- creep_quartz(stress = stress$samples, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
+edot <- creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001", sim = nmc)
 
-# Median strain rate
-print(edot$median)
-#> 1.188639e-14 [1/s]
-
-# 68% Interpercentile range of MC estimates
-print(edot$ir_68)
-#> Units: [1/s]
-#>          16%          84% 
-#> 1.300882e-15 1.140643e-13
+# Summary stats of Monte Carlo simulation
+summary(edot)
+#> Statistical summary of 1000 Monte Carlo simulations
+#> 
+#> Median:                      1e-14 /s
+#> 95% interpercentile range:   1.7e-18 - 6.4e-12 /s
+#> Standard error in log-space: 0.0535924
+#> Student's t-Test:            p<0.05
 ```
 
 ## Author

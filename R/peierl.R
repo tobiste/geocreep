@@ -71,8 +71,8 @@ peierls_creep <- function(stress, temperature, model = c("Goetze1979", "Demouchy
 
   edot <- units::set_units(edot, 's-1')
   if(length(edot)>1){
-    mc_stats(edot)
-  } else {
-    edot
+    class(edot) <- append(class(edot), 'MCS')
   }
+    return(edot)
+
 }
