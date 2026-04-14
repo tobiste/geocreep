@@ -17,11 +17,15 @@
 a list with
 \describe{
 \item{\code{median}}{median of the Monte Carlo simulations}
+\item{\code{ir.95}}{the 95\% and 68\% interpercentile range}
+\item{\code{ir.68}}{the 68\% interpercentile range}
 \item{\code{mean}}{geometric mean the Monte Carlo simulations}
-\item{\code{stderr_log}}{standard error of \code{log(samples)}}
-\item{\code{ir_95}}{the 95\% and 68\% interpercentile range}
-\item{\code{ir_68}}{the 68\% interpercentile range}
-\item{\code{samples}}{the Monte Carlo simulation}
+\item{\code{sd}}{1\eqn{\sigma} range about the mean}
+\item{\code{sd2}}{2\eqn{\sigma} range about the mean}
+\item{\code{conf.int}}{95\% confidence intverval about the mean}
+\item{\code{stderr.log}}{standard error of \code{log(samples)}}
+\item{\code{t.test}}{Statistic and p-value of the Student's t-test of \code{log(samples)}}
+\item{\code{n}}{Number of samples}
 }
 Values will be in the unit specified by parameter \code{unit} or be equal to the unit of \code{x} if \code{x} is a \code{units} object.
 }

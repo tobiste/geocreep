@@ -50,8 +50,8 @@ nmc <- 1e3 # here a small number has been chosen just for demonstration. In prac
 Calculate water fugacity from temperature and pressures using the Pitzer and Sterner (1994) equation:
 ```{r fug}
 #Define temperature and pressure
-temperature <- units::set_units(rnorm(nmc, 300, 50), degC)
-pressure <- units::set_units(rnorm(nmc, 400, 10), MPa)
+temperature <- units::set_units(rnorm(nmc, 300, 50/1.96), degC)
+pressure <- units::set_units(rnorm(nmc, 400, 10/1.96), MPa)
 
 # Calculate fugacity
 fugacity <- ps_fugacity(pressure, temperature)

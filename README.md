@@ -43,8 +43,8 @@ and Sterner (1994) equation:
 
 ``` r
 #Define temperature and pressure
-temperature <- units::set_units(rnorm(nmc, 300, 50), degC)
-pressure <- units::set_units(rnorm(nmc, 400, 10), MPa)
+temperature <- units::set_units(rnorm(nmc, 300, 50/1.96), degC)
+pressure <- units::set_units(rnorm(nmc, 400, 10/1.96), MPa)
 
 # Calculate fugacity
 fugacity <- ps_fugacity(pressure, temperature)
@@ -53,8 +53,8 @@ summary(fugacity)
 #> Statistical summary of 1000 Monte Carlo simulations
 #> 
 #> Median:                      370 bar 
-#> 95% interpercentile range:   94 - 850 bar 
-#> Standard error in log-space: 0.00764469
+#> 95% interpercentile range:   200 - 590 bar 
+#> Standard error in log-space: 0.00375502
 #> Student's t-Test:            p<0.05
 ```
 
@@ -107,9 +107,9 @@ edot <- creep_quartz(stress = stress, temperature = temperature, fugacity = fuga
 summary(edot)
 #> Statistical summary of 1000 Monte Carlo simulations
 #> 
-#> Median:                      1e-14 /s
-#> 95% interpercentile range:   1.7e-18 - 6.4e-12 /s
-#> Standard error in log-space: 0.0535924
+#> Median:                      1.1e-14 /s
+#> 95% interpercentile range:   3.8e-17 - 2.5e-12 /s
+#> Standard error in log-space: 0.0380114
 #> Student's t-Test:            p<0.05
 ```
 

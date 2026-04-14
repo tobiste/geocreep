@@ -23,11 +23,15 @@ set_units_if <- function(x, unit) {
 #' @returns a list with
 #' \describe{
 #' \item{`median`}{median of the Monte Carlo simulations}
+#' \item{`ir.95`}{the 95% and 68% interpercentile range}
+#' \item{`ir.68`}{the 68% interpercentile range}
 #' \item{`mean`}{geometric mean the Monte Carlo simulations}
-#' \item{`stderr_log`}{standard error of `log(samples)`}
-#' \item{`ir_95`}{the 95% and 68% interpercentile range}
-#' \item{`ir_68`}{the 68% interpercentile range}
-#' \item{`samples`}{the Monte Carlo simulation}
+#' \item{`sd`}{1\eqn{\sigma} range about the mean}
+#' \item{`sd2`}{2\eqn{\sigma} range about the mean}
+#' \item{`conf.int`}{95% confidence intverval about the mean}
+#' \item{`stderr.log`}{standard error of `log(samples)`}
+#' \item{`t.test`}{Statistic and p-value of the Student's t-test of `log(samples)`}
+#' \item{`n`}{Number of samples}
 #' }
 #' Values will be in the unit specified by parameter `unit` or be equal to the unit of `x` if `x` is a `units` object.
 #'
