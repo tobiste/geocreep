@@ -250,7 +250,7 @@ flow_models <- function() {
 #' \item{`"Kronenberg1984"`}{Kronenberg and Tullis (1984): deformation mechanism: dislocation creep and grain-size sensitive creep; strain geometry: axial compression}
 #' \item{`"Luan1992"`}{Luan and Paterson (1990): dislocation creep; axial compression}
 #' \item{`"Gleason1995"`}{Gleason and Tullis (1995): dislocation creep; axial compression}
-#' \item{`"Gleason1995_melt"`}{Gleason and Tullis (1995): dislocation creep; axial compression; 1-2\% melt}
+#' \item{`"Gleason1995_melt"`}{Gleason and Tullis (1995): dislocation creep; axial compression; 1-2 percent melt}
 #' \item{`"Rutter2004"`}{Rutter and Brodie (2004): dislocation creep; axial compression}
 #' \item{`"Fukuda2018_LT"`}{Fukada et al. (2018): dislocation creep; axial compression}
 #' \item{`"Fukuda2018_HT"`}{Fukada et al. (2018): dislocation creep and grain-size sensitive creep; axial compression; HT-fit}
@@ -271,11 +271,11 @@ flow_models <- function() {
 #'
 #' To propagate the uncertainties of the flow parameters Monte Carlo simulation is used here.
 #' \itemize{
-#' \item{ If the flow law parameters are given by a mean value and a marginal error (\eqn{\mu \pm z}),
+#' \item{If the flow law parameters are given by a mean value and a marginal error (\eqn{\mu \pm z}),
 #' the Monte Carlo simulation assumes a normal distribution given by
 #' \eqn{X = N\left(\mu, \sigma\right)}, where \eqn{\mu} is the mean and \eqn{\sigma}
 #'  is the standard deviation of the mean (\eqn{\sigma = \text{z}/1.96}).}
-#' \item{ If the parameter is given by a range of possible values \eqn{\left[x_\text{min}, x_\text{max}\right]},
+#' \item{If the parameter is given by a range of possible values \eqn{\left[x_\text{min}, x_\text{max}\right]},
 #'  the Monte Carlo simulation assumes an uniform distribution given by \eqn{X = U\left(x_\text{min}, x_\text{max}\right)}.}
 #' }
 #'
@@ -302,7 +302,7 @@ flow_models <- function() {
 #'
 #' @export
 #'
-#' @seealso [units::set_units()]
+#' @seealso [units::set_units()] to set up `units` objects; [summary.MCS_log()] for statistical parameters of Monte Carlo samples
 #'
 #' @importFrom stats rnorm
 #' @importFrom units set_units

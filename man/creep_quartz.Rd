@@ -36,7 +36,7 @@ creep_quartz(
 \item{\code{"Kronenberg1984"}}{Kronenberg and Tullis (1984): deformation mechanism: dislocation creep and grain-size sensitive creep; strain geometry: axial compression}
 \item{\code{"Luan1992"}}{Luan and Paterson (1990): dislocation creep; axial compression}
 \item{\code{"Gleason1995"}}{Gleason and Tullis (1995): dislocation creep; axial compression}
-\item{\code{"Gleason1995_melt"}}{Gleason and Tullis (1995): dislocation creep; axial compression; 1-2\\% melt}
+\item{\code{"Gleason1995_melt"}}{Gleason and Tullis (1995): dislocation creep; axial compression; 1-2 percent melt}
 \item{\code{"Rutter2004"}}{Rutter and Brodie (2004): dislocation creep; axial compression}
 \item{\code{"Fukuda2018_LT"}}{Fukada et al. (2018): dislocation creep; axial compression}
 \item{\code{"Fukuda2018_HT"}}{Fukada et al. (2018): dislocation creep and grain-size sensitive creep; axial compression; HT-fit}
@@ -70,11 +70,11 @@ parameters are the prefactor \eqn{A}, and the exponents \eqn{n}, \eqn{m}, and \e
 
 To propagate the uncertainties of the flow parameters Monte Carlo simulation is used here.
 \itemize{
-\item{ If the flow law parameters are given by a mean value and a marginal error (\eqn{\mu \pm z}),
+\item{If the flow law parameters are given by a mean value and a marginal error (\eqn{\mu \pm z}),
 the Monte Carlo simulation assumes a normal distribution given by
 \eqn{X = N\left(\mu, \sigma\right)}, where \eqn{\mu} is the mean and \eqn{\sigma}
 is the standard deviation of the mean (\eqn{\sigma = \text{z}/1.96}).}
-\item{ If the parameter is given by a range of possible values \eqn{\left[x_\text{min}, x_\text{max}\right]},
+\item{If the parameter is given by a range of possible values \eqn{\left[x_\text{min}, x_\text{max}\right]},
 the Monte Carlo simulation assumes an uniform distribution given by \eqn{X = U\left(x_\text{min}, x_\text{max}\right)}.}
 }
 }
@@ -106,5 +106,5 @@ Lusk, A. D. J., Platt, J. P., \& Platt, J. A. (2021). Natural and Experimental C
 Richter, B., Stünitz, H., \& Heilbronner, R. (2018). The brittle-to-viscous transition in polycrystalline quartz: An experimental study. Journal of Structural Geology, 114(September 2017), 1-21. \doi{10.1016/j.jsg.2018.06.005}
 }
 \seealso{
-\code{\link[units:units]{units::set_units()}}
+\code{\link[units:units]{units::set_units()}} to set up \code{units} objects; \code{\link[=summary.MCS_log]{summary.MCS_log()}} for statistical parameters of Monte Carlo samples
 }
