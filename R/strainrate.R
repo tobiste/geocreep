@@ -40,13 +40,31 @@ flow_models <- function() {
 
       A * stress^n * exp(-H / (R * temperature))
     },
-    Gleason2004 = function(stress, temperature, fugacity = NULL, grainsize = NULL, pressure = NULL, sim) {
-      A <- 1.1e-4
+    Gleason1995 = function(stress, temperature, fugacity = NULL, grainsize = NULL, pressure = NULL, sim) {
+      A_factor <- 1.1
+      A_mean <- -4
+      A_sd <- 2
       H <- 223
       H_std <- 56
       n <- 4
       n_std <- 0.9
-      # A * stress^n * grainsize^m * fugacity^r * exp(-H / (R * temperature))
+
+      A <- A_factor * 10^rnorm(sim, A_mean, A_sd * ci2sd)
+      H <- rnorm(sim, H, H_std * ci2sd)
+      n <- rnorm(sim, n, n_std * ci2sd)
+
+      A * stress^n * exp(-H / (R * temperature))
+    },
+    Gleason1995_melt = function(stress, temperature, fugacity = NULL, grainsize = NULL, pressure = NULL, sim) {
+      A_factor <- 1.8
+      A_mean <- -8
+      A_sd <- 2
+      H <- 137
+      H_std <- 34
+      n <- 4
+      n_std <- 0.9
+
+      A <- A_factor * 10^rnorm(sim, A_mean, A_sd * ci2sd)
       H <- rnorm(sim, H, H_std * ci2sd)
       n <- rnorm(sim, n, n_std * ci2sd)
 
@@ -65,7 +83,7 @@ flow_models <- function() {
 
       A * stress^n * fugacity^r * exp(-H / (R * temperature))
     },
-    Fukuda2018 = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
+    Fukuda2018_LT = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
       H <- 129
       H_std <- 33
       n_min <- 2.9
@@ -76,17 +94,19 @@ flow_models <- function() {
 
       stress^n * fugacity^r * exp(-H / (R * temperature))
     },
-    Fukuda2018_2 = function(stress, temperature, fugacity, grainsize, pressure = NULL, sim) {
-      A <- 1.0 * 10^(-2.97)
-      H <- 183
+    Fukuda2018_HT = function(stress, temperature, fugacity, grainsize, pressure = NULL, sim) {
+      A <- -2.97
+      A_std <- 0.23
+      H <- 183.0
       H_std <- 25
       n <- 1.7
       n_std <- 0.2
-      m <- 0.51
-      m_std <- 0.51
-      r <- 1
+      m <- -0.51
+      m_std <- 0.13
+      r <- 1.0
       r_std <- 0.2
 
+      A <- 10^rnorm(sim, A, A_std * ci2sd)
       H <- rnorm(sim, H, H_std * ci2sd)
       n <- rnorm(sim, n, n_std * ci2sd)
       m <- rnorm(sim, m, m_std * ci2sd)
@@ -96,8 +116,10 @@ flow_models <- function() {
     },
     Richter2018 = function(stress, temperature, fugacity = NULL, grainsize = NULL, pressure = NULL, sim) {
       A <- 3.1e-4
-      H_min <- 168
-      H_max <- 170
+      # H_min <- 168
+      # H_max <- 170
+      H <- 170
+      H_std <- 72
       n <- 1.9
       n_std <- 0.6
       m <- 1.08
@@ -121,20 +143,21 @@ flow_models <- function() {
     },
     Lu2019 = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
       A <- 6e-15
+      A_std <- 5e-15
       H <- 132
       H_std <- 5
-      V <- 35.3
-      n <- 4
+      V <- 35.3 # cm3/mol
+      n <- 4 # adopted from Gleason and Tullis (1995) and Luan and Paterson (1992)
+      n_std <- 0.85 # mean std from Gleason and Tullis (1995) and Luan and Paterson (1992)
       r <- 2.7
 
       H <- rnorm(sim, H, H_std * ci2sd)
-      # V <- rnorm(sim, V, V_std * ci2sd)
-      # H <- Q + V * pressure
-      # A * stress^n * grainsize^m * fugacity^r * exp(-H / (R * temperature))
+      n <- rnorm(sim, n, n_std * ci2sd)
+      A <- rnorm(sim, A, A_std * ci2sd)
 
       A * stress^n * fugacity^r * exp(-H / (R * temperature))
     },
-    Tokle2019 = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
+    Tokle2019_HT = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
       A <- 8e-12
       H <- 140
       H_std <- 15
@@ -147,8 +170,8 @@ flow_models <- function() {
 
       A * stress^n * fugacity^r * exp(-H / (R * temperature))
     },
-    Tokle2019_2 = function(stress, temperature, fugacity, sim) {
-      A <- 5.e-12
+    Tokle2019_LT = function(stress, temperature, fugacity, sim) {
+      A <- 5.4e-12
       H <- 105
       H_std <- 15
       n <- 2.7
@@ -220,19 +243,21 @@ flow_models <- function() {
 #' @param grainsize Grain size in \eqn{\mu}m or `units` object
 #' @param pressure Pressure in MPa or `units` object
 #' @param sim non-negative number. Number of Monte Carlo simulations
-#' @param model character specifying the flow law to be used: \describe{
+#' @param model character specifying the flow law to be used:
+#'  \describe{
 #' \item{`"Hirth2001"`}{Hirth and Tullis (2001), dislocation creep}
 #' \item{`"Paterson1990"`}{Paterson and Luan (1990): dislocation creep; axial compression}
 #' \item{`"Kronenberg1984"`}{Kronenberg and Tullis (1984): deformation mechanism: dislocation creep and grain-size sensitive creep; strain geometry: axial compression}
 #' \item{`"Luan1992"`}{Luan and Paterson (1990): dislocation creep; axial compression}
-#' \item{`"Gleason2004"`}{Gleason and Tullis (1995): dislocation creep; axial compression}
+#' \item{`"Gleason1995"`}{Gleason and Tullis (1995): dislocation creep; axial compression}
+#' \item{`"Gleason1995_melt"`}{Gleason and Tullis (1995): dislocation creep; axial compression; 1-2\% melt}
 #' \item{`"Rutter2004"`}{Rutter and Brodie (2004): dislocation creep; axial compression}
-#' \item{`"Fukuda2018"`}{Fukada et al. (2018): dislocation creep; axial compression}
-#' \item{`"Fukuda2018_2"`}{Fukada et al. (2018): dislocation creep and grain-size sensitive creep; axial compression}
-#' \item{`"Richter2018"`}{Richter et al. (2018): dislocation creep and grain-size sensitive creep; general shear}
+#' \item{`"Fukuda2018_LT"`}{Fukada et al. (2018): dislocation creep; axial compression}
+#' \item{`"Fukuda2018_HT"`}{Fukada et al. (2018): dislocation creep and grain-size sensitive creep; axial compression; HT-fit}
+#' \item{`"Richter2018"`}{Richter et al. (2018): dislocation creep and grain-size sensitive creep; general shear; between 800 and 1000 degree Celsius}
 #' \item{`"Lu2019"`}{Lu and Jiang (2019): dislocation creep}
-#' \item{`"Tokle2019"`}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep}
-#' \item{`"Tokle2019_2"`}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep}
+#' \item{`"Tokle2019_HT"`}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep; high temperatures/low stress}
+#' \item{`"Tokle2019_LT"`}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep; low temperature/high stress}
 #' \item{`"Lusk2021"`}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for low pressures (less than 560 MPa)}
 #' \item{`"Lusk2021_HP"`}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for high pressures (700-1600 MPa)}
 #' }
@@ -250,7 +275,7 @@ flow_models <- function() {
 #' the Monte Carlo simulation assumes a normal distribution given by
 #' \eqn{X = N\left(\mu, \sigma\right)}, where \eqn{\mu} is the mean and \eqn{\sigma}
 #'  is the standard deviation of the mean (\eqn{\sigma = \text{z}/1.96}).}
-#'  \item{ If the parameter is given by a range of possible values \eqn{\left[x_\text{min}, x_\text{max}\right]},
+#' \item{ If the parameter is given by a range of possible values \eqn{\left[x_\text{min}, x_\text{max}\right]},
 #'  the Monte Carlo simulation assumes an uniform distribution given by \eqn{X = U\left(x_\text{min}, x_\text{max}\right)}.}
 #' }
 #'
@@ -261,11 +286,19 @@ flow_models <- function() {
 #' (or geometric mean), and the interpercentile range.
 #'
 #' @references
-#'  Hirth, G., Teyssier, C., & Dunlap, W. J. (2001). An evaluation of quartzite flow laws based on comparisons between experimentally and naturally deformed rocks. International Journal of Earth Sciences, 90(1), 77–87. https://doi.org/10.1007/s005310000152
+#' Fukuda, J., Holyoke, C. W., & Kronenberg, A. K. (2018). Deformation of Fine‐Grained Quartz Aggregates by Mixed Diffusion and Dislocation Creep. Journal of Geophysical Research: Solid Earth, 123(6), 4676-4696. \doi{10.1029/2017JB015133}
 #'
-#'  Tokle, L., Hirth, G., & Behr, W. M. (2019). Flow laws and fabric transitions in wet quartzite. Earth and Planetary Science Letters, 505, 152–161. https://doi.org/10.1016/j.epsl.2018.10.017
+#' Gleason, G. C., & Tullis, J. (1995). A flow law for dislocation creep of quartz aggregates determined with the molten salt cell. Tectonophysics, 247(1-4), 1-23. \doi{10.1016/0040-1951(95)00011-B}
 #'
-#'  Lusk, A. D. J., Platt, J. P., & Platt, J. A. (2021). Natural and Experimental Constraints on a Flow Law for Dislocation‐Dominated Creep in Wet Quartz. Journal of Geophysical Research: Solid Earth, 126(5), 1–25. https://doi.org/10.1029/2020JB021302
+#' Hirth, G., Teyssier, C., \& Dunlap, W. J. (2001). An evaluation of quartzite flow laws based on comparisons between experimentally and naturally deformed rocks. International Journal of Earth Sciences, 90(1), 77-87. \doi{10.1007/s005310000152}
+#'
+#' Tokle, L., Hirth, G., \& Behr, W. M. (2019). Flow laws and fabric transitions in wet quartzite. Earth and Planetary Science Letters, 505, 152-161. \doi{10.1016/j.epsl.2018.10.017}
+#'
+#' Lu, L. X., \& Jiang, D. (2019). Quartz Flow Law Revisited: The Significance of Pressure Dependence of the Activation Enthalpy. Journal of Geophysical Research: Solid Earth, 124(1), 241–256. \doi{10.1029/2018JB016226}
+#'
+#' Lusk, A. D. J., Platt, J. P., \& Platt, J. A. (2021). Natural and Experimental Constraints on a Flow Law for Dislocation‐Dominated Creep in Wet Quartz. Journal of Geophysical Research: Solid Earth, 126(5), 1-25. \doi{10.1029/2020JB021302}
+#'
+#' Richter, B., Stünitz, H., \& Heilbronner, R. (2018). The brittle-to-viscous transition in polycrystalline quartz: An experimental study. Journal of Structural Geology, 114(September 2017), 1-21. \doi{10.1016/j.jsg.2018.06.005}
 #'
 #' @export
 #'
@@ -280,14 +313,15 @@ flow_models <- function() {
 #' temperature <- units::set_units(300, degC)
 #' pressure <- units::set_units(400, MPa)
 #' fugacity <- ps_fugacity(pressure, temperature)
+#'
 #' creep_quartz(stress = stress, temperature = temperature, model = "Paterson1990")
 #' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
 #' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Rutter2004")
 #' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Lu2019")
 creep_quartz <- function(stress, temperature, fugacity = NULL,
-                        grainsize = NULL, pressure = NULL,
-                        sim = 1e6,
-                        model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason2004", "Rutter2004", "Fukuda2018", "Richter2018", "Lu2019", "Tokle2019", "Lusk2021")) {
+                         grainsize = NULL, pressure = NULL,
+                         sim = 1e6,
+                         model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995", "Gleason1995_melt",  "Rutter2004", "Fukuda2018_LT","Fukuda2018_HT", "Richter2018", "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021", "Lusk2021_HP")) {
   model <- match.arg(model)
 
   # stress, pressure and fugacity in Mega-Pascal, temperature in Kelvins
@@ -300,14 +334,14 @@ creep_quartz <- function(stress, temperature, fugacity = NULL,
 
   if (!is.null(pressure)) args$pressure <- units::set_units(pressure, "MPa") |> as.numeric()
 
-  if (!is.null(grainsize))  args$grainsize <- units::set_units(grainsize, "um") |> as.numeric()
+  if (!is.null(grainsize)) args$grainsize <- units::set_units(grainsize, "um") |> as.numeric()
 
   # Validate model name
   fm <- flow_models()
   if (!model %in% names(fm)) {
     stop(paste("Unknown model '", model, "'. Available models: ",
-               paste(names(fm), collapse = ", "),
-               sep = ""
+      paste(names(fm), collapse = ", "),
+      sep = ""
     ))
   }
 
@@ -317,8 +351,8 @@ creep_quartz <- function(stress, temperature, fugacity = NULL,
   edot <- do.call(fm_FUN, args = args) |>
     units::set_units("1/s")
 
-  if(length(edot)>1){
-    class(edot) <- append('MCS_log', class(edot))
+  if (length(edot) > 1) {
+    class(edot) <- append("MCS_log", class(edot))
   }
   return(edot)
 }

@@ -56,7 +56,6 @@ pressure <- units::set_units(rnorm(nmc, 400, 100/1.96), MPa)
 fugacity <- ps_fugacity(pressure, temperature)
 
 fugacity_stats <- summary(fugacity)
-print(fugacity_stats)
 ```
 
 > Here, the Monte Carlo simulation produces 1,000 normal-distributed estimates for the fugacity.

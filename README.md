@@ -55,41 +55,6 @@ fugacity_stats <- summary(fugacity)
 #> 95% confidence interval: 370 - 390 bar 
 #> Standard error:          4.12965
 #> Student's t-Test:        p<0.05
-print(fugacity_stats)
-#> $median
-#> 366.2079 [bar]
-#> 
-#> $ir.68
-#> Units: [bar]
-#>      16%      84% 
-#> 264.8137 498.2328 
-#> 
-#> $ir.95
-#> Units: [bar]
-#>     2.5%    97.5% 
-#> 171.1255 661.7710 
-#> 
-#> $mean
-#> 382.8071 [bar]
-#> 
-#> $sd
-#> 130.591 [bar]
-#> 
-#> $conf.int
-#> Units: [bar]
-#> [1] 374.7033 390.9109
-#> attr(,"conf.level")
-#> [1] 0.95
-#> 
-#> $stderr
-#> [1] 4.12965
-#> 
-#> $t.test
-#>        t          
-#> 92.69722  0.00000 
-#> 
-#> $n
-#> [1] 1000
 ```
 
 > Here, the Monte Carlo simulation produces 1,000 normal-distributed

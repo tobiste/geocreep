@@ -68,7 +68,7 @@ set_units_if <- function(x, unit) {
 #' MC_res <- grainsize_piezometry(12.2)
 #' summary(MC_res)
 #'
-#' n <- 1e3
+#' n <- 100
 #' temperature <- units::set_units(rnorm(n, 300, 25), degC)
 #' pressure <- units::set_units(rnorm(n, 400, 50), MPa)
 #' MC_res2 <- ps_fugacity(pressure, temperature) # 37 MPa
