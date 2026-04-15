@@ -39,9 +39,6 @@ library(units) # load this package to define your units
 
 # Set seed for reproducibility
 set.seed(20250411)
-
-# define a number of Monte Carlo simulations
-nmc <- 1e3 # here a small number has been chosen just for demonstration. In practice you would use a number >>1e5
 ```
 
 
@@ -49,22 +46,20 @@ nmc <- 1e3 # here a small number has been chosen just for demonstration. In prac
 
 Calculate water fugacity from temperature and pressures using the Pitzer and Sterner (1994) equation:
 ```{r fug}
+nmc <- 1e3 # create 1,000 samples for temperature and pressure using a normal distribution
+
 #Define temperature and pressure
 temperature <- units::set_units(rnorm(nmc, 300, 50/1.96), degC)
-pressure <- units::set_units(rnorm(nmc, 400, 10/1.96), MPa)
+pressure <- units::set_units(rnorm(nmc, 400, 100/1.96), MPa)
 
 # Calculate fugacity
 fugacity <- ps_fugacity(pressure, temperature)
 
-summary(fugacity)
+fugacity_stats <- summary(fugacity)
+print(fugacity_stats)
 ```
 
-By default, the functions create 100,000 samples for each parameter with uncertainties, creating 1e6 results. 
-Here, a small number has been chosen just for demonstration purpose. In practice, however, you would use a number >>1e5.
-
-In general, the Monte Carlo simulations results do not follow a normal (symmetric) distribution because some parameters are exponents in the power laws. 
-Therefore, the median and interpercentile range provide the best estimators for average and dispersion, rather than mean and standard deviation.
-
+> Here, the Monte Carlo simulation produces 1,000 normal-distributed estimates for the fugacity.
 
 
 ### Grain-size piezometry
@@ -75,11 +70,15 @@ Calculating differential stress from grain size (e.g. using the Stipp and Tullis
 grainsize <- units::set_units(11, um)
 
 # Calculate equivalent differential stress
-stress <- grainsize_piezometry(grainsize, model = "Stipp-reg2-3", sim = nmc)
+stress <- grainsize_piezometry(grainsize, model = "Stipp-reg2-3")
 
 # Summary stats of Monte Carlo simulation
 summary(stress)
 ```
+
+>By default, the functions create 1,000,000 samples for each parameter with uncertainties, creating 1e6 results. 
+Results of Monte Carlo simulations based on flow law equations do not follow a normal (symmetric) distribution because some parameters are exponents of the power laws. 
+Therefore, the median and interpercentile range provide the best estimators for average and dispersion, rather than mean and standard deviation.
 
 Note: There is also a subgrain-size piezometer (Goddard et al. 2021): `subgrainsize_piezometer()`
 
@@ -88,8 +87,13 @@ Note: There is also a subgrain-size piezometer (Goddard et al. 2021): `subgrains
 Calculate strain rates using a defined flow law for quartz from differential stress, temperature, and fugacity: 
 
 ```{r edot}
-# Calculate strain rates using temperature, the fugacity, and the MC estimates for differential stress calculated before
-edot <- creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001", sim = nmc)
+# Calculate strain rates using temperature, fugacity, and differential stress
+edot <- creep_quartz(
+  stress = stress, 
+  temperature = units::set_units(rnorm(1e6, 300, 50/1.96), degC),
+  fugacity = rnorm(1e6, fugacity_stats$mean, fugacity_stats$sd), 
+  model = "Hirth2001"
+  )
 
 # Summary stats of Monte Carlo simulation
 summary(edot)

@@ -70,6 +70,7 @@ ps_eos <- function(volume, temperature, targetP, phase = c("H2O", "CO2")) {
 #' @param temperature numeric. Temperature either in Kelvin or as `units` object
 #' @param phase character. Fluid phase for which fugacity or volume should be calculated for;
 #'  one of `"H2O"` (the default) and `"CO2"`.
+#' @param ... optional arguments passed to [future.apply::future_mapply()]
 #'
 #' @references Pitzer, K.S. and Sterner, S.M., 1994. Equations of state valid
 #' continuously from zero to extreme pressures for H2O and CO2.
@@ -117,11 +118,17 @@ ps_volume <- function(pressure, temperature, phase = c("H2O", "CO2")) {
 
 #' @rdname pitzer
 #' @export
-ps_fugacity <-  function(pressure, temperature, phase = c("H2O", "CO2")) {
-  edot <- future.apply::future_mapply(ps_fugacity1, pressure = pressure, temperature = temperature, MoreArgs = list(phase = c("H2O", "CO2"))) |>
-    units::set_units("bar") # bars
-  class(edot) <- append('MCS_log', class(edot))
-  return(edot)
+ps_fugacity <-  function(pressure, temperature, phase = c("H2O", "CO2"), ...) {
+  fug <- if(length(pressure) == 1 & length(temperature) == 1){
+    ps_fugacity1( pressure = pressure, temperature = temperature, phase)
+  } else {future.apply::future_mapply(ps_fugacity1, pressure = pressure, temperature = temperature,
+                                      MoreArgs = list(phase = c("H2O", "CO2")),
+                                      ...)
+  }
+  fug <- units::set_units(fug, "bar") # bars
+
+  class(fug) <- append('MCS', class(fug))
+  return(fug)
 }
 
 ps_fugacity1 <- function(pressure, temperature, phase = c("H2O", "CO2")) {

@@ -13,7 +13,7 @@ and adds the CO2 parameters.
 \usage{
 ps_volume(pressure, temperature, phase = c("H2O", "CO2"))
 
-ps_fugacity(pressure, temperature, phase = c("H2O", "CO2"))
+ps_fugacity(pressure, temperature, phase = c("H2O", "CO2"), ...)
 }
 \arguments{
 \item{pressure}{numeric. Pressure either in bar or as \code{units} object}
@@ -22,6 +22,8 @@ ps_fugacity(pressure, temperature, phase = c("H2O", "CO2"))
 
 \item{phase}{character. Fluid phase for which fugacity or volume should be calculated for;
 one of \code{"H2O"} (the default) and \code{"CO2"}.}
+
+\item{...}{optional arguments passed to \code{\link[future.apply:future_mapply]{future.apply::future_mapply()}}}
 }
 \value{
 units object
