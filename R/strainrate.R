@@ -12,7 +12,7 @@ flow_models <- function() {
       n_max <- 3.2
       m <- 0.18
       n <- runif(sim, n_min, n_max)
-      H <- runif(sim, H_min, H_max) |> set_units('kJ mol-1')
+      H <- runif(sim, H_min, H_max) |> set_units("kJ mol-1")
 
       RT <- gas_const() * temperature
 
@@ -20,11 +20,11 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      stress^n * grainsize^m * fugacity^0 * arrhenius
+      stress^n * grainsize^m * arrhenius
     },
     Paterson1990 = function(stress, temperature, fugacity = NULL, grainsize = NULL, pressure = NULL, sim) {
       A <- 6.5e-8
-      H <- 135 |> set_units('kJ mol-1')
+      H <- 135 |> set_units("kJ mol-1")
       n <- 3.1
 
       RT <- gas_const() * temperature
@@ -33,7 +33,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^0 * grainsize^0 * arrhenius
+      A * stress^n * arrhenius
     },
     Luan1992 = function(stress, temperature, fugacity = NULL, grainsize = NULL, pressure = NULL, sim) {
       # uncertainties not specified; assuming 1s
@@ -43,8 +43,8 @@ flow_models <- function() {
       n <- 4
       n_std <- 0.8
       # A * stress^n * grainsize^m * fugacity^r * exp(-H / (R * temperature))
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std)  |> set_units('kJ mol-1')
-      n <- rnorm(sim, n, n_std )
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
+      n <- rnorm(sim, n, n_std)
 
       RT <- gas_const() * temperature
 
@@ -52,7 +52,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^0 * grainsize^0 * arrhenius
+      A * stress^n * arrhenius
     },
     Gleason1995 = function(stress, temperature, fugacity = NULL, grainsize = NULL, pressure = NULL, sim) {
       # uncertainties not specified; assuming 1s
@@ -65,8 +65,8 @@ flow_models <- function() {
       n_std <- 0.9
 
       A <- A_factor * 10^truncnorm::rtruncnorm(sim, a = 0, mean = A_mean, sd = A_std)
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std)  |> set_units('kJ mol-1')
-      n <- rnorm(sim, n, n_std )
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
+      n <- rnorm(sim, n, n_std)
 
       RT <- gas_const() * temperature
 
@@ -74,7 +74,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^0 * grainsize^0 * arrhenius
+      A * stress^n * arrhenius
     },
     Gleason1995_melt = function(stress, temperature, fugacity = NULL, grainsize = NULL, pressure = NULL, sim) {
       # uncertainties not specified; assuming 1s
@@ -87,8 +87,8 @@ flow_models <- function() {
       n_std <- 0.9
 
       A <- A_factor * 10^truncnorm::rtruncnorm(sim, a = 0, mean = A_mean, sd = A_std)
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std)  |> set_units('kJ mol-1')
-      n <- rnorm(sim, n, n_std )
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
+      n <- rnorm(sim, n, n_std)
 
       RT <- gas_const() * temperature
 
@@ -96,7 +96,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^0 * grainsize^0 * arrhenius
+      A * stress^n * arrhenius
     },
     Rutter2004 = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
       log_A <- -4.93
@@ -107,9 +107,9 @@ flow_models <- function() {
       n_std <- 0.29 # 1s
       r <- 1
 
-      A <- 10^rnorm(sim, log_A, log_A_std )
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std)  |> set_units('kJ mol-1')
-      n <- rnorm(sim, n, n_std )
+      A <- 10^rnorm(sim, log_A, log_A_std)
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
+      n <- rnorm(sim, n, n_std)
 
       RT <- gas_const() * temperature
 
@@ -117,17 +117,17 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^r * grainsize^0 * arrhenius
+      A * stress^n * fugacity^r * arrhenius
     },
     Fukuda2018_LT = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
       # uncertainties not specified; assuming 1s
       H <- 129
-      H_std <- 33  # std given as 1s?
+      H_std <- 33 # std given as 1s?
       n_min <- 2.9
       n_max <- 5.2
       r <- 1
 
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std)  |> set_units('kJ mol-1')
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
       n <- runif(sim, n_min, n_max)
 
       RT <- gas_const() * temperature
@@ -136,22 +136,22 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      stress^n * fugacity^r * grainsize^0 * arrhenius
+      stress^n * fugacity^r * arrhenius
     },
     Fukuda2018_HT = function(stress, temperature, fugacity, grainsize, pressure = NULL, sim) {
       log_A <- -2.97
       log_A_std <- 0.23
       H <- 183.0
-      H_std <- 25  # std given as 1s?
+      H_std <- 25 # std given as 1s?
       n <- 1.7
-      n_std <- 0.2  # std given as 1s?
+      n_std <- 0.2 # std given as 1s?
       m <- -0.51
-      m_std <- 0.13  # std given as 1s?
+      m_std <- 0.13 # std given as 1s?
       r <- 1.0
-      r_std <- 0.2  # std given as 1s?
+      r_std <- 0.2 # std given as 1s?
 
       A <- 10^rnorm(sim, log_A, log_A_std)
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std)  |> set_units('kJ mol-1')
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
       n <- rnorm(sim, n, n_std)
       m <- rnorm(sim, m, m_std)
       r <- rnorm(sim, r, r_std)
@@ -175,7 +175,7 @@ flow_models <- function() {
       m <- 1.08
 
       # std given as 1s?
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units('kJ mol-1')
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
       n <- rnorm(sim, n, n_std)
 
       RT <- gas_const() * temperature
@@ -184,7 +184,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^0 * grainsize^m * arrhenius
+      A * stress^n * grainsize^m * arrhenius
     },
     Hirth2001 = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
       # uncertainties not specified; assuming 1s
@@ -200,7 +200,7 @@ flow_models <- function() {
       r <- 1 # water fugacity exponent
       A <- 10^rnorm(sim, log_A, log_A_std)
 
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units('kJ mol-1')
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
 
       RT <- gas_const() * temperature
 
@@ -208,7 +208,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^r * grainsize^0 * arrhenius
+      A * stress^n * fugacity^r * arrhenius
     },
     Lu2019 = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
       # uncertainties not specified; assuming 1s
@@ -221,7 +221,7 @@ flow_models <- function() {
       n_std <- 0.85 # mean std from Gleason and Tullis (1995) and Luan and Paterson (1992)
       r <- 2.7
 
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units('kJ mol-1')
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
       n <- rnorm(sim, n, n_std)
       A <- truncnorm::rtruncnorm(sim, a = 0, mean = A, sd = A_std) * 10^(-15)
 
@@ -231,7 +231,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^r * grainsize^0 * arrhenius
+      A * stress^n * fugacity^r * arrhenius
     },
     Tokle2019_HT = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
       # uncertainties not specified; assuming 1s
@@ -242,7 +242,7 @@ flow_models <- function() {
       n_std <- 0.3
       r <- 1
 
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units('kJ mol-1')
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
       n <- rnorm(sim, n, n_std)
 
       RT <- gas_const() * temperature
@@ -251,7 +251,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^r * grainsize^0 * arrhenius
+      A * stress^n * fugacity^r * arrhenius
     },
     Tokle2019_LT = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim) {
       # uncertainties not specified; assuming 1s
@@ -263,7 +263,8 @@ flow_models <- function() {
       r <- 1.1
 
       n <- rnorm(sim, n, n_std)
-      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
+      H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |>
+        set_units("kJ mol-1")
 
       RT <- gas_const() * temperature
 
@@ -276,7 +277,7 @@ flow_models <- function() {
     Lusk2021_LP = function(stress, temperature, fugacity, grainsize = NULL, pressure, sim) {
       # "low-pressure" <560 MPa
 
-      #std given as 1sd
+      # std given as 1sd
       log_A <- -9.3 # MPa^(-n-r) s^-1
       log_A_std <- 0.66
       n <- 3.5
@@ -301,12 +302,12 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^r * grainsize^0 * arrhenius
+      A * stress^n * fugacity^r * arrhenius
     },
     Lusk2021_HP = function(stress, temperature, fugacity, grainsize = NULL, pressure, sim) {
       # “high-pressure” 700–1600 MPa
 
-      #std given as 1sd
+      # std given as 1sd
       log_A <- -7.90
       log_A_std <- 0.34 # MPa−n−r s−1;
       n <- 2.0
@@ -331,7 +332,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      A * stress^n * fugacity^r * grainsize^0 * arrhenius
+      A * stress^n * fugacity^r * arrhenius
     }
   )
 }
@@ -418,7 +419,7 @@ flow_models <- function() {
 #' @seealso [units::set_units()] to set up `units` objects; [summary.MCS_log()] for statistical parameters of Monte Carlo samples
 #'
 #' @importFrom stats rnorm
-#' @importFrom units set_units
+#' @importFrom units set_units unitless
 #' @importFrom truncnorm rtruncnorm
 #'
 #' @examples
@@ -452,12 +453,16 @@ creep_quartz <- function(stress, temperature, fugacity = NULL,
 
   args <- list(stress = stress, temperature = temperature, sim = sim)
 
-  if (!is.null(fugacity)) args$fugacity <- units::set_units(fugacity, "MPa") |> as.numeric()
+  if (!is.null(fugacity)){
+    args$fugacity <- units::set_units(fugacity, "MPa") |> as.numeric()
+  } else {
+    args$fugacity <- 1
+  }
 
   if (!is.null(pressure)) args$pressure <- units::set_units(pressure, "MPa") #|> as.numeric()
 
   if (!is.null(grainsize)) {
-    args$grainsize <- units::set_units(grainsize, "um") |>  as.numeric()
+    args$grainsize <- units::set_units(grainsize, "um") |> as.numeric()
   } else {
     args$grainsize <- 1
   }
