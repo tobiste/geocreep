@@ -53,10 +53,10 @@ grainsize_piezometry(12.2) |> summary() # 92
 grainsize_piezometry(31) |> summary() # 44
 }
 \references{
-Stipp, M., & Tullis, J. (2003). The recrystallized grain size piezometer for
+Stipp, M., \& Tullis, J. (2003). The recrystallized grain size piezometer for
 quartz. Geophysical Research Letters, 30(21), 1–5. https://doi.org/10.1029/2003GL018444
 
-Cross, A. J., Prior, D. J., Stipp, M., & Kidder, S. (2017). The
+Cross, A. J., Prior, D. J., Stipp, M., \& Kidder, S. (2017). The
 recrystallized grain size piezometer for quartz: An EBSD-based calibration.
 Geophysical Research Letters, 44(13), 6667–6674. https://doi.org/10.1002/2017GL073836
 }

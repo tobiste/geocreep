@@ -1,0 +1,67 @@
+---
+title: "Flow law comparison"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{comparison}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(geocreep)
+library(ggplot2)
+set.seed(20250411)
+```
+
+```{r params}
+grainsize <- units::set_units(11, um)
+stress <- grainsize_piezometry(grainsize)
+temperature <- units::set_units(300, degC)
+pressure <- units::set_units(400, MPa)
+fugacity <- ps_fugacity(pressure, temperature)
+```
+
+```{r hist_stress}
+hist(log10(as.numeric(stress)), xlab = 'log10(differential stress)', main = NULL)
+abline(v = median(log10(as.numeric(stress))), lty = 2, lwd = 2, col = 'red')
+```
+
+```{r mc_estimates}
+models <- c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995", "Gleason1995_melt", "Rutter2004", "Fukuda2018_LT", "Fukuda2018_HT", "Richter2018", "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP")
+
+edot_estimates <- lapply(models,
+       function(m){
+         creep_quartz(stress = median(stress), temperature = temperature, fugacity = fugacity, pressure = pressure, grainsize = grainsize, model = m)
+       }) |> 
+  setNames(models)
+```
+
+```{r hist_strain}
+m <- 'Hirth2001'
+hist(log10(as.numeric(edot_estimates[[m]])), xlab = 'log10(strain rate)', main = m)
+abline(v = median(log10(as.numeric(edot_estimates[[m]]))), lty = 2, lwd = 2, col = 'red')
+```
+
+
+```{r summary}
+edot_quantiles <- sapply(edot_estimates, quantile, probs = c(.025, .5, .975)) |> 
+  t() |> 
+  as.data.frame()
+
+edot_quantiles$model <- reorder(factor(models), edot_quantiles$`50%`)
+```
+
+```{r plot1}
+edot_quantiles |> 
+  ggplot(aes(x = `50%`, xmin = `2.5%`, xmax = `97.5%`, y = model)) +
+  geom_pointrange() +
+  scale_x_log10('Strain rate (1/s)') +
+  theme_classic()
+```
