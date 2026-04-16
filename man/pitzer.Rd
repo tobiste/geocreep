@@ -8,7 +8,7 @@
 \source{
 This is modified version of the \code{fugacity.py} script: https://github.com/forsterite/fugacity/tree/master
 This R version uses a precise gas constant, accepts inputs in different units,
-and adds the CO2 parameters.
+and adds the CO\eqn{_2} parameters.
 }
 \usage{
 ps_volume(pressure, temperature, phase = c("H2O", "CO2"))
@@ -46,7 +46,7 @@ ps_volume(pressure2, temperature2)
 \dontshow{\}) # examplesIf}
 }
 \references{
-Pitzer, K.S. and Sterner, S.M., 1994. Equations of state valid
+Pitzer, K.S. \& Sterner, S.M., 1994. Equations of state valid
 continuously from zero to extreme pressures for H2O and CO2.
 Journal of Chemical Physics. 101: 3111-3116.
 }

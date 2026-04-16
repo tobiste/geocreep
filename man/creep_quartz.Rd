@@ -13,7 +13,7 @@ creep_quartz(
   sim = 1e+06,
   model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995",
     "Gleason1995_melt", "Rutter2004", "Fukuda2018_LT", "Fukuda2018_HT", "Richter2018",
-    "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021", "Lusk2021_HP")
+    "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP")
 )
 }
 \arguments{
@@ -36,16 +36,16 @@ creep_quartz(
 \item{\code{"Kronenberg1984"}}{Kronenberg and Tullis (1984): deformation mechanism: dislocation creep and grain-size sensitive creep; strain geometry: axial compression}
 \item{\code{"Luan1992"}}{Luan and Paterson (1990): dislocation creep; axial compression}
 \item{\code{"Gleason1995"}}{Gleason and Tullis (1995): dislocation creep; axial compression}
-\item{\code{"Gleason1995_melt"}}{Gleason and Tullis (1995): dislocation creep; axial compression; 1-2 percent melt}
-\item{\code{"Rutter2004"}}{Rutter and Brodie (2004): dislocation creep; axial compression}
-\item{\code{"Fukuda2018_LT"}}{Fukada et al. (2018): dislocation creep; axial compression}
-\item{\code{"Fukuda2018_HT"}}{Fukada et al. (2018): dislocation creep and grain-size sensitive creep; axial compression; HT-fit}
-\item{\code{"Richter2018"}}{Richter et al. (2018): dislocation creep and grain-size sensitive creep; general shear; between 800 and 1000 degree Celsius}
+\item{\code{"Gleason1995_melt"}}{Gleason and Tullis (1995): dislocation creep; axial compression; 1–2\% melt}
+\item{\code{"Rutter2004"}}{Rutter and Brodie (2004b): dislocation creep; axial compression}
+\item{\code{"Fukuda2018_LT"}}{Fukada et al. (2018): dislocation creep; axial compression; low temperatures (600–750 °C)}
+\item{\code{"Fukuda2018_HT"}}{Fukada et al. (2018): dislocation creep and grain-size sensitive creep; axial compression; high temperatures (800–950 °C)}
+\item{\code{"Richter2018"}}{Richter et al. (2018): dislocation creep and grain-size sensitive creep; general shear; 800–1000 °C}
 \item{\code{"Lu2019"}}{Lu and Jiang (2019): dislocation creep}
 \item{\code{"Tokle2019_HT"}}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep; high temperatures/low stress}
 \item{\code{"Tokle2019_LT"}}{Tokle et al. (2019): dislocation creep and grain-size sensitive creep; low temperature/high stress}
-\item{\code{"Lusk2021"}}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for low pressures (less than 560 MPa)}
-\item{\code{"Lusk2021_HP"}}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for high pressures (700-1600 MPa)}
+\item{\code{"Lusk2021_LP"}}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for low pressures (≤560 MPa)}
+\item{\code{"Lusk2021_HP"}}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for high pressures (700–1600 MPa)}
 }}
 }
 \value{
@@ -89,6 +89,14 @@ creep_quartz(stress = stress, temperature = temperature, model = "Paterson1990")
 creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
 creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Rutter2004")
 creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Lu2019")
+creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Kronenberg1984")
+creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Luan1992")
+creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Gleason1995")
+creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Rutter2004")
+creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Fukuda2018_LT")
+creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Richter2018")
+creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Tokle2019_LT")
+creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure, model = "Lusk2021")
 }
 \references{
 Fukuda, J., Holyoke, C. W., & Kronenberg, A. K. (2018). Deformation of Fine‐Grained Quartz Aggregates by Mixed Diffusion and Dislocation Creep. Journal of Geophysical Research: Solid Earth, 123(6), 4676-4696. \doi{10.1029/2017JB015133}
@@ -97,13 +105,21 @@ Gleason, G. C., & Tullis, J. (1995). A flow law for dislocation creep of quartz 
 
 Hirth, G., Teyssier, C., \& Dunlap, W. J. (2001). An evaluation of quartzite flow laws based on comparisons between experimentally and naturally deformed rocks. International Journal of Earth Sciences, 90(1), 77-87. \doi{10.1007/s005310000152}
 
-Tokle, L., Hirth, G., \& Behr, W. M. (2019). Flow laws and fabric transitions in wet quartzite. Earth and Planetary Science Letters, 505, 152-161. \doi{10.1016/j.epsl.2018.10.017}
+Kronenberg, A. K., \& Tullis, J. (1984). Flow strengths of quartz aggregates: Grain size and pressure effects due to hydrolytic weakening. Journal of Geophysical Research: Solid Earth, 89(B6), 4281–4297. \doi{10.1029/JB089iB06p04281}
 
 Lu, L. X., \& Jiang, D. (2019). Quartz Flow Law Revisited: The Significance of Pressure Dependence of the Activation Enthalpy. Journal of Geophysical Research: Solid Earth, 124(1), 241–256. \doi{10.1029/2018JB016226}
 
 Lusk, A. D. J., Platt, J. P., \& Platt, J. A. (2021). Natural and Experimental Constraints on a Flow Law for Dislocation‐Dominated Creep in Wet Quartz. Journal of Geophysical Research: Solid Earth, 126(5), 1-25. \doi{10.1029/2020JB021302}
 
+Paterson, M. S., \& Luan, F. C. (1990). Quartzite rheology under geological conditions. Geological Society, London, Special Publications, 54(1), 299–307. \doi{10.1144/GSL.SP.1990.054.01.26}
+
 Richter, B., Stünitz, H., \& Heilbronner, R. (2018). The brittle-to-viscous transition in polycrystalline quartz: An experimental study. Journal of Structural Geology, 114(September 2017), 1-21. \doi{10.1016/j.jsg.2018.06.005}
+
+Rutter, E. H., \& Brodie, K. H. (2004a). Experimental grain size-sensitive flow of hot-pressed Brazilian quartz aggregates. Journal of Structural Geology, 26(11), 2011–2023. \doi{10.1016/j.jsg.2004.04.006}
+
+Rutter, E. ., \& Brodie, K. . (2004b). Experimental intracrystalline plastic flow in hot-pressed synthetic quartzite prepared from Brazilian quartz crystals. Journal of Structural Geology, 26(2), 259–270. \doi{10.1016/S0191-8141(03)00096-8}
+
+Tokle, L., Hirth, G., \& Behr, W. M. (2019). Flow laws and fabric transitions in wet quartzite. Earth and Planetary Science Letters, 505, 152-161. \doi{10.1016/j.epsl.2018.10.017}
 }
 \seealso{
 \code{\link[units:units]{units::set_units()}} to set up \code{units} objects; \code{\link[=summary.MCS_log]{summary.MCS_log()}} for statistical parameters of Monte Carlo samples

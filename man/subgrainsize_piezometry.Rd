@@ -13,7 +13,7 @@ subgrainsize_piezometry(
 )
 }
 \arguments{
-\item{lambda}{mean line intercept length in \eqn{\mu}m or \code{units} object.}
+\item{lambda}{mean line intercept length in μm or \code{units} object.}
 
 \item{sd}{(optional) Standard deviation of \code{lambda}}
 
@@ -48,7 +48,7 @@ subgrainsize_piezometry(18, min = "q") # 240 MPa
 }
 \references{
 Goddard, R. M., Hansen, L. N., Wallis, D., Stipp, M., Holyoke,
-C. W., Kumamoto, K. M., & Kohlstedt, D. L. (2020). A Subgrain‐Size Piezometer
+C. W., Kumamoto, K. M., \& Kohlstedt, D. L. (2020). A Subgrain‐Size Piezometer
 Calibrated for EBSD. Geophysical Research Letters, 47(23).
 https://doi.org/10.1029/2020GL090056
 }

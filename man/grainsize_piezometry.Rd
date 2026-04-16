@@ -12,7 +12,7 @@ grainsize_piezometry(
 )
 }
 \arguments{
-\item{d}{numeric. Grain size in \eqn{\mu}m or \code{units} object}
+\item{d}{numeric. Grain size in μm or \code{units} object}
 
 \item{sd}{(optional) Standard deviation of \code{d}}
 
@@ -20,9 +20,9 @@ grainsize_piezometry(
 \describe{
 \item{\code{"Stipp-reg2-3"}}{Piezometer for dislocation creep regime 2 and 3 (for deviatoric stress <368 MPa) after
 Stipp and Tullis (2003)}
-\item{\code{"Stripp-reg1"}}{Piezometer for dislocation creep regime 1 (deviatoric stress \eqn{\ge}368 MPa) after
+\item{\code{"Stripp-reg1"}}{Piezometer for dislocation creep regime 1 (deviatoric stress ≥368 MPa) after
 Stipp and Tullis (2003)}
-\item{\code{"Cross-1"}}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m
+\item{\code{"Cross-1"}}{Piezometer after Cross et al. (2017) for 1 μm
 step size resolution in EBSD data}
 \item{\code{"Cross-sliding"}}{Sliding resolution piezometer after Cross et al. 2017.
 According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}

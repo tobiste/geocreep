@@ -3,18 +3,18 @@
 #' Calculates differential stress from grain size.
 #' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 #'
-#' @param d numeric. Grain size in \eqn{\mu}m or `units` object
+#' @param d numeric. Grain size in &mu;m or `units` object
 #' @param sd (optional) Standard deviation of `d`
 #' @param model character. One of
 #' \describe{
 #' \item{`"Stipp-reg2-3"`}{Piezometer for dislocation creep regime 2 and 3 (for deviatoric stress <368 MPa) after
 #' Stipp and Tullis (2003)}
-#' \item{`"Stripp-reg1"`}{Piezometer for dislocation creep regime 1 (deviatoric stress \eqn{\ge}368 MPa) after
+#' \item{`"Stripp-reg1"`}{Piezometer for dislocation creep regime 1 (deviatoric stress &ge;368 MPa) after
 #' Stipp and Tullis (2003)}
-#' \item{`"Cross-1"`}{Piezometer after Cross et al. (2017) for 1 \eqn{\mu}m
+#' \item{`"Cross-1"`}{Piezometer after Cross et al. (2017) for 1 &mu;m
 #' step size resolution in EBSD data}
 #' \item{`"Cross-sliding"`}{Sliding resolution piezometer after Cross et al. 2017.
-#' According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
+#' According to authors, more accurately estimates stress in fine-grained (<10 &mu;m) samples}
 #' }
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
@@ -99,10 +99,10 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
 #' Calculates differential stress using the Subgrain‐Size Piezometer of Goddard et al. (2020).
 #' Uses Monte Carlo sampling for propagating parameter uncertainties in flow model.
 #'
-#' @param lambda mean line intercept length in \eqn{\mu}m or `units` object.
+#' @param lambda mean line intercept length in &mu;m or `units` object.
 #' @param sd (optional) Standard deviation of `lambda`
 #' @param calibrated logical. Whether the calibration of Holyoke and Kronenberg (2010) is considered or not.
-#' @param min character. The Mineral uses. one of `"q"` for quartz, `"fo90"` for Olive with 90% Forsterite, or `"fo50"` for Olivine with 50% Forsterite.
+#' @param min character. The Mineral uses. one of `"q"` for quartz, `"fo90"` for Olive with 90&#37; Forsterite, or `"fo50"` for Olivine with 50&#37; Forsterite.
 #' @param sim non-negative integer. Number of Monte Carlo simulations
 #'
 #' @returns list. Differential stress in MPa. If Monte Carlo Simulation was used,
@@ -123,7 +123,7 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
 #' @importFrom units set_units
 #'
 #' @references Goddard, R. M., Hansen, L. N., Wallis, D., Stipp, M., Holyoke,
-#' C. W., Kumamoto, K. M., & Kohlstedt, D. L. (2020). A Subgrain‐Size Piezometer
+#' C. W., Kumamoto, K. M., \& Kohlstedt, D. L. (2020). A Subgrain‐Size Piezometer
 #' Calibrated for EBSD. Geophysical Research Letters, 47(23).
 #' https://doi.org/10.1029/2020GL090056
 #'

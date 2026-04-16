@@ -82,7 +82,8 @@ summary.MCS_log <- function(object, unit = NULL, ...) {
     unit <- units(object)
     object <- units::drop_units(object)
   }
-  x <- object
+  x <- as.numeric(na.omit(object))
+
 
   median_s <- stats::median(x)
   ir_95 <- stats::quantile(x, c(0.025, 0.975))
@@ -121,7 +122,7 @@ summary.MCS_log <- function(object, unit = NULL, ...) {
     conf.int = conf.int |> set_units_if(unit),
     stderr.log = stderr_log,
     t.test = c(log_s_tt$statistic, log_s_tt$p.value),
-    n = length(x)
+    n = length(object)
   )
 
   normal <- log_s_tt$p.value <= 0.05
@@ -160,7 +161,7 @@ summary.MCS <- function(object, unit = NULL, ...) {
     unit <- units(object)
     object <- units::drop_units(object)
   }
-  x <- object
+  x <- as.numeric(na.omit(object))
 
   median_s <- stats::median(x)
   ir_95 <- stats::quantile(x, c(0.025, 0.975))
@@ -188,7 +189,7 @@ summary.MCS <- function(object, unit = NULL, ...) {
     conf.int = CI95_s |> set_units_if(unit),
     stderr = stderr_s,
     t.test = c(s_tt$statistic, s_tt$p.value),
-    n = length(x)
+    n = length(object)
   )
 
   normal <- s_tt$p.value <= 0.05
@@ -223,4 +224,9 @@ summary.MCS <- function(object, unit = NULL, ...) {
 
 gas_const <- function() {
   units::set_units(8.31446261815324, J * K^-1 * mol^-1)
+}
+
+negative_strainrate <- function(x) {
+  x[x < 0] <- 0
+  return(x)
 }
