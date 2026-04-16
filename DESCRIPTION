@@ -7,6 +7,8 @@ Description: Flow laws, grain size piezometry, and water fugacity.
 License: GPL (>= 3)
 URL: https://github.com/tobiste/geocreep
 BugReports: https://github.com/tobiste/geocreep/issues
+Depends: 
+    R (>= 4.1.0)
 Imports:
     future.apply,
     nleqslv,
@@ -15,3 +17,6 @@ Imports:
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

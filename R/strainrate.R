@@ -429,18 +429,8 @@ flow_models <- function() {
 #' pressure <- units::set_units(400, MPa)
 #' fugacity <- ps_fugacity(pressure, temperature)
 #'
-#' creep_quartz(stress = stress, temperature = temperature, model = "Paterson1990")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Rutter2004")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Lu2019")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Kronenberg1984")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Luan1992")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Gleason1995")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Rutter2004")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Fukuda2018_LT")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Richter2018")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Tokle2019_LT")
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure, model = "Lusk2021")
+#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001") |>
+#'  summary()
 creep_quartz <- function(stress, temperature, fugacity = NULL,
                          grainsize = NULL, pressure = NULL,
                          sim = 1e6,

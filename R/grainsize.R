@@ -45,8 +45,8 @@
 #'
 #' @examples
 #' set.seed(20250411)
-#' grainsize_piezometry(12.2) # 92
-#' grainsize_piezometry(31) # 44
+#' grainsize_piezometry(12.2) |> summary() # 92
+#' grainsize_piezometry(31) |> summary() # 44
 grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp-reg1", "Cross-1", "Cross-sliding"), sim = 1e6) {
   # d in micrometre
   if (!is.null(sd)) d <- rnorm(sim, d, sd)
@@ -131,8 +131,8 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
 #'
 #' @examples
 #' set.seed(20250411)
-#' subgrainsize_piezometry(9, min = "fo50") # 420 MPa
-#' subgrainsize_piezometry(18, min = "q") # 240 MPa
+#' subgrainsize_piezometry(9, min = "fo50") |> summary() # 420 MPa
+#' subgrainsize_piezometry(18, min = "q") |> summary() # 240 MPa
 subgrainsize_piezometry <- function(lambda, sd = NULL, calibrated = TRUE, min = c("q", "fo90", "fo50"), sim = 1e6) {
   min <- match.arg(min)
 

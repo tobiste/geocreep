@@ -43,8 +43,8 @@ where \eqn{\lambda} is the mean line intercept length, \eqn{b} is the Burgers ve
 }
 \examples{
 set.seed(20250411)
-subgrainsize_piezometry(9, min = "fo50") # 420 MPa
-subgrainsize_piezometry(18, min = "q") # 240 MPa
+subgrainsize_piezometry(9, min = "fo50") |> summary() # 420 MPa
+subgrainsize_piezometry(18, min = "q") |> summary() # 240 MPa
 }
 \references{
 Goddard, R. M., Hansen, L. N., Wallis, D., Stipp, M., Holyoke,

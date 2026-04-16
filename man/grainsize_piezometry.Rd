@@ -49,8 +49,8 @@ where \eqn{\sigma} is the differential stress, \eqn{d} is the grain size, and
 }
 \examples{
 set.seed(20250411)
-grainsize_piezometry(12.2) # 92
-grainsize_piezometry(31) # 44
+grainsize_piezometry(12.2) |> summary() # 92
+grainsize_piezometry(31) |> summary() # 44
 }
 \references{
 Stipp, M., & Tullis, J. (2003). The recrystallized grain size piezometer for

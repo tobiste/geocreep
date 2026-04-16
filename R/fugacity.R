@@ -41,7 +41,9 @@ ps_eos <- function(volume, temperature, targetP, phase = c("H2O", "CO2")) {
   phase <- match.arg(phase)
   # volume in cm3/mol, temperature in Kelvins, targetP in bars
   # R_const <- 8314462.61815324 # ideal gas constant: Pa*cm3/K/mol
-  R_const <- gas_const() |> set_units('Pa cm3 K-1 mol-1') |> as.numeric()
+  R_const <- gas_const() |>
+    set_units('Pa cm3 K-1 mol-1') |>
+    as.numeric()
   den <- 1 / volume
   cv <- numeric(10)
   coeff <- ps_coeff()[[phase]]
@@ -140,7 +142,9 @@ ps_fugacity1 <- function(pressure, temperature, phase = c("H2O", "CO2")) {
     as.numeric()
 
   # R_const <- 8314462.61815324 # ideal gas constant: Pa*cm3/K/mol
-  R_const <- gas_const() |> set_units('Pa cm3 K-1 mol-1') |> as.numeric()
+  R_const <- gas_const() |>
+    set_units('Pa cm3 K-1 mol-1') |>
+    as.numeric()
 
   coeff <- ps_coeff()[[phase]]
   cv <- numeric(10)

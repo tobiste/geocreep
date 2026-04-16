@@ -16,7 +16,7 @@
 #' @examples
 #' peierls_creep(300, 500, model = "Goetze1979")
 #' peierls_creep(300, 500, model = "Demouchy2013")
-#' peierls_creep(300, 500, model = "Mei2010")
+#' peierls_creep(300, 500, model = "Mei2010") |> summary()
 peierls_creep <- function(stress, temperature, model = c("Goetze1979", "Demouchy2013", "Mei2010"), sim = 1e6) {
   model <- match.arg(model)
 
