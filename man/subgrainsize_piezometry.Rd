@@ -9,7 +9,8 @@ subgrainsize_piezometry(
   sd = NULL,
   calibrated = TRUE,
   min = c("q", "fo90", "fo50"),
-  sim = 1e+06
+  sim = 1e+06,
+  propagate_err = TRUE
 )
 }
 \arguments{
@@ -21,7 +22,10 @@ subgrainsize_piezometry(
 
 \item{min}{character. The Mineral uses. one of \code{"q"} for quartz, \code{"fo90"} for Olive with 90\% Forsterite, or \code{"fo50"} for Olivine with 50\% Forsterite.}
 
-\item{sim}{non-negative integer. Number of Monte Carlo simulations}
+\item{sim}{non-negative number. Number of Monte Carlo simulations}
+
+\item{propagate_err}{logical. Whether errors of the flow law parameters
+should be propagated. \code{TRUE} by default.}
 }
 \value{
 list. Differential stress in MPa. If Monte Carlo Simulation was used,

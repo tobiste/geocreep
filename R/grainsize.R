@@ -16,7 +16,7 @@
 #' \item{`"Cross-sliding"`}{Sliding resolution piezometer after Cross et al. 2017.
 #' According to authors, more accurately estimates stress in fine-grained (<10 &mu;m) samples}
 #' }
-#' @param sim non-negative integer. Number of Monte Carlo simulations
+#' @inheritParams creep_quartz
 #'
 #' @returns list. Differential stress in MPa. If Monte Carlo Simulation was used,
 #' and object of class `"MCS"` is returned (see [summary()] for detailed description of output).
@@ -47,7 +47,7 @@
 #' set.seed(20250411)
 #' grainsize_piezometry(12.2) |> summary() # 92
 #' grainsize_piezometry(31) |> summary() # 44
-grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp-reg1", "Cross-1", "Cross-sliding"), sim = 1e6) {
+grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp-reg1", "Cross-1", "Cross-sliding"), sim = 1e6, propagate_err = TRUE) {
   # d in micrometre
   if (!is.null(sd)) d <- rnorm(sim, d, sd)
 
@@ -78,12 +78,17 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
     n_ci95 <- 0.26
   }
 
+  if(isTRUE(propagate_err)){
   log_k_sd <- log_k_ci95 / 1.96 # convert 95% CI to SD
   n_sd <- n_ci95 / 1.96 # convert 95% CI to SD
 
   # k is the grain size exponent; n is the stress exponent
   k_samples <- 10^rnorm(sim, mean = log_k, sd = log_k_sd)
   n_samples <- rnorm(sim, mean = n, sd = n_sd)
+  } else {
+    k_samples <- 10^log_k
+    n_samples <- n
+  }
 
   # solve D = k * sigma ^ n
   # stress_samples <- (k_samples / d)^(-1 / n_samples) # in MPa
@@ -103,7 +108,7 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
 #' @param sd (optional) Standard deviation of `lambda`
 #' @param calibrated logical. Whether the calibration of Holyoke and Kronenberg (2010) is considered or not.
 #' @param min character. The Mineral uses. one of `"q"` for quartz, `"fo90"` for Olive with 90&#37; Forsterite, or `"fo50"` for Olivine with 50&#37; Forsterite.
-#' @param sim non-negative integer. Number of Monte Carlo simulations
+#' @inheritParams grainsize_piezometry
 #'
 #' @returns list. Differential stress in MPa. If Monte Carlo Simulation was used,
 #' and object of class `"MCS"` is returned (see [summary()] for detailed description of output).
@@ -133,7 +138,7 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
 #' set.seed(20250411)
 #' subgrainsize_piezometry(9, min = "fo50") |> summary() # 420 MPa
 #' subgrainsize_piezometry(18, min = "q") |> summary() # 240 MPa
-subgrainsize_piezometry <- function(lambda, sd = NULL, calibrated = TRUE, min = c("q", "fo90", "fo50"), sim = 1e6) {
+subgrainsize_piezometry <- function(lambda, sd = NULL, calibrated = TRUE, min = c("q", "fo90", "fo50"), sim = 1e6, propagate_err = TRUE) {
   min <- match.arg(min)
 
   if (!is.null(sd)) lambda <- stats::rnorm(sim, lambda, sd)
@@ -154,12 +159,21 @@ subgrainsize_piezometry <- function(lambda, sd = NULL, calibrated = TRUE, min = 
     units::set_units("MPa")
   shear_m <- as.numeric(s[min])
 
+
   if (isTRUE(calibrated)) {
-    a <- stats::rnorm(sim, 0.6, sd = 0.7 / 1.96)
-    b <- stats::rnorm(sim, -1.2, sd = 0.3 / 1.96)
+    a <- 0.6
+    b <- -1.2
+    if(isTRUE(propagate_err)){
+    a <- stats::rnorm(sim, a, sd = 0.7 / 1.96)
+    b <- stats::rnorm(sim, b, sd = 0.3 / 1.96)
+    }
   } else {
-    a <- stats::rnorm(sim, 1.2, sd = 1 / 1.96)
-    b <- stats::rnorm(sim, -1.0, sd = 0.4 / 1.96)
+    a <- 1.2
+    b <- -1.0
+    if(isTRUE(propagate_err)){
+    a <- stats::rnorm(sim, a, sd = 1 / 1.96)
+    b <- stats::rnorm(sim, b, sd = 0.4 / 1.96)
+    }
   }
 
   stress <- shear_m * (lambda / (burgers * 10^a))^(1 / b)

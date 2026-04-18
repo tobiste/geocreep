@@ -10,10 +10,11 @@ creep_quartz(
   fugacity = NULL,
   grainsize = NULL,
   pressure = NULL,
-  sim = 1e+06,
   model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995",
     "Gleason1995_melt", "Rutter2004", "Fukuda2018_LT", "Fukuda2018_HT", "Richter2018",
-    "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP")
+    "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP"),
+  propagate_err = TRUE,
+  sim = 1e+06
 )
 }
 \arguments{
@@ -26,8 +27,6 @@ creep_quartz(
 \item{grainsize}{Grain size in \eqn{\mu}m or \code{units} object}
 
 \item{pressure}{Pressure in MPa or \code{units} object}
-
-\item{sim}{non-negative number. Number of Monte Carlo simulations}
 
 \item{model}{character specifying the flow law to be used:
 \describe{
@@ -47,6 +46,11 @@ creep_quartz(
 \item{\code{"Lusk2021_LP"}}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for low pressures (≤560 MPa)}
 \item{\code{"Lusk2021_HP"}}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for high pressures (700–1600 MPa)}
 }}
+
+\item{propagate_err}{logical. Whether errors of the flow law parameters
+should be propagated. \code{TRUE} by default.}
+
+\item{sim}{non-negative number. Number of Monte Carlo simulations}
 }
 \value{
 list. Strain rate in 1/s. If Monte Carlo Simulation was used, and
@@ -86,7 +90,7 @@ pressure <- units::set_units(400, MPa)
 fugacity <- ps_fugacity(pressure, temperature)
 
 creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001") |>
- summary()
+  summary()
 }
 \references{
 Fukuda, J., Holyoke, C. W., & Kronenberg, A. K. (2018). Deformation of Fine‐Grained Quartz Aggregates by Mixed Diffusion and Dislocation Creep. Journal of Geophysical Research: Solid Earth, 123(6), 4676-4696. \doi{10.1029/2017JB015133}

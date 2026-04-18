@@ -8,7 +8,8 @@ grainsize_piezometry(
   d,
   sd = NULL,
   model = c("Stipp-reg2-3", "Stripp-reg1", "Cross-1", "Cross-sliding"),
-  sim = 1e+06
+  sim = 1e+06,
+  propagate_err = TRUE
 )
 }
 \arguments{
@@ -28,7 +29,10 @@ step size resolution in EBSD data}
 According to authors, more accurately estimates stress in fine-grained (<10 μm) samples}
 }}
 
-\item{sim}{non-negative integer. Number of Monte Carlo simulations}
+\item{sim}{non-negative number. Number of Monte Carlo simulations}
+
+\item{propagate_err}{logical. Whether errors of the flow law parameters
+should be propagated. \code{TRUE} by default.}
 }
 \value{
 list. Differential stress in MPa. If Monte Carlo Simulation was used,
