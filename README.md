@@ -95,12 +95,12 @@ Note: There is also a subgrain-size piezometer (Goddard et al. 2021):
 
 ### Flow laws
 
-Calculate strain rates using a defined flow law for quartz from
-differential stress, temperature, and fugacity:
+Calculate strain rates using a defined flow law for dislocation creep in
+quartz from differential stress, temperature, and fugacity:
 
 ``` r
 # Calculate strain rates using temperature, fugacity, and differential stress
-edot <- creep_quartz(
+edot <- disl_creep_quartz(
   stress = stress, 
   temperature = units::set_units(rnorm(1e6, 300, 50/1.96), degC),
   fugacity = rnorm(1e6, fugacity_stats$mean, fugacity_stats$sd), 
@@ -109,12 +109,11 @@ edot <- creep_quartz(
 
 # Summary stats of Monte Carlo simulation
 summary(edot)
-#> Warning in summary.MCS_log(edot): NaNs produced
 #> Statistical summary of 1000000 Monte Carlo simulations
 #> 
 #> Median:                      1.1e-13 /s
-#> 95% interpercentile range:   5.6e-16 - 1.8e-11 /s
-#> Standard error in log-space: 0.00113936
+#> 95% interpercentile range:   1.8e-18 - 6.8e-09 /s
+#> Standard error in log-space: 0.00242432
 #> Student's t-Test:            p<0.05
 ```
 

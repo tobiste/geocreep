@@ -46,7 +46,7 @@ ps_volume(pressure2, temperature2)
 \dontshow{\}) # examplesIf}
 }
 \references{
-Pitzer, K.S. \& Sterner, S.M., 1994. Equations of state valid
+Pitzer, K.S. & Sterner, S.M., 1994. Equations of state valid
 continuously from zero to extreme pressures for H2O and CO2.
 Journal of Chemical Physics. 101: 3111-3116.
 }

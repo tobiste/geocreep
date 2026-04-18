@@ -82,7 +82,7 @@ summary.MCS_log <- function(object, unit = NULL, ...) {
     unit <- units(object)
     object <- units::drop_units(object)
   }
-  x <- as.numeric(na.omit(object))
+  x <- as.numeric(stats::na.omit(object))
 
 
   median_s <- stats::median(x)
@@ -90,8 +90,9 @@ summary.MCS_log <- function(object, unit = NULL, ...) {
   ir_68 <- stats::quantile(x, c(0.16, 0.84))
 
   log_s <- log10(x)
+  log_s[is.infinite(log_s)] <- NA
 
-  log_s_tt <- t.test(log_s)
+  log_s_tt <- stats::t.test(log_s)
 
   mean_log_s <- unname(log_s_tt$estimate)
   CI95_log_s <- log_s_tt$conf.int
@@ -99,14 +100,14 @@ summary.MCS_log <- function(object, unit = NULL, ...) {
 
   mean_s <- 10^mean_log_s
 
-  sd_log_s <- sd(log_s)
+  sd_log_s <- stats::sd(log_s)
   sd_range <- 10^c(mean_log_s - sd_log_s, mean_log_s + sd_log_s)
   sd2_range <- 10^c(mean_log_s - 2 * sd_log_s, mean_log_s + 2 * sd_log_s)
 
   se_log_s <- sd_log_s / sqrt(length(x))
   sde_range <- 10^c(mean_log_s - se_log_s, mean_log_s + se_log_s)
   conf.int <- 10^c(CI95_log_s) |>
-    setNames(c("2.5%", "97.5%"))
+    stats::setNames(c("2.5%", "97.5%"))
 
   out <- list(
     # quantiles
@@ -161,20 +162,20 @@ summary.MCS <- function(object, unit = NULL, ...) {
     unit <- units(object)
     object <- units::drop_units(object)
   }
-  x <- as.numeric(na.omit(object))
+  x <- as.numeric(stats::na.omit(object))
 
   median_s <- stats::median(x)
   ir_95 <- stats::quantile(x, c(0.025, 0.975))
   ir_68 <- stats::quantile(x, c(0.16, 0.84))
 
 
-  s_tt <- t.test(x)
+  s_tt <- stats::t.test(x)
 
   mean_s <- unname(s_tt$estimate)
   CI95_s <- s_tt$conf.int
   stderr_s <- s_tt$stderr
 
-  sd_s <- sd(x)
+  sd_s <- stats::sd(x)
   # se_s <- sd_s / sqrt(length(x))
 
   out <- list(
@@ -223,7 +224,7 @@ summary.MCS <- function(object, unit = NULL, ...) {
 
 
 gas_const <- function() {
-  units::set_units(8.31446261815324, J * K^-1 * mol^-1)
+  units::set_units(8.31446261815324, "J K-1 mol-1")
 }
 
 negative_strainrate <- function(x) {

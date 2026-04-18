@@ -7,21 +7,30 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7, fig.height = 4
 )
+
+library(future)
+plan(multisession, workers = 4)
+set.seed(20250411)
 ```
 
-```{r setup}
+```{r setup, warning=FALSE, message=FALSE}
 library(geocreep)
 library(ggplot2)
 library(dplyr)
 library(scales)
-set.seed(20250411)
+theme_set(theme_classic())
 ```
 
+
+
+Define initial grainsize, temperature and pressure:
 ```{r params}
 grainsize <- units::set_units(11, um)
 stress0 <- grainsize_piezometry(grainsize, propagate_err = FALSE)
@@ -37,7 +46,7 @@ models <- c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1
 ```{r no_prop}
 edot_estimates0 <- sapply(models,
        function(m){
-         creep_quartz(stress = stress0, temperature = temperature, fugacity = fugacity, pressure = pressure, grainsize = grainsize, model = m, propagate_err = FALSE)
+         disl_creep_quartz(stress = stress0, temperature = temperature, fugacity = fugacity, pressure = pressure, grainsize = grainsize, model = m, propagate_err = FALSE)
        }) |> 
   setNames(models) |> 
   t() |> 
@@ -54,15 +63,22 @@ edot_estimates0$error <- 'none'
 
 ## Only error propagation of flow law uncertainties
 
+Specify the amount of Monte Carlo (MC) simulations:
+```{r mcs}
+n <- 1e3
+```
+
+Recalculate stress using MC simulations:
 ```{r params1}
-n <- 1e4
 stress1 <- grainsize_piezometry(grainsize, sim = n)
 ```
 
 ### Distribution of differential stress
 
+Visualize the calculated stress estimates:
 ```{r hist_stress}
 stress_log <- log10(as.numeric(stress1))
+
 hist(stress_log, xlab = bquote(sigma[d] ~ '(MPa)'), main = NULL, freq = FALSE, xaxt ='n', border = 'white')
 ticks <- seq(1.4, 2.6, .2)
 labels <- sapply(ticks, function(i) as.expression(bquote(10^.(i))))
@@ -72,18 +88,21 @@ lines(density(stress_log), lwd = 1.5, col = 'dodgerblue3', xpd = TRUE)
 abline(v = median(stress_log), lty = 2, lwd = 2, col = 'red')
 ```
 
+Calculate the strain rates using the stress estimates:
 ```{r mc_estimates1}
 edot_estimates1 <- lapply(models,
        function(m){
-         creep_quartz(stress = median(stress1), temperature = temperature, fugacity = fugacity, pressure = pressure, grainsize = grainsize, model = m, sim = n)
+         disl_creep_quartz(stress = median(stress1), temperature = temperature, fugacity = fugacity, pressure = pressure, grainsize = grainsize, model = m, sim = n)
        }) |> 
   setNames(models)
 ```
 
 ### Distribution of strain rate
+Visualize the strain rate estimates:
 ```{r hist_strain1}
 m <- 'Hirth2001'
 edot_log <- log10(as.numeric(edot_estimates1[[m]]))
+
 hist(edot_log, xlab = bquote(dot(epsilon) ~ '('* s^{-1} * ')'), main = m, freq = FALSE, xaxt ='n', border = 'white')
 
 ticks <- seq(-22, -6, 2)
@@ -91,7 +110,7 @@ labels <- sapply(ticks, function(i) as.expression(bquote(10^.(i))))
 axis(1, at = ticks, labels = labels)
 
 lines(density(edot_log), lwd = 1.5, col = '#4E79A7', xpd = TRUE)
-abline(v = quantile(edot_log2, probs =c( .025, .5, .975)), lty = 2, lwd = 2, col = '#E15759')
+abline(v = quantile(edot_log, probs =c( .025, .5, .975)), lty = 2, lwd = 2, col = '#E15759')
 ```
 
 
@@ -109,33 +128,23 @@ edot_quantiles1$model <- models
 edot_quantiles1$error <- 'only flow law'
 ```
 
-```{r plot1, fig.width=10, fig.height=5}
-edot_quantiles1 |> 
-  mutate(model = reorder(factor(model), `50%`)) |> 
-  ggplot(aes(x = `50%`, xmin = `2.5%`, xmax = `97.5%`, y = model)) +
-  geom_rect(aes(xmin = 1e-15, xmax = 1e-14, ymin = -Inf, ymax = Inf), color = NA, fill = 'grey90') +
-  annotate('text', x =  10^(-14.5), y = length(models),  label = 'Natural geological strain rates', angle = 90, hjust = 1, vjust = .5, color = 'grey50', fontface = 3) +
-  geom_pointrange(color = '#4E79A7') +
-  geom_point(aes(x = mean), color = '#4E79A7', size = 1.5, shape = 0) +
-  scale_x_log10('Strain rate (1/s)', breaks = breaks_log(n = 15), labels = label_log()) +
-  labs(y = NULL, caption = paste('95% interpercentile range based on', n, "Monte Carlo simulations")) +
-  theme_classic()
-```
-
 ## Error propagation of flow law uncertainties and measurement errors
+
+Now we add some uncertainties to our temperature and pressure estimates, and then recaclulate the fugacity:
 
 (this may take a while...)
 
 ```{r params2}
 temperature2 <- units::set_units(rnorm(n, temperature, 50), degC)
 pressure2 <- units::set_units(rnorm(n, pressure, 100), MPa)
-fugacity2 <- ps_fugacity(pressure2, temperature2)
+fugacity2 <- ps_fugacity(pressure2, temperature2, future.seed = TRUE)
 ```
 
 ### Distribution of fugacity values 
-
+Visualize the distribution of the recalculated fugacity values:
 ```{r hist_fugacity}
 fug_bar <- log10(as.numeric(fugacity2))
+
 hist(fug_bar, xlab = bquote('f'['H'[2]*'O']~ '(bar)'), main = 'Pitzer and Sterner (1994)', freq = FALSE, xaxt ='n', border = 'white')
 
 ticks <- seq(1, 4, .5)
@@ -146,22 +155,26 @@ lines(density(fug_bar), lwd = 1.5, col = '#4E79A7', xpd = TRUE)
 abline(v = quantile(fug_bar, probs =c( .025, .5, .975)), lty = 2, lwd = 2, col = '#E15759')
 ```
 
+Student's T-test for normal distribution:
 ```{r test_norm}
 t.test(as.numeric(fugacity2)); t.test(log10(as.numeric(fugacity2)));
 ```
 
 ### Distribution of strain rate values 
+Calculate strain rate values:
 ```{r mc_estimates2}
 edot_estimates2 <- lapply(models,
        function(m){
-         creep_quartz(stress = stress1, temperature = temperature2, fugacity = fugacity2, pressure = pressure2, grainsize = grainsize, model = m, sim = n)
+         disl_creep_quartz(stress = stress1, temperature = temperature2, fugacity = fugacity2, pressure = pressure2, grainsize = grainsize, model = m, sim = n)
        }) |> 
   setNames(models)
 ```
 
+Visualize the distribution of the new strian rate values:
 ```{r hist_strain}
 m <- 'Hirth2001'
 edot_log2 <- log10(as.numeric(edot_estimates2[[m]]))
+
 hist(edot_log2, xlab = bquote(dot(epsilon) ~ '('* s^{-1} * ')'), main = m, freq = FALSE, xaxt ='n', border = 'white')
 
 ticks <- seq(-22, -6, 2)
@@ -188,7 +201,8 @@ edot_quantiles2$error <- 'all'
 
 ### Compare results
 
-```{r plot2, fig.width=10, fig.height=5}
+Finally, we compare the strain rate results calculated without any error propagation, considering the errors in the flow laws, and the uncertainties in the initial temperature and pressure values:
+```{r plot2, fig.height=6, message=FALSE, warning=FALSE}
 bind_rows(edot_quantiles1, edot_quantiles2, edot_estimates0) |> 
   mutate(#model = reorder(factor(model), `50%`),
          error = factor(error, levels = c('none', 'only flow law', 'all'))
@@ -204,6 +218,9 @@ bind_rows(edot_quantiles1, edot_quantiles2, edot_estimates0) |>
                      labels = c('all' = 'Measurement + flow law parameters', 'only flow law' = 'Only flow law parameters', 'none' = 'None')) +
   labs(y = NULL, caption = paste('95% interpercentile range based on', n, "Monte Carlo simulations")) +
   guides(shape = "none") +
-  theme_classic() +
   theme(legend.position = 'bottom')
+```
+
+```{r exit, include=FALSE}
+plan(sequential)
 ```

@@ -74,7 +74,7 @@ ps_eos <- function(volume, temperature, targetP, phase = c("H2O", "CO2")) {
 #'  one of `"H2O"` (the default) and `"CO2"`.
 #' @param ... optional arguments passed to [future.apply::future_mapply()]
 #'
-#' @references Pitzer, K.S. \& Sterner, S.M., 1994. Equations of state valid
+#' @references Pitzer, K.S. & Sterner, S.M., 1994. Equations of state valid
 #' continuously from zero to extreme pressures for H2O and CO2.
 #' Journal of Chemical Physics. 101: 3111-3116.
 #'

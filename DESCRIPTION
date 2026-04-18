@@ -5,7 +5,7 @@ Authors@R:
     person("Tobias", "Stephan", , "tstephan@lakeheadu.ca", role = c("aut", "cre"))
 Description: Flow laws, grain size piezometry, and water fugacity.
 License: GPL (>= 3)
-URL: https://github.com/tobiste/geocreep
+URL: https://github.com/tobiste/geocreep, https://tobiste.github.io/geocreep/
 BugReports: https://github.com/tobiste/geocreep/issues
 Depends: 
     R (>= 4.1.0)
@@ -17,8 +17,10 @@ Imports:
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+VignetteBuilder: knitr
 Suggests: 
     knitr,
+    future,
     ggplot2,
     dplyr,
     scales,

@@ -465,23 +465,23 @@ flow_models <- function() {
 #'
 #' Gleason, G. C., & Tullis, J. (1995). A flow law for dislocation creep of quartz aggregates determined with the molten salt cell. Tectonophysics, 247(1-4), 1-23. \doi{10.1016/0040-1951(95)00011-B}
 #'
-#' Hirth, G., Teyssier, C., \& Dunlap, W. J. (2001). An evaluation of quartzite flow laws based on comparisons between experimentally and naturally deformed rocks. International Journal of Earth Sciences, 90(1), 77-87. \doi{10.1007/s005310000152}
+#' Hirth, G., Teyssier, C., & Dunlap, W. J. (2001). An evaluation of quartzite flow laws based on comparisons between experimentally and naturally deformed rocks. International Journal of Earth Sciences, 90(1), 77-87. \doi{10.1007/s005310000152}
 #'
-#' Kronenberg, A. K., \& Tullis, J. (1984). Flow strengths of quartz aggregates: Grain size and pressure effects due to hydrolytic weakening. Journal of Geophysical Research: Solid Earth, 89(B6), 4281–4297. \doi{10.1029/JB089iB06p04281}
+#' Kronenberg, A. K., & Tullis, J. (1984). Flow strengths of quartz aggregates: Grain size and pressure effects due to hydrolytic weakening. Journal of Geophysical Research: Solid Earth, 89(B6), 4281–4297. \doi{10.1029/JB089iB06p04281}
 #'
-#' Lu, L. X., \& Jiang, D. (2019). Quartz Flow Law Revisited: The Significance of Pressure Dependence of the Activation Enthalpy. Journal of Geophysical Research: Solid Earth, 124(1), 241–256. \doi{10.1029/2018JB016226}
+#' Lu, L. X., & Jiang, D. (2019). Quartz Flow Law Revisited: The Significance of Pressure Dependence of the Activation Enthalpy. Journal of Geophysical Research: Solid Earth, 124(1), 241–256. \doi{10.1029/2018JB016226}
 #'
-#' Lusk, A. D. J., Platt, J. P., \& Platt, J. A. (2021). Natural and Experimental Constraints on a Flow Law for Dislocation‐Dominated Creep in Wet Quartz. Journal of Geophysical Research: Solid Earth, 126(5), 1-25. \doi{10.1029/2020JB021302}
+#' Lusk, A. D. J., Platt, J. P., & Platt, J. A. (2021). Natural and Experimental Constraints on a Flow Law for Dislocation‐Dominated Creep in Wet Quartz. Journal of Geophysical Research: Solid Earth, 126(5), 1-25. \doi{10.1029/2020JB021302}
 #'
-#' Paterson, M. S., \& Luan, F. C. (1990). Quartzite rheology under geological conditions. Geological Society, London, Special Publications, 54(1), 299–307. \doi{10.1144/GSL.SP.1990.054.01.26}
+#' Paterson, M. S., & Luan, F. C. (1990). Quartzite rheology under geological conditions. Geological Society, London, Special Publications, 54(1), 299–307. \doi{10.1144/GSL.SP.1990.054.01.26}
 #'
-#' Richter, B., Stünitz, H., \& Heilbronner, R. (2018). The brittle-to-viscous transition in polycrystalline quartz: An experimental study. Journal of Structural Geology, 114(September 2017), 1-21. \doi{10.1016/j.jsg.2018.06.005}
+#' Richter, B., Stünitz, H., & Heilbronner, R. (2018). The brittle-to-viscous transition in polycrystalline quartz: An experimental study. Journal of Structural Geology, 114(September 2017), 1-21. \doi{10.1016/j.jsg.2018.06.005}
 #'
-#' Rutter, E. H., \& Brodie, K. H. (2004a). Experimental grain size-sensitive flow of hot-pressed Brazilian quartz aggregates. Journal of Structural Geology, 26(11), 2011–2023. \doi{10.1016/j.jsg.2004.04.006}
+#' Rutter, E. H., & Brodie, K. H. (2004a). Experimental grain size-sensitive flow of hot-pressed Brazilian quartz aggregates. Journal of Structural Geology, 26(11), 2011–2023. \doi{10.1016/j.jsg.2004.04.006}
 #'
-#' Rutter, E. ., \& Brodie, K. . (2004b). Experimental intracrystalline plastic flow in hot-pressed synthetic quartzite prepared from Brazilian quartz crystals. Journal of Structural Geology, 26(2), 259–270. \doi{10.1016/S0191-8141(03)00096-8}
+#' Rutter, E. ., & Brodie, K. . (2004b). Experimental intracrystalline plastic flow in hot-pressed synthetic quartzite prepared from Brazilian quartz crystals. Journal of Structural Geology, 26(2), 259–270. \doi{10.1016/S0191-8141(03)00096-8}
 #'
-#' Tokle, L., Hirth, G., \& Behr, W. M. (2019). Flow laws and fabric transitions in wet quartzite. Earth and Planetary Science Letters, 505, 152-161. \doi{10.1016/j.epsl.2018.10.017}
+#' Tokle, L., Hirth, G., & Behr, W. M. (2019). Flow laws and fabric transitions in wet quartzite. Earth and Planetary Science Letters, 505, 152-161. \doi{10.1016/j.epsl.2018.10.017}
 #' @export
 #'
 #' @seealso [units::set_units()] to set up `units` objects; [summary.MCS_log()] for statistical parameters of Monte Carlo samples
@@ -497,9 +497,11 @@ flow_models <- function() {
 #' pressure <- units::set_units(400, MPa)
 #' fugacity <- ps_fugacity(pressure, temperature)
 #'
-#' creep_quartz(stress = stress, temperature = temperature, fugacity = fugacity, model = "Hirth2001") |>
-#'   summary()
-creep_quartz <- function(stress, temperature, fugacity = NULL,
+#' disl_creep_quartz(
+#'   stress = stress, temperature = temperature, fugacity = fugacity,
+#'   model = "Hirth2001") |>
+#'  summary()
+disl_creep_quartz <- function(stress, temperature, fugacity = NULL,
                          grainsize = NULL, pressure = NULL,
                          model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995", "Gleason1995_melt", "Rutter2004", "Fukuda2018_LT", "Fukuda2018_HT", "Richter2018", "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP"),
                          propagate_err = TRUE,

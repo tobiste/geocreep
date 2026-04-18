@@ -16,7 +16,7 @@
 #' \item{`"Cross-sliding"`}{Sliding resolution piezometer after Cross et al. 2017.
 #' According to authors, more accurately estimates stress in fine-grained (<10 &mu;m) samples}
 #' }
-#' @inheritParams creep_quartz
+#' @inheritParams disl_creep_quartz
 #'
 #' @returns list. Differential stress in MPa. If Monte Carlo Simulation was used,
 #' and object of class `"MCS"` is returned (see [summary()] for detailed description of output).
@@ -32,10 +32,10 @@
 #'
 #'
 #' @references
-#' Stipp, M., \& Tullis, J. (2003). The recrystallized grain size piezometer for
+#' Stipp, M., & Tullis, J. (2003). The recrystallized grain size piezometer for
 #' quartz. Geophysical Research Letters, 30(21), 1–5. https://doi.org/10.1029/2003GL018444
 #'
-#' Cross, A. J., Prior, D. J., Stipp, M., \& Kidder, S. (2017). The
+#' Cross, A. J., Prior, D. J., Stipp, M., & Kidder, S. (2017). The
 #' recrystallized grain size piezometer for quartz: An EBSD-based calibration.
 #' Geophysical Research Letters, 44(13), 6667–6674. https://doi.org/10.1002/2017GL073836
 #'
@@ -128,7 +128,7 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
 #' @importFrom units set_units
 #'
 #' @references Goddard, R. M., Hansen, L. N., Wallis, D., Stipp, M., Holyoke,
-#' C. W., Kumamoto, K. M., \& Kohlstedt, D. L. (2020). A Subgrain‐Size Piezometer
+#' C. W., Kumamoto, K. M., & Kohlstedt, D. L. (2020). A Subgrain‐Size Piezometer
 #' Calibrated for EBSD. Geophysical Research Letters, 47(23).
 #' https://doi.org/10.1029/2020GL090056
 #'
