@@ -2,7 +2,8 @@
 
 S3method(base::summary,MCS)
 S3method(base::summary,MCS_log)
-export(disl_creep_quartz)
+export(creep_quartz)
+export(creep_quartz_analytic)
 export(grainsize_piezometry)
 export(peierls_creep)
 export(ps_fugacity)

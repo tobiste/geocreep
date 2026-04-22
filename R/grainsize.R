@@ -16,7 +16,7 @@
 #' \item{`"Cross-sliding"`}{Sliding resolution piezometer after Cross et al. 2017.
 #' According to authors, more accurately estimates stress in fine-grained (<10 &mu;m) samples}
 #' }
-#' @inheritParams disl_creep_quartz
+#' @inheritParams creep_quartz
 #'
 #' @returns list. Differential stress in MPa. If Monte Carlo Simulation was used,
 #' and object of class `"MCS"` is returned (see [summary()] for detailed description of output).

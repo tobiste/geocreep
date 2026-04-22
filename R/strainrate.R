@@ -1,8 +1,10 @@
 #' @noRd
 #' @importFrom stats rnorm runif
 #' @importFrom units set_units
-flow_models <- function() {
+flow_models <- function(model) {
   ci2sd <- 1 / 1.96 # convert 95% CI to SD
+
+  #x <- flow_model_params(model)
 
   list(
     Kronenberg1984 = function(stress, temperature, fugacity = NULL, grainsize, pressure = NULL, sim, propagate_err = TRUE) {
@@ -147,6 +149,8 @@ flow_models <- function() {
     },
     Fukuda2018_LT = function(stress, temperature, fugacity, grainsize = NULL, pressure = NULL, sim, propagate_err = TRUE) {
       # uncertainties not specified; assuming 1s
+      log_A <- -2.97
+      log_A_std <- 0.23
       H <- 129
       H_std <- 33 # std given as 1s?
       n_min <- 2.9
@@ -154,9 +158,11 @@ flow_models <- function() {
       r <- 1
 
       if (isTRUE(propagate_err)) {
+        A <- 10^rnorm(sim, log_A, log_A_std)
         H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
         n <- runif(sim, n_min, n_max)
       } else {
+        A <- 10^log_A
         H <- set_units(H, "kJ mol-1")
         n <- mean(c(n_min, n_max))
       }
@@ -167,7 +173,7 @@ flow_models <- function() {
       stopifnot(units(term) == units::unitless)
       arrhenius <- exp(as.numeric(term))
 
-      stress^n * fugacity^r * arrhenius
+      A * stress^n * fugacity^r * arrhenius
     },
     Fukuda2018_HT = function(stress, temperature, fugacity, grainsize, pressure = NULL, sim, propagate_err = TRUE) {
       log_A <- -2.97
@@ -257,6 +263,7 @@ flow_models <- function() {
       # uncertainties not specified; assuming 1s
       A <- 6
       A_std <- 5
+      A_k <- -15
       H <- 132
       H_std <- 5
       # V <- 35.3 |> set_units("cm3 mol-1") # cm3/mol
@@ -266,10 +273,10 @@ flow_models <- function() {
 
       if (isTRUE(propagate_err)) {
         H <- truncnorm::rtruncnorm(sim, a = 0, mean = H, sd = H_std) |> set_units("kJ mol-1")
-        A <- truncnorm::rtruncnorm(sim, a = 0, mean = A, sd = A_std) * 10^(-15)
+        A <- truncnorm::rtruncnorm(sim, a = 0, mean = A, sd = A_std) * 10^(A_k)
         n <- rnorm(sim, n, n_std)
       } else {
-        A <- A* 10^(-15)
+        A <- A* 10^(A_k)
         H <- set_units(H, "kJ mol-1")
       }
 
@@ -408,7 +415,7 @@ flow_models <- function() {
 #'
 #' Calculates strain rates of deforming quartz from stress, temperature, and grain size from
 #' experimentally determined creep law parameters.
-#' Monte Carlo sampling is used for propagating parameter uncertainties in to creep estimate.
+#' Monte Carlo simulation is used for propagating parameter uncertainties in to creep estimate.
 #'
 #' @param stress Differential stress in MPa or `units` object
 #' @param temperature Temperature in Kelvin or `units` object
@@ -437,10 +444,10 @@ flow_models <- function() {
 #' \item{`"Lusk2021_HP"`}{Lusk et al. (2021): dislocation-dominated creep in wet quartz, for high pressures (700&ndash;1600 MPa)}
 #' }
 #'
-#' @details General flow law giving the strain rate is  \deqn{\dot{\epsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
+#' @details General flow law giving the strain rate is  \deqn{\dot{\varepsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
 #'
 #' where \eqn{\sigma} is the differential stress, \eqn{d} is the grain size,
-#' \eqn{f_{H_2O}} is the water fugacity, \eqn{T} is the temperature,
+#' f_{H_2O} is the water fugacity, \eqn{T} is the temperature,
 #' \eqn{H} is the enthalpy, and \eqn{R} is the ideal gas constant. The flow
 #' parameters are the prefactor \eqn{A}, and the exponents \eqn{n}, \eqn{m}, and \eqn{r}.
 #'
@@ -484,7 +491,8 @@ flow_models <- function() {
 #' Tokle, L., Hirth, G., & Behr, W. M. (2019). Flow laws and fabric transitions in wet quartzite. Earth and Planetary Science Letters, 505, 152-161. \doi{10.1016/j.epsl.2018.10.017}
 #' @export
 #'
-#' @seealso [units::set_units()] to set up `units` objects; [summary.MCS_log()] for statistical parameters of Monte Carlo samples
+#' @seealso [units::set_units()] to set up `units` objects; [summary.MCS_log()] for statistical parameters of Monte Carlo samples;
+#' [creep_quartz_analytic()] for an analytical solution
 #'
 #' @importFrom stats rnorm
 #' @importFrom units set_units unitless
@@ -497,11 +505,11 @@ flow_models <- function() {
 #' pressure <- units::set_units(400, MPa)
 #' fugacity <- ps_fugacity(pressure, temperature)
 #'
-#' disl_creep_quartz(
+#' creep_quartz(
 #'   stress = stress, temperature = temperature, fugacity = fugacity,
 #'   model = "Hirth2001") |>
 #'  summary()
-disl_creep_quartz <- function(stress, temperature, fugacity = NULL,
+creep_quartz <- function(stress, temperature, fugacity = NULL,
                          grainsize = NULL, pressure = NULL,
                          model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995", "Gleason1995_melt", "Rutter2004", "Fukuda2018_LT", "Fukuda2018_HT", "Richter2018", "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP"),
                          propagate_err = TRUE,
