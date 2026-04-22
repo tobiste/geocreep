@@ -2,8 +2,10 @@
 
 ## All functions
 
-- [`disl_creep_quartz()`](https://tobiste.github.io/geocreep/reference/disl_creep_quartz.md)
+- [`creep_quartz()`](https://tobiste.github.io/geocreep/reference/creep_quartz.md)
   : Strain Rates for Creep in Quartz
+- [`creep_quartz_analytic()`](https://tobiste.github.io/geocreep/reference/creep_quartz_analytic.md)
+  : Algebraic error propagation of flow laws
 - [`grainsize_piezometry()`](https://tobiste.github.io/geocreep/reference/grainsize_piezometry.md)
   : Grain-Size Piezometry
 - [`peierls_creep()`](https://tobiste.github.io/geocreep/reference/peierls_creep.md)

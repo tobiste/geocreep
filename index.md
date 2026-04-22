@@ -33,9 +33,9 @@ and Sterner (1994) equation:
 ``` r
 nmc <- 1e3 # create 1,000 samples for temperature and pressure using a normal distribution
 
-#Define temperature and pressure
-temperature <- units::set_units(rnorm(nmc, 300, 50/1.96), degC)
-pressure <- units::set_units(rnorm(nmc, 400, 100/1.96), MPa)
+# Define temperature and pressure
+temperature <- units::set_units(rnorm(nmc, 300, 50 / 1.96), degC)
+pressure <- units::set_units(rnorm(nmc, 400, 100 / 1.96), MPa)
 
 # Calculate fugacity
 fugacity <- ps_fugacity(pressure, temperature)
@@ -92,12 +92,12 @@ quartz from differential stress, temperature, and fugacity:
 
 ``` r
 # Calculate strain rates using temperature, fugacity, and differential stress
-edot <- disl_creep_quartz(
-  stress = stress, 
-  temperature = units::set_units(rnorm(1e6, 300, 50/1.96), degC),
-  fugacity = rnorm(1e6, fugacity_stats$mean, fugacity_stats$sd), 
+edot <- creep_quartz(
+  stress = stress,
+  temperature = units::set_units(rnorm(1e6, 300, 50 / 1.96), degC),
+  fugacity = rnorm(1e6, fugacity_stats$mean, fugacity_stats$sd),
   model = "Hirth2001"
-  )
+)
 
 # Summary stats of Monte Carlo simulation
 summary(edot)
