@@ -143,9 +143,9 @@ General flow law giving the strain rate is \$\$\dot{\varepsilon} = A
 \sigma^n d^m f\_{H_2O}^r \\ e^{\left({\frac{-H}{RT}}\right)}\$\$
 
 where \\\sigma\\ is the differential stress, \\d\\ is the grain size,
-f_H_2O is the water fugacity, \\T\\ is the temperature, \\H\\ is the
-enthalpy, and \\R\\ is the ideal gas constant. The flow parameters are
-the prefactor \\A\\, and the exponents \\n\\, \\m\\, and \\r\\.
+\\f\_{H_2O}\\ is the water fugacity, \\T\\ is the temperature, \\H\\ is
+the enthalpy, and \\R\\ is the ideal gas constant. The flow parameters
+are the prefactor \\A\\, and the exponents \\n\\, \\m\\, and \\r\\.
 
 To propagate the uncertainties of the flow parameters Monte Carlo
 simulation is used here.
@@ -188,6 +188,10 @@ Lu, L. X., & Jiang, D. (2019). Quartz Flow Law Revisited: The
 Significance of Pressure Dependence of the Activation Enthalpy. Journal
 of Geophysical Research: Solid Earth, 124(1), 241–256.
 [doi:10.1029/2018JB016226](https://doi.org/10.1029/2018JB016226)
+
+Luan, F. C., & Paterson, M. S. (1992). Preparation and Deformation of
+Synthetic Aggregates of Quartz. Journal of Geophysical Research, 97,
+301–320. https://doi.org/10.1029/91JB01748
 
 Lusk, A. D. J., Platt, J. P., & Platt, J. A. (2021). Natural and
 Experimental Constraints on a Flow Law for Dislocation‐Dominated Creep

@@ -158,19 +158,19 @@ creep_quartz_analytic(
 #> 
 #> $sd_e_range
 #> Units: [1/s]
-#> [1] 1.422672e-16 9.553726e-13
+#> [1] 1.834746e-16 7.408012e-13
 #> 
 #> $var_log_e_total
-#> [1] 19.4135
+#> [1] 17.23666
 #> 
 #> $sd_log_e_total
-#> [1] 4.406075
+#> [1] 4.151706
 #> 
 #> $var_log_e
 #>          prefactor    stress_exponent  fugacity_exponent grainsize_exponent 
-#>        1.381551056       18.026453576        0.000000000        0.000000000 
+#>        1.908683320       15.322485539        0.000000000        0.000000000 
 #>             stress           fugacity          grainsize        temperature 
-#>                 NA                 NA                 NA                 NA 
+#>        0.000000000        0.000000000        0.000000000        0.000000000 
 #>           enthalpy 
 #>        0.005491873 
 #> 
