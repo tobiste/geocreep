@@ -231,3 +231,15 @@ negative_strainrate <- function(x) {
   x[x < 0] <- 0
   return(x)
 }
+
+replace_na_with_zero <- function(x) {
+  x[is.na(x)] <- 0
+  x
+}
+
+replace_with_zero <- function(x) {
+  cond <- is.na(x) | is.nan(x) | is.infinite(x)
+
+  x[cond] <- 0
+  x
+}

@@ -447,7 +447,7 @@ flow_models <- function(model) {
 #' @details General flow law giving the strain rate is  \deqn{\dot{\varepsilon} = A \sigma^n d^m f_{H_2O}^r \, e^{\left({\frac{-H}{RT}}\right)}}
 #'
 #' where \eqn{\sigma} is the differential stress, \eqn{d} is the grain size,
-#' f_{H_2O} is the water fugacity, \eqn{T} is the temperature,
+#' \eqn{f_{H_2O}} is the water fugacity, \eqn{T} is the temperature,
 #' \eqn{H} is the enthalpy, and \eqn{R} is the ideal gas constant. The flow
 #' parameters are the prefactor \eqn{A}, and the exponents \eqn{n}, \eqn{m}, and \eqn{r}.
 #'
@@ -477,6 +477,8 @@ flow_models <- function(model) {
 #' Kronenberg, A. K., & Tullis, J. (1984). Flow strengths of quartz aggregates: Grain size and pressure effects due to hydrolytic weakening. Journal of Geophysical Research: Solid Earth, 89(B6), 4281–4297. \doi{10.1029/JB089iB06p04281}
 #'
 #' Lu, L. X., & Jiang, D. (2019). Quartz Flow Law Revisited: The Significance of Pressure Dependence of the Activation Enthalpy. Journal of Geophysical Research: Solid Earth, 124(1), 241–256. \doi{10.1029/2018JB016226}
+#'
+#' Luan, F. C., & Paterson, M. S. (1992). Preparation and Deformation of Synthetic Aggregates of Quartz. Journal of Geophysical Research, 97, 301–320. https://doi.org/10.1029/91JB01748
 #'
 #' Lusk, A. D. J., Platt, J. P., & Platt, J. A. (2021). Natural and Experimental Constraints on a Flow Law for Dislocation‐Dominated Creep in Wet Quartz. Journal of Geophysical Research: Solid Earth, 126(5), 1-25. \doi{10.1029/2020JB021302}
 #'
