@@ -86,13 +86,13 @@ subgrainsize_piezometry(9, min = "fo50") |> summary() # 420 MPa
 #> 
 #> Median:                      560 MPa 
 #> 95% interpercentile range:   34 - 3600 MPa 
-#> Standard error in log-space: 0.000516207
+#> Log-variance:                0.26647
 #> Student's t-Test:            p<0.05
 subgrainsize_piezometry(18, min = "q") |> summary() # 240 MPa
 #> Statistical summary of 1000000 Monte Carlo simulations
 #> 
 #> Median:                      220 MPa 
 #> 95% interpercentile range:   11 - 1500 MPa 
-#> Standard error in log-space: 0.00054436
+#> Log-variance:                0.296328
 #> Student's t-Test:            p<0.05
 ```

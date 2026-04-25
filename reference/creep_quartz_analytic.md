@@ -152,7 +152,8 @@ fugacity <- ps_fugacity(pressure, temperature)
 
 creep_quartz_analytic(
   stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
-  model = "Hirth2001")
+  model = "Hirth2001"
+)
 #> $e_best
 #> 1.165839e-14 [1/s]
 #> 

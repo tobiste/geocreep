@@ -93,7 +93,7 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Mean:                    380 bar </span></span>
 <span><span class="co">#&gt; 95% confidence interval: 370 - 390 bar </span></span>
-<span><span class="co">#&gt; Standard error:          4.12965</span></span>
+<span><span class="co">#&gt; Variance:                17054</span></span>
 <span><span class="co">#&gt; Student's t-Test:        p&lt;0.05</span></span></code></pre></div>
 <blockquote>
 <p>Here, the Monte Carlo simulation produces 1,000 normal-distributed estimates for the fugacity.</p>
@@ -116,7 +116,7 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Median:                      100 MPa </span></span>
 <span><span class="co">#&gt; 95% interpercentile range:   53 - 210 MPa </span></span>
-<span><span class="co">#&gt; Standard error in log-space: 0.000152958</span></span>
+<span><span class="co">#&gt; Log-variance:                0.0233963</span></span>
 <span><span class="co">#&gt; Student's t-Test:            p&lt;0.05</span></span></code></pre></div>
 <blockquote>
 <p>By default, the functions create 1,000,000 samples for each parameter with uncertainties, creating 1e6 results. Results of Monte Carlo simulations based on flow law equations do not follow a normal (symmetric) distribution because some parameters are exponents of the power laws. Therefore, the median and interpercentile range provide the best estimators for average and dispersion, rather than mean and standard deviation.</p>
@@ -128,11 +128,14 @@
 </h3>
 <p>Calculate strain rates using a defined flow law for dislocation creep in quartz from differential stress, temperature, and fugacity:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate strain rates using temperature, fugacity, and differential stress</span></span>
+<code class="sourceCode R"><span><span class="va">fug_distr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1e6</span>, <span class="va">fugacity_stats</span><span class="op">$</span><span class="va">mean</span>, <span class="va">fugacity_stats</span><span class="op">$</span><span class="va">sd</span><span class="op">)</span></span>
+<span><span class="va">temp_distr</span> <span class="op">&lt;-</span> <span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://r-quantities.github.io/units/reference/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1e6</span>, <span class="fl">300</span>, <span class="fl">50</span> <span class="op">/</span> <span class="fl">1.96</span><span class="op">)</span>, <span class="va">degC</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Calculate strain rates using temperature, fugacity, and differential stress</span></span>
 <span><span class="va">edot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/creep_quartz.html">creep_quartz</a></span><span class="op">(</span></span>
 <span>  stress <span class="op">=</span> <span class="va">stress</span>,</span>
-<span>  temperature <span class="op">=</span> <span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://r-quantities.github.io/units/reference/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1e6</span>, <span class="fl">300</span>, <span class="fl">50</span> <span class="op">/</span> <span class="fl">1.96</span><span class="op">)</span>, <span class="va">degC</span><span class="op">)</span>,</span>
-<span>  fugacity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1e6</span>, <span class="va">fugacity_stats</span><span class="op">$</span><span class="va">mean</span>, <span class="va">fugacity_stats</span><span class="op">$</span><span class="va">sd</span><span class="op">)</span>,</span>
+<span>  temperature <span class="op">=</span> <span class="va">temp_distr</span>,</span>
+<span>  fugacity <span class="op">=</span> <span class="va">fug_distr</span>,</span>
 <span>  model <span class="op">=</span> <span class="st">"Hirth2001"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -140,10 +143,38 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">edot</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Statistical summary of 1000000 Monte Carlo simulations</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Median:                      1.1e-13 /s</span></span>
-<span><span class="co">#&gt; 95% interpercentile range:   1.8e-18 - 6.8e-09 /s</span></span>
-<span><span class="co">#&gt; Standard error in log-space: 0.00242432</span></span>
+<span><span class="co">#&gt; Median:                      1.2e-13 /s</span></span>
+<span><span class="co">#&gt; 95% interpercentile range:   2.4e-18 - 7.2e-09 /s</span></span>
+<span><span class="co">#&gt; Log-variance:                5.83321</span></span>
 <span><span class="co">#&gt; Student's t-Test:            p&lt;0.05</span></span></code></pre></div>
+<p>An theoretical approach to calculate the uncertainties in strain rates uses standard error propagation and is provided through the <code><a href="reference/creep_quartz_analytic.html">creep_quartz_analytic()</a></code> function:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/creep_quartz_analytic.html">creep_quartz_analytic</a></span><span class="op">(</span></span>
+<span>  stress <span class="op">=</span> <span class="va">stress</span>,</span>
+<span>  temperature <span class="op">=</span> <span class="va">temp_distr</span>,</span>
+<span>  fugacity <span class="op">=</span> <span class="va">fug_distr</span>,</span>
+<span>  model <span class="op">=</span> <span class="st">"Hirth2001"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; $e_best</span></span>
+<span><span class="co">#&gt; 1.621933e-13 [1/s]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $sd_e_range</span></span>
+<span><span class="co">#&gt; Units: [1/s]</span></span>
+<span><span class="co">#&gt; [1] 2.379690e-23 1.105466e-03</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $var_log_e_total</span></span>
+<span><span class="co">#&gt; [1] 512.6828</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $sd_log_e_total</span></span>
+<span><span class="co">#&gt; [1] 22.6425</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $var_log_e</span></span>
+<span><span class="co">#&gt;          prefactor    stress_exponent  fugacity_exponent grainsize_exponent </span></span>
+<span><span class="co">#&gt;       1.908683e+00       1.582356e+01       0.000000e+00       0.000000e+00 </span></span>
+<span><span class="co">#&gt;             stress           fugacity          grainsize        temperature </span></span>
+<span><span class="co">#&gt;       1.105766e+02       3.827764e+02       0.000000e+00       1.592087e+00 </span></span>
+<span><span class="co">#&gt;           enthalpy </span></span>
+<span><span class="co">#&gt;       5.491489e-03</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

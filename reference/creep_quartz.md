@@ -243,12 +243,13 @@ fugacity <- ps_fugacity(pressure, temperature)
 
 creep_quartz(
   stress = stress, temperature = temperature, fugacity = fugacity,
-  model = "Hirth2001") |>
- summary()
+  model = "Hirth2001"
+) |>
+  summary()
 #> Statistical summary of 1000000 Monte Carlo simulations
 #> 
 #> Median:                      1.2e-14 1 / s
 #> 95% interpercentile range:   4.3e-19 - 3.1e-10 1 / s
-#> Standard error in log-space: 0.00226041
+#> Log-variance:                5.10945
 #> Student's t-Test:            p<0.05
 ```

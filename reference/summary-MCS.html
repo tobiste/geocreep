@@ -83,10 +83,13 @@ If class of <code>object</code> is <code>"MCS"</code>, the list contains the fol
 <dd><p>arithmetic mean the Monte Carlo simulations</p></dd>
 
 <dt><code>sd</code></dt>
-<dd><p>1\(\sigma\) standard deviation</p></dd>
+<dd><p>1\(\sigma\) standard deviation about the mean</p></dd>
 
 <dt><code>conf.int</code></dt>
 <dd><p>95% confidence intverval about the mean</p></dd>
+
+<dt><code>"var"</code></dt>
+<dd><p>Variance</p></dd>
 
 <dt><code>stderr</code></dt>
 <dd><p>standard error</p></dd>
@@ -119,6 +122,9 @@ If class of <code>object</code> is <code>"MCS"</code>, the list contains the fol
 <dt><code>conf.int</code></dt>
 <dd><p>95% confidence intverval about the mean</p></dd>
 
+<dt><code>var.log</code></dt>
+<dd><p>Log-variance</p></dd>
+
 <dt><code>stderr.log</code></dt>
 <dd><p>standard error of <code>log(samples)</code></p></dd>
 
@@ -150,7 +156,7 @@ standard deviation and confidence intervals.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Median:                      92 MPa </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 95% interpercentile range:   49 - 190 MPa </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error in log-space: 0.000151644</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Log-variance:                0.0229959</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Student's t-Test:            p&lt;0.05</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span></span></span>
@@ -162,7 +168,7 @@ standard deviation and confidence intervals.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Mean:                    390 bar </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 95% confidence interval: 370 - 420 bar </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Standard error:          11.9467</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Variance:                14272.4</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Student's t-Test:        p&lt;0.05</span>
 </code></pre></div>
     </div>

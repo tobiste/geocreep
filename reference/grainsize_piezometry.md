@@ -101,13 +101,13 @@ grainsize_piezometry(12.2) |> summary() # 92
 #> 
 #> Median:                      92 MPa 
 #> 95% interpercentile range:   49 - 190 MPa 
-#> Standard error in log-space: 0.000151644
+#> Log-variance:                0.0229959
 #> Student's t-Test:            p<0.05
 grainsize_piezometry(31) |> summary() # 44
 #> Statistical summary of 1000000 Monte Carlo simulations
 #> 
 #> Median:                      44 MPa 
 #> 95% interpercentile range:   24 - 86 MPa 
-#> Standard error in log-space: 0.00014041
+#> Log-variance:                0.019715
 #> Student's t-Test:            p<0.05
 ```

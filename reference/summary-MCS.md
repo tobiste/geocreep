@@ -51,11 +51,15 @@ elements:
 
 - `sd`:
 
-  1\\\sigma\\ standard deviation
+  1\\\sigma\\ standard deviation about the mean
 
 - `conf.int`:
 
   95% confidence intverval about the mean
+
+- `"var"`:
+
+  Variance
 
 - `stderr`:
 
@@ -100,6 +104,10 @@ elements:
 
   95% confidence intverval about the mean
 
+- `var.log`:
+
+  Log-variance
+
 - `stderr.log`:
 
   standard error of `log(samples)`
@@ -132,7 +140,7 @@ summary(MC_res)
 #> 
 #> Median:                      92 MPa 
 #> 95% interpercentile range:   49 - 190 MPa 
-#> Standard error in log-space: 0.000151644
+#> Log-variance:                0.0229959
 #> Student's t-Test:            p<0.05
 
 n <- 100
@@ -144,6 +152,6 @@ summary(MC_res2)
 #> 
 #> Mean:                    390 bar 
 #> 95% confidence interval: 370 - 420 bar 
-#> Standard error:          11.9467
+#> Variance:                14272.4
 #> Student's t-Test:        p<0.05
 ```
