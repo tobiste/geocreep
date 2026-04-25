@@ -23,10 +23,11 @@
 #'
 #' creep_quartz_analytic(
 #'   stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
-#'   model = "Hirth2001")
+#'   model = "Hirth2001"
+#' )
 creep_quartz_analytic <- function(stress, temperature, fugacity = NULL,
-                            grainsize = NULL, pressure = NULL,
-                            model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995", "Gleason1995_melt", "Rutter2004", "Fukuda2018_LT", "Fukuda2018_HT", "Richter2018", "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP")) {
+                                  grainsize = NULL, pressure = NULL,
+                                  model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995", "Gleason1995_melt", "Rutter2004", "Fukuda2018_LT", "Fukuda2018_HT", "Richter2018", "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP")) {
   model <- match.arg(model)
 
   # stress, pressure and fugacity in Mega-Pascal, temperature in Kelvins
@@ -36,7 +37,7 @@ creep_quartz_analytic <- function(stress, temperature, fugacity = NULL,
   if (!is.null(fugacity)) {
     fugacity <- units::set_units(fugacity, "MPa") #|> as.numeric()
   } else {
-    fugacity <- units::set_units(1, 'MPa')
+    fugacity <- units::set_units(1, "MPa")
   }
 
   if (!is.null(pressure)) {
@@ -48,15 +49,20 @@ creep_quartz_analytic <- function(stress, temperature, fugacity = NULL,
   if (!is.null(grainsize)) {
     grainsize <- units::set_units(grainsize, "um") #|> as.numeric()
   } else {
-    grainsize <- units::set_units(1, 'um')# |> as.numeric()
+    grainsize <- units::set_units(1, "um") # |> as.numeric()
   }
 
   # assuming normal distribution to calculate sd; if there is only one value, sd() returns NA, and the propagated error will also be NA as it has no effect
-  temperature_sd <- sd(temperature) |> replace_na_with_zero();  units(temperature_sd) <- units(temperature)
-  stress_sd <- sd(stress) |> replace_na_with_zero();  units(stress_sd) <- units(stress)
-  grainsize_sd <- sd(grainsize) |> replace_na_with_zero();  units(grainsize_sd) <- units(grainsize)
-  pressure_sd <- sd(pressure) |> replace_na_with_zero();  units(pressure_sd) <- units(pressure)
-  fugacity_sd <- sd(fugacity) |> replace_na_with_zero();  units(fugacity_sd) <- units(fugacity)
+  temperature_sd <- sd(temperature) |> replace_na_with_zero()
+  units(temperature_sd) <- units(temperature)
+  stress_sd <- sd(stress) |> replace_na_with_zero()
+  units(stress_sd) <- units(stress)
+  grainsize_sd <- sd(grainsize) |> replace_na_with_zero()
+  units(grainsize_sd) <- units(grainsize)
+  pressure_sd <- sd(pressure) |> replace_na_with_zero()
+  units(pressure_sd) <- units(pressure)
+  fugacity_sd <- sd(fugacity) |> replace_na_with_zero()
+  units(fugacity_sd) <- units(fugacity)
 
   temperature_mean <- mean(temperature)
   stress_mean <- mean(stress)
@@ -64,43 +70,42 @@ creep_quartz_analytic <- function(stress, temperature, fugacity = NULL,
   pressure_mean <- mean(pressure)
   fugacity_mean <- mean(fugacity)
 
-  #load model parameters:
+  # load model parameters:
   x <- flow_model_params2(model)
-  R <- gas_const() |> units::set_units('kJ/K/mol') #|> as.numeric()
+  R <- gas_const() #|> as.numeric()
 
   # 1st order Taylor expansion:
-  prefactor_error <- log(10)^2 * (x$log_A_sd)^2
-  stress_exponent_error <- log(stress_mean)^2 * x$n_sd^2
-  fugacity_exponent_error <- log(fugacity_mean)^2 * x$r_sd^2
-  grainsize_exponent_error <- log(grainsize_mean)^2 * x$m_sd^2
-  stress_error <- x$n^2 / stress_sd^2 * stress_mean^2
-  fugacity_error <- x$r^2 / fugacity_sd^2 * fugacity_mean^2
-  grainsize_error <- x$m^2 / grainsize_sd^2 * grainsize_mean^2
+  prefactor_error <- (log(10) * x$log_A_sd)^2
+  stress_exponent_error <- (log(stress_mean) * x$n_sd)^2
+  fugacity_exponent_error <- (log(fugacity_mean) * x$r_sd)^2
+  grainsize_exponent_error <- (log(grainsize_mean) * x$m_sd)^2
+  stress_error <- (stress_mean * x$n  / stress_sd)^2
+  fugacity_error <- (fugacity_mean * x$r / fugacity_sd)^2
+  grainsize_error <- (grainsize_mean * x$m / grainsize_sd)^2
 
   # replace NA, NaN and Inf with zero
   stress_error <- replace_with_zero(stress_error)
   fugacity_error <- replace_with_zero(fugacity_error)
   grainsize_error <- replace_with_zero(grainsize_error)
 
-  if(is.null(x$Q)) {
-    H <- units::set_units(x$H, 'kJ mol-1') #|> as.numeric()
-    H_sd <-  units::set_units(x$H_sd, 'kJ mol-1') #|> as.numeric()
+  if (is.null(x$Q)) {
+    H <- units::set_units(x$H, "kJ mol-1") #|> as.numeric()
+    H_sd <- units::set_units(x$H_sd, "kJ mol-1") #|> as.numeric()
     enthalpy_error <- H_sd / (R * temperature_mean^2)
   } else {
-    Q <- units::set_units(x$Q, 'kJ mol-1')# |> as.numeric()
-    Q_sd <- units::set_units(x$Q_sd, 'kJ mol-1')  #|> as.numeric()
-    V <- units::set_units(x$V, 'cm3 mol-1') # |> as.numeric()
-    V_sd <- units::set_units(x$V_sd, 'cm3 mol-1') # |> as.numeric()
+    Q <- units::set_units(x$Q, "kJ mol-1") # |> as.numeric()
+    Q_sd <- units::set_units(x$Q_sd, "kJ mol-1") #|> as.numeric()
+    V <- units::set_units(x$V, "cm3 mol-1") # |> as.numeric()
+    V_sd <- units::set_units(x$V_sd, "cm3 mol-1") # |> as.numeric()
 
     H <- Q + V * pressure_mean
-    enthalpy_error <- 1 / (R^2 * temperature_mean^2) * (Q_sd^2 + pressure_mean^2 * V_sd^2 + V^2 * pressure_sd^2)
+    enthalpy_error <- 1 / (R * temperature_mean)^2 * (Q_sd^2 + (pressure_mean * V_sd)^2 + (V * pressure_sd)^2)
   }
 
-  temperature_error <- H^2 * temperature_sd^2 / (R^2 * temperature_mean^4)
+  temperature_error <- (H * temperature_sd / (R * temperature_mean^2))^2
 
   # merge all contributors
   errors <- c("prefactor" = prefactor_error, "stress_exponent" = stress_exponent_error, "fugacity_exponent" = fugacity_exponent_error, "grainsize_exponent" = grainsize_exponent_error, "stress" = stress_error, "fugacity" = fugacity_error, "grainsize" = grainsize_error, "temperature" = temperature_error, "enthalpy" = enthalpy_error)
-
 
 
   # sum of all contributors is the log-variance
@@ -113,34 +118,34 @@ creep_quartz_analytic <- function(stress, temperature, fugacity = NULL,
   stopifnot(units(term) == units::unitless)
   arrhenius <- exp(as.numeric(term))
   epsilon <- 10^x$log_A * as.numeric(stress_mean)^x$n * as.numeric(fugacity_mean)^x$r * as.numeric(grainsize_mean)^x$m * arrhenius
-  e_best = units::set_units(epsilon, 's-1')
-  sd_e_range = e_best * exp(c(-sd_log_e, sd_log_e))
+  e_best <- units::set_units(epsilon, "s-1")
+  sd_e_range <- e_best * exp(c(-sd_log_e, sd_log_e))
 
-  #return
+  # return
   list(e_best = e_best, sd_e_range = sd_e_range, var_log_e_total = var_log_e, sd_log_e_total = sd_log_e, var_log_e = errors)
 }
 
 
-flow_model_params2 <- function(model){
+flow_model_params2 <- function(model) {
   x <- flow_model_params(model)
 
-  if(!is.null(x$n_min)){
+  if (!is.null(x$n_min)) {
     x$n <- mean(c(x$n_min, x$n_max))
     x$n_sd <- (x$n_max - x$n_min)^2 / 12
   }
-  if(!is.null(x$H_min)){
+  if (!is.null(x$H_min)) {
     x$H <- mean(c(x$H_min, x$H_max))
     x$H_sd <- (x$H_max - x$H_min)^2 / 12
   }
-  if(!is.null(x$A_factor)){
+  if (!is.null(x$A_factor)) {
     x$log_A <- x$A_mean + log10(x$A_factor)
     x$log_A_sd <- x$A_sd
   }
-  if(!is.null(x$A) & is.null(x$A_k)){
+  if (!is.null(x$A) & is.null(x$A_k)) {
     x$log_A <- log10(x$A)
     x$log_A_sd <- 0
   }
-  if(!is.null(x$A_k)){
+  if (!is.null(x$A_k)) {
     x$log_A <- x$A_k + log10(x$A)
     x$log_A_sd <- x$A_sd / (x$A * log(10))
   }
@@ -148,7 +153,7 @@ flow_model_params2 <- function(model){
 }
 
 #' @noRd
-flow_model_params <- function(model){
+flow_model_params <- function(model) {
   list(
     Kronenberg1984 = list(
       H_min = 120,
@@ -166,7 +171,7 @@ flow_model_params <- function(model){
       H_sd = 0,
       n = 3.1,
       n_sd = 0,
-      m = 0, m_sd =0,
+      m = 0, m_sd = 0,
       r = 0, r_sd = 0
     ),
     Luan1992 = list(
@@ -336,5 +341,3 @@ flow_model_params <- function(model){
     )
   )[[model]]
 }
-
-

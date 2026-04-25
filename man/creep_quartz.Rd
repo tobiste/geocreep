@@ -91,8 +91,9 @@ fugacity <- ps_fugacity(pressure, temperature)
 
 creep_quartz(
   stress = stress, temperature = temperature, fugacity = fugacity,
-  model = "Hirth2001") |>
- summary()
+  model = "Hirth2001"
+) |>
+  summary()
 }
 \references{
 Fukuda, J., Holyoke, C. W., & Kronenberg, A. K. (2018). Deformation of Fine‐Grained Quartz Aggregates by Mixed Diffusion and Dislocation Creep. Journal of Geophysical Research: Solid Earth, 123(6), 4676-4696. \doi{10.1029/2017JB015133}

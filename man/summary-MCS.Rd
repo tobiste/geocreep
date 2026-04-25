@@ -27,8 +27,9 @@ If class of \code{object} is \code{"MCS"}, the list contains the following eleme
 \item{\code{ir.95}}{the 95\% and 68\% interpercentile range}
 \item{\code{ir.68}}{the 68\% interpercentile range}
 \item{\code{mean}}{arithmetic mean the Monte Carlo simulations}
-\item{\code{sd}}{1\eqn{\sigma} standard deviation}
+\item{\code{sd}}{1\eqn{\sigma} standard deviation about the mean}
 \item{\code{conf.int}}{95\% confidence intverval about the mean}
+\item{\code{"var"}}{Variance}
 \item{\code{stderr}}{standard error}
 \item{\code{t.test}}{Statistic and p-value of the Student's t-test}
 \item{\code{n}}{Number of samples}
@@ -43,6 +44,7 @@ If class of \code{object} is \code{"MCS_log"}, the list contains the following e
 \item{\code{sd}}{1\eqn{\sigma} range about the mean}
 \item{\code{sd2}}{2\eqn{\sigma} range about the mean}
 \item{\code{conf.int}}{95\% confidence intverval about the mean}
+\item{\code{var.log}}{Log-variance}
 \item{\code{stderr.log}}{standard error of \code{log(samples)}}
 \item{\code{t.test}}{Statistic and p-value of the Student's t-test of \code{log(samples)}}
 \item{\code{n}}{Number of samples}

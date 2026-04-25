@@ -29,8 +29,9 @@ set_units_if <- function(x, unit) {
 #' \item{`ir.95`}{the 95% and 68% interpercentile range}
 #' \item{`ir.68`}{the 68% interpercentile range}
 #' \item{`mean`}{arithmetic mean the Monte Carlo simulations}
-#' \item{`sd`}{1\eqn{\sigma} standard deviation}
+#' \item{`sd`}{1\eqn{\sigma} standard deviation about the mean}
 #' \item{`conf.int`}{95% confidence intverval about the mean}
+#' \item{`"var"`}{Variance}
 #' \item{`stderr`}{standard error}
 #' \item{`t.test`}{Statistic and p-value of the Student's t-test}
 #' \item{`n`}{Number of samples}
@@ -45,6 +46,7 @@ set_units_if <- function(x, unit) {
 #' \item{`sd`}{1\eqn{\sigma} range about the mean}
 #' \item{`sd2`}{2\eqn{\sigma} range about the mean}
 #' \item{`conf.int`}{95% confidence intverval about the mean}
+#' \item{`var.log`}{Log-variance}
 #' \item{`stderr.log`}{standard error of `log(samples)`}
 #' \item{`t.test`}{Statistic and p-value of the Student's t-test of `log(samples)`}
 #' \item{`n`}{Number of samples}
@@ -100,7 +102,8 @@ summary.MCS_log <- function(object, unit = NULL, ...) {
 
   mean_s <- 10^mean_log_s
 
-  sd_log_s <- stats::sd(log_s)
+  var_log_s <- stats::var(log_s)
+  sd_log_s <- sqrt(var_log_s)
   sd_range <- 10^c(mean_log_s - sd_log_s, mean_log_s + sd_log_s)
   sd2_range <- 10^c(mean_log_s - 2 * sd_log_s, mean_log_s + 2 * sd_log_s)
 
@@ -121,6 +124,7 @@ summary.MCS_log <- function(object, unit = NULL, ...) {
     sd2.int = sd2_range |> set_units_if(unit),
     sde.int = sde_range |> set_units_if(unit),
     conf.int = conf.int |> set_units_if(unit),
+    var.log = var_log_s,
     stderr.log = stderr_log,
     t.test = c(log_s_tt$statistic, log_s_tt$p.value),
     n = length(object)
@@ -146,7 +150,7 @@ summary.MCS_log <- function(object, unit = NULL, ...) {
     "Statistical summary of ", out$n, " Monte Carlo simulations\n\n",
     "Median:                      ", signif(out$median, 2), " ", unit_text, "\n",
     "95% interpercentile range:   ", signif(out$ir.95[1], 2), " - ", signif(out$ir.95[2], 2), " ", unit_text, "\n",
-    "Standard error in log-space: ", signif(out$stderr.log), "\n",
+    "Log-variance:                ", signif(out$var.log), "\n",
     "Student's t-Test:            ", normal_text
   )
 
@@ -175,7 +179,8 @@ summary.MCS <- function(object, unit = NULL, ...) {
   CI95_s <- s_tt$conf.int
   stderr_s <- s_tt$stderr
 
-  sd_s <- stats::sd(x)
+  var_s <- stats::var(x)
+  sd_s <- sqrt(x)
   # se_s <- sd_s / sqrt(length(x))
 
   out <- list(
@@ -188,6 +193,7 @@ summary.MCS <- function(object, unit = NULL, ...) {
     sd = sd_s |> set_units_if(unit),
     # se = se_s |> set_units_if(unit),
     conf.int = CI95_s |> set_units_if(unit),
+    var = var_s,
     stderr = stderr_s,
     t.test = c(s_tt$statistic, s_tt$p.value),
     n = length(object)
@@ -213,7 +219,7 @@ summary.MCS <- function(object, unit = NULL, ...) {
     "Statistical summary of ", out$n, " Monte Carlo simulations\n\n",
     "Mean:                    ", signif(out$mean, 2), " ", unit_text, "\n",
     "95% confidence interval: ", signif(out$conf.int[1], 2), " - ", signif(out$conf.int[2], 2), " ", unit_text, "\n",
-    "Standard error:          ", signif(out$stderr), "\n",
+    "Variance:                ", signif(out$var), "\n",
     "Student's t-Test:        ", normal_text
   )
 
@@ -242,4 +248,13 @@ replace_with_zero <- function(x) {
 
   x[cond] <- 0
   x
+}
+
+sd_center <- function(x, center = median(x), na.rm = FALSE){
+  if (isTRUE(na.rm)) {
+    x <- x[!is.na(x)]
+  }
+
+  v <- sum((x - center)^2) / (length(x) - 1)
+  sqrt(v)
 }

@@ -65,7 +65,8 @@ fugacity <- ps_fugacity(pressure, temperature)
 
 creep_quartz_analytic(
   stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
-  model = "Hirth2001")
+  model = "Hirth2001"
+)
 }
 \seealso{
 \code{\link[=creep_quartz]{creep_quartz()}}

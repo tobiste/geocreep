@@ -4,7 +4,7 @@
 flow_models <- function(model) {
   ci2sd <- 1 / 1.96 # convert 95% CI to SD
 
-  #x <- flow_model_params(model)
+  # x <- flow_model_params(model)
 
   list(
     Kronenberg1984 = function(stress, temperature, fugacity = NULL, grainsize, pressure = NULL, sim, propagate_err = TRUE) {
@@ -106,7 +106,7 @@ flow_models <- function(model) {
 
       if (isTRUE(propagate_err)) {
         A <- A_factor * 10^rnorm(sim, mean = A_mean, sd = A_std)
-        H <- rnorm(sim,mean = H, sd = H_std) |> set_units("kJ mol-1")
+        H <- rnorm(sim, mean = H, sd = H_std) |> set_units("kJ mol-1")
         n <- rnorm(sim, n, n_std)
       } else {
         A <- A_factor * (10^A_mean)
@@ -276,7 +276,7 @@ flow_models <- function(model) {
         A <- truncnorm::rtruncnorm(sim, a = 0, mean = A, sd = A_std) * 10^(A_k)
         n <- rnorm(sim, n, n_std)
       } else {
-        A <- A* 10^(A_k)
+        A <- A * 10^(A_k)
         H <- set_units(H, "kJ mol-1")
       }
 
@@ -509,8 +509,9 @@ flow_models <- function(model) {
 #'
 #' creep_quartz(
 #'   stress = stress, temperature = temperature, fugacity = fugacity,
-#'   model = "Hirth2001") |>
-#'  summary()
+#'   model = "Hirth2001"
+#' ) |>
+#'   summary()
 creep_quartz <- function(stress, temperature, fugacity = NULL,
                          grainsize = NULL, pressure = NULL,
                          model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995", "Gleason1995_melt", "Rutter2004", "Fukuda2018_LT", "Fukuda2018_HT", "Richter2018", "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP"),

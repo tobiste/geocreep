@@ -87,16 +87,29 @@ Calculate strain rates using a defined flow law for dislocation creep in quartz
 from differential stress, temperature, and fugacity: 
 
 ```{r edot}
+fug_distr <- rnorm(1e6, fugacity_stats$mean, fugacity_stats$sd)
+temp_distr <- units::set_units(rnorm(1e6, 300, 50 / 1.96), degC)
+
 # Calculate strain rates using temperature, fugacity, and differential stress
 edot <- creep_quartz(
   stress = stress,
-  temperature = units::set_units(rnorm(1e6, 300, 50 / 1.96), degC),
-  fugacity = rnorm(1e6, fugacity_stats$mean, fugacity_stats$sd),
+  temperature = temp_distr,
+  fugacity = fug_distr,
   model = "Hirth2001"
 )
 
 # Summary stats of Monte Carlo simulation
 summary(edot)
+```
+
+An theoretical approach to calculate the uncertainties in strain rates uses standard error propagation and is provided through the `creep_quartz_analytic()` function:
+```{r edot_alg}
+creep_quartz_analytic(
+  stress = stress,
+  temperature = temp_distr,
+  fugacity = fug_distr,
+  model = "Hirth2001"
+)
 ```
 
 ## Author

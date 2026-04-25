@@ -78,13 +78,13 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
     n_ci95 <- 0.26
   }
 
-  if(isTRUE(propagate_err)){
-  log_k_sd <- log_k_ci95 / 1.96 # convert 95% CI to SD
-  n_sd <- n_ci95 / 1.96 # convert 95% CI to SD
+  if (isTRUE(propagate_err)) {
+    log_k_sd <- log_k_ci95 / 1.96 # convert 95% CI to SD
+    n_sd <- n_ci95 / 1.96 # convert 95% CI to SD
 
-  # k is the grain size exponent; n is the stress exponent
-  k_samples <- 10^rnorm(sim, mean = log_k, sd = log_k_sd)
-  n_samples <- rnorm(sim, mean = n, sd = n_sd)
+    # k is the grain size exponent; n is the stress exponent
+    k_samples <- 10^rnorm(sim, mean = log_k, sd = log_k_sd)
+    n_samples <- rnorm(sim, mean = n, sd = n_sd)
   } else {
     k_samples <- 10^log_k
     n_samples <- n
@@ -95,7 +95,7 @@ grainsize_piezometry <- function(d, sd = NULL, model = c("Stipp-reg2-3", "Stripp
   stress_samples <- (d / k_samples)^(1 / n_samples)
 
   stress <- units::set_units(stress_samples, "MPa")
-  class(stress) <- append('MCS_log', class(stress))
+  class(stress) <- append("MCS_log", class(stress))
   return(stress)
 }
 
@@ -163,22 +163,22 @@ subgrainsize_piezometry <- function(lambda, sd = NULL, calibrated = TRUE, min = 
   if (isTRUE(calibrated)) {
     a <- 0.6
     b <- -1.2
-    if(isTRUE(propagate_err)){
-    a <- stats::rnorm(sim, a, sd = 0.7 / 1.96)
-    b <- stats::rnorm(sim, b, sd = 0.3 / 1.96)
+    if (isTRUE(propagate_err)) {
+      a <- stats::rnorm(sim, a, sd = 0.7 / 1.96)
+      b <- stats::rnorm(sim, b, sd = 0.3 / 1.96)
     }
   } else {
     a <- 1.2
     b <- -1.0
-    if(isTRUE(propagate_err)){
-    a <- stats::rnorm(sim, a, sd = 1 / 1.96)
-    b <- stats::rnorm(sim, b, sd = 0.4 / 1.96)
+    if (isTRUE(propagate_err)) {
+      a <- stats::rnorm(sim, a, sd = 1 / 1.96)
+      b <- stats::rnorm(sim, b, sd = 0.4 / 1.96)
     }
   }
 
   stress <- shear_m * (lambda / (burgers * 10^a))^(1 / b)
   stress <- stress * 10 |> # to match the values as published in Goddard
     units::set_units("MPa")
-  class(stress) <- append('MCS_log', class(stress))
+  class(stress) <- append("MCS_log", class(stress))
   return(stress)
 }

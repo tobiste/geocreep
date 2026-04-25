@@ -53,7 +53,7 @@ fugacity_stats <- summary(fugacity)
 #> 
 #> Mean:                    380 bar 
 #> 95% confidence interval: 370 - 390 bar 
-#> Standard error:          4.12965
+#> Variance:                17054
 #> Student's t-Test:        p<0.05
 ```
 
@@ -78,7 +78,7 @@ summary(stress)
 #> 
 #> Median:                      100 MPa 
 #> 95% interpercentile range:   53 - 210 MPa 
-#> Standard error in log-space: 0.000152958
+#> Log-variance:                0.0233963
 #> Student's t-Test:            p<0.05
 ```
 
@@ -99,11 +99,14 @@ Calculate strain rates using a defined flow law for dislocation creep in
 quartz from differential stress, temperature, and fugacity:
 
 ``` r
+fug_distr <- rnorm(1e6, fugacity_stats$mean, fugacity_stats$sd)
+temp_distr <- units::set_units(rnorm(1e6, 300, 50 / 1.96), degC)
+
 # Calculate strain rates using temperature, fugacity, and differential stress
 edot <- creep_quartz(
   stress = stress,
-  temperature = units::set_units(rnorm(1e6, 300, 50 / 1.96), degC),
-  fugacity = rnorm(1e6, fugacity_stats$mean, fugacity_stats$sd),
+  temperature = temp_distr,
+  fugacity = fug_distr,
   model = "Hirth2001"
 )
 
@@ -111,10 +114,43 @@ edot <- creep_quartz(
 summary(edot)
 #> Statistical summary of 1000000 Monte Carlo simulations
 #> 
-#> Median:                      1.1e-13 /s
-#> 95% interpercentile range:   1.8e-18 - 6.8e-09 /s
-#> Standard error in log-space: 0.00242432
+#> Median:                      1.2e-13 /s
+#> 95% interpercentile range:   2.4e-18 - 7.2e-09 /s
+#> Log-variance:                5.83321
 #> Student's t-Test:            p<0.05
+```
+
+An theoretical approach to calculate the uncertainties in strain rates
+uses standard error propagation and is provided through the
+`creep_quartz_analytic()` function:
+
+``` r
+creep_quartz_analytic(
+  stress = stress,
+  temperature = temp_distr,
+  fugacity = fug_distr,
+  model = "Hirth2001"
+)
+#> $e_best
+#> 1.621933e-13 [1/s]
+#> 
+#> $sd_e_range
+#> Units: [1/s]
+#> [1] 2.379690e-23 1.105466e-03
+#> 
+#> $var_log_e_total
+#> [1] 512.6828
+#> 
+#> $sd_log_e_total
+#> [1] 22.6425
+#> 
+#> $var_log_e
+#>          prefactor    stress_exponent  fugacity_exponent grainsize_exponent 
+#>       1.908683e+00       1.582356e+01       0.000000e+00       0.000000e+00 
+#>             stress           fugacity          grainsize        temperature 
+#>       1.105766e+02       3.827764e+02       0.000000e+00       1.592087e+00 
+#>           enthalpy 
+#>       5.491489e-03
 ```
 
 ## Author
