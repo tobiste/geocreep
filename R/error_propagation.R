@@ -25,6 +25,16 @@
 #'   stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
 #'   model = "Hirth2001"
 #' )
+#'
+#' creep_quartz_analytic(
+#'   stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
+#'   model = "Lusk2021_LP"
+#' )
+#'
+#' creep_quartz_analytic(
+#'   stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
+#'   model = "Kronenberg1984"
+#' )
 creep_quartz_analytic <- function(stress, temperature, fugacity = NULL,
                                   grainsize = NULL, pressure = NULL,
                                   model = c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992", "Gleason1995", "Gleason1995_melt", "Rutter2004", "Fukuda2018_LT", "Fukuda2018_HT", "Richter2018", "Lu2019", "Tokle2019_LT", "Tokle2019_HT", "Lusk2021_LP", "Lusk2021_HP")) {
@@ -73,6 +83,7 @@ creep_quartz_analytic <- function(stress, temperature, fugacity = NULL,
   # load model parameters:
   x <- flow_model_params2(model)
   R <- gas_const() #|> as.numeric()
+  RT <- R * temperature_mean
 
   # 1st order Taylor expansion:
   prefactor_error <- (log(10) * x$log_A_sd)^2
@@ -99,10 +110,11 @@ creep_quartz_analytic <- function(stress, temperature, fugacity = NULL,
     V_sd <- units::set_units(x$V_sd, "cm3 mol-1") # |> as.numeric()
 
     H <- Q + V * pressure_mean
-    enthalpy_error <- 1 / (R * temperature_mean)^2 * (Q_sd^2 + (pressure_mean * V_sd)^2 + (V * pressure_sd)^2)
+    #enthalpy_error <- 1 / (RT)^2 * (Q_sd^2 + (pressure_mean * V_sd)^2 + (V * pressure_sd)^2)
+    enthalpy_error <-  (Q_sd/RT)^2 + (pressure_mean * V_sd/RT)^2 + (V * pressure_sd/RT)^2
   }
 
-  temperature_error <- (H * temperature_sd / (R * temperature_mean^2))^2
+  temperature_error <- (H * temperature_sd / (RT*temperature_mean))^2
 
   # merge all contributors
   errors <- c("prefactor" = prefactor_error, "stress_exponent" = stress_exponent_error, "fugacity_exponent" = fugacity_exponent_error, "grainsize_exponent" = grainsize_exponent_error, "stress" = stress_error, "fugacity" = fugacity_error, "grainsize" = grainsize_error, "temperature" = temperature_error, "enthalpy" = enthalpy_error)
@@ -113,11 +125,10 @@ creep_quartz_analytic <- function(stress, temperature, fugacity = NULL,
   sd_log_e <- sqrt(var_log_e)
 
   # calculate 'best-fit' strain rate:
-  RT <- R * temperature_mean
   term <- -H / RT
   stopifnot(units(term) == units::unitless)
   arrhenius <- exp(as.numeric(term))
-  epsilon <- 10^x$log_A * as.numeric(stress_mean)^x$n * as.numeric(fugacity_mean)^x$r * as.numeric(grainsize_mean)^x$m * arrhenius
+  epsilon <- 10^replace_with_zero(x$log_A) * as.numeric(stress_mean)^x$n * as.numeric(fugacity_mean)^x$r * as.numeric(grainsize_mean)^x$m * arrhenius
   e_best <- units::set_units(epsilon, "s-1")
   sd_e_range <- e_best * exp(c(-sd_log_e, sd_log_e))
 
@@ -156,6 +167,8 @@ flow_model_params2 <- function(model) {
 flow_model_params <- function(model) {
   list(
     Kronenberg1984 = list(
+      log_A = NA,
+      log_A_sd = 0,
       H_min = 120,
       H_max = 150,
       n_min = 2.9,

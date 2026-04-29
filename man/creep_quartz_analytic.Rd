@@ -67,6 +67,16 @@ creep_quartz_analytic(
   stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
   model = "Hirth2001"
 )
+
+creep_quartz_analytic(
+  stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
+  model = "Lusk2021_LP"
+)
+
+creep_quartz_analytic(
+  stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
+  model = "Kronenberg1984"
+)
 }
 \seealso{
 \code{\link[=creep_quartz]{creep_quartz()}}

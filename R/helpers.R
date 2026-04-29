@@ -244,7 +244,7 @@ replace_na_with_zero <- function(x) {
 }
 
 replace_with_zero <- function(x) {
-  cond <- is.na(x) | is.nan(x) | is.infinite(x)
+  cond <- is.na(x) | is.nan(x) | is.infinite(x) | is.null(x)
 
   x[cond] <- 0
   x
