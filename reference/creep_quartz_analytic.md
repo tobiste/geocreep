@@ -175,4 +175,56 @@ creep_quartz_analytic(
 #>           enthalpy 
 #>        0.005491873 
 #> 
+
+creep_quartz_analytic(
+  stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
+  model = "Lusk2021_LP"
+)
+#> $e_best
+#> 4.17758e-13 [1/s]
+#> 
+#> $sd_e_range
+#> Units: [1/s]
+#> [1] 4.982208e-14 3.502899e-12
+#> 
+#> $var_log_e_total
+#> [1] 4.521764
+#> 
+#> $sd_log_e_total
+#> [1] 2.126444
+#> 
+#> $var_log_e
+#>          prefactor    stress_exponent  fugacity_exponent grainsize_exponent 
+#>          2.3095068          0.8483037          0.2207950          0.0000000 
+#>             stress           fugacity          grainsize        temperature 
+#>          0.0000000          0.0000000          0.0000000          0.0000000 
+#>           enthalpy 
+#>          1.1431584 
+#> 
+
+creep_quartz_analytic(
+  stress = stress, temperature = temperature, fugacity = fugacity, pressure = pressure,
+  model = "Kronenberg1984"
+)
+#> $e_best
+#> 6.264269e-07 [1/s]
+#> 
+#> $sd_e_range
+#> Units: [1/s]
+#> [1] 5.288804e-07 7.419650e-07
+#> 
+#> $var_log_e_total
+#> [1] 0.02865229
+#> 
+#> $sd_log_e_total
+#> [1] 0.1692699
+#> 
+#> $var_log_e
+#>          prefactor    stress_exponent  fugacity_exponent grainsize_exponent 
+#>        0.000000000        0.001192927        0.000000000        0.000000000 
+#>             stress           fugacity          grainsize        temperature 
+#>        0.000000000        0.000000000        0.000000000        0.000000000 
+#>           enthalpy 
+#>        0.027459365 
+#> 
 ```

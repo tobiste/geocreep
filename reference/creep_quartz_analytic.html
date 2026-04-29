@@ -184,6 +184,58 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>           enthalpy </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        0.005491873 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">creep_quartz_analytic</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  stress <span class="op">=</span> <span class="va">stress</span>, temperature <span class="op">=</span> <span class="va">temperature</span>, fugacity <span class="op">=</span> <span class="va">fugacity</span>, pressure <span class="op">=</span> <span class="va">pressure</span>,</span></span>
+<span class="r-in"><span>  model <span class="op">=</span> <span class="st">"Lusk2021_LP"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $e_best</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.17758e-13 [1/s]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sd_e_range</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Units: [1/s]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.982208e-14 3.502899e-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $var_log_e_total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.521764</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sd_log_e_total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.126444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $var_log_e</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          prefactor    stress_exponent  fugacity_exponent grainsize_exponent </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          2.3095068          0.8483037          0.2207950          0.0000000 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             stress           fugacity          grainsize        temperature </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          0.0000000          0.0000000          0.0000000          0.0000000 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           enthalpy </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          1.1431584 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">creep_quartz_analytic</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  stress <span class="op">=</span> <span class="va">stress</span>, temperature <span class="op">=</span> <span class="va">temperature</span>, fugacity <span class="op">=</span> <span class="va">fugacity</span>, pressure <span class="op">=</span> <span class="va">pressure</span>,</span></span>
+<span class="r-in"><span>  model <span class="op">=</span> <span class="st">"Kronenberg1984"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $e_best</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6.264269e-07 [1/s]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sd_e_range</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Units: [1/s]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5.288804e-07 7.419650e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $var_log_e_total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02865229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sd_log_e_total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1692699</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $var_log_e</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          prefactor    stress_exponent  fugacity_exponent grainsize_exponent </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        0.000000000        0.001192927        0.000000000        0.000000000 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             stress           fugacity          grainsize        temperature </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        0.000000000        0.000000000        0.000000000        0.000000000 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           enthalpy </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        0.027459365 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
