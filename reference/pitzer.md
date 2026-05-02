@@ -64,7 +64,7 @@ ps_fugacity(pressure, temperature) # 0.04946
 
 temperature2 <- units::set_units(300, degC)
 pressure2 <- units::set_units(400, MPa)
-ps_fugacity(pressure2, temperature2) # 37 MPa
+ps_fugacity(pressure2, temperature2) # 37 MPa (371 bar)
 #> 371.3371 [bar]
 ps_volume(pressure2, temperature2)
 #> 18.69728 [cm^3/mol]

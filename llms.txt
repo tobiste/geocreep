@@ -11,6 +11,7 @@ You can install the development version of geocreep from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("tobiste/geocreep")
 ```
@@ -18,6 +19,7 @@ pak::pak("tobiste/geocreep")
 ## Example
 
 ``` r
+
 library(geocreep)
 library(units) # load this package to define your units
 
@@ -31,6 +33,7 @@ Calculate water fugacity from temperature and pressures using the Pitzer
 and Sterner (1994) equation:
 
 ``` r
+
 nmc <- 1e3 # create 1,000 samples for temperature and pressure using a normal distribution
 
 # Define temperature and pressure
@@ -58,6 +61,7 @@ Calculating differential stress from grain size (e.g. using the Stipp
 and Tullis, 2003, piezometer):
 
 ``` r
+
 # Define grain size
 grainsize <- units::set_units(11, um)
 
@@ -91,6 +95,7 @@ Calculate strain rates using a defined flow law for dislocation creep in
 quartz from differential stress, temperature, and fugacity:
 
 ``` r
+
 fug_distr <- rnorm(1e6, fugacity_stats$mean, fugacity_stats$sd)
 temp_distr <- units::set_units(rnorm(1e6, 300, 50 / 1.96), degC)
 
@@ -118,6 +123,7 @@ uses standard error propagation and is provided through the
 function:
 
 ``` r
+
 creep_quartz_analytic(
   stress = stress,
   temperature = temp_distr,

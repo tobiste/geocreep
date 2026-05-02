@@ -1,6 +1,7 @@
 # Flow law sensitivity analysis
 
 ``` r
+
 library(geocreep)
 library(ggplot2)
 library(dplyr)
@@ -11,6 +12,7 @@ theme_set(theme_classic())
 Define initial grainsize, temperature and pressure:
 
 ``` r
+
 grainsize <- units::set_units(11, um)
 stress0 <- grainsize_piezometry(grainsize, propagate_err = FALSE)
 temperature <- units::set_units(300, degC)
@@ -26,6 +28,7 @@ models <- c("Hirth2001", "Paterson1990", "Kronenberg1984", "Luan1992",
 ## No error propagation
 
 ``` r
+
 edot_estimates0 <- sapply(
   models,
   function(m) {
@@ -54,12 +57,14 @@ edot_estimates0$error <- "none"
 Specify the amount of Monte Carlo (MC) simulations:
 
 ``` r
+
 n <- 1e3
 ```
 
 Recalculate stress using MC simulations:
 
 ``` r
+
 stress1 <- grainsize_piezometry(grainsize, sim = n)
 ```
 
@@ -68,6 +73,7 @@ stress1 <- grainsize_piezometry(grainsize, sim = n)
 Visualize the calculated stress estimates:
 
 ``` r
+
 stress_log <- log10(as.numeric(stress1))
 
 hist(stress_log, xlab = bquote(sigma[d] ~ "(MPa)"), 
@@ -85,6 +91,7 @@ abline(v = median(stress_log), lty = 2, lwd = 2, col = "red")
 Calculate the strain rates using the stress estimates:
 
 ``` r
+
 edot_estimates1 <- lapply(
   models,
   function(m) {
@@ -106,6 +113,7 @@ edot_estimates1 <- lapply(
 Visualize the strain rate estimates:
 
 ``` r
+
 m <- "Hirth2001"
 edot_log <- log10(as.numeric(edot_estimates1[[m]]))
 
@@ -124,6 +132,7 @@ abline(v = quantile(edot_log, probs = c(.025, .5, .975)), lty = 2, lwd = 2, col 
 ![](comparison_files/figure-html/hist_strain1-1.png)
 
 ``` r
+
 edot_quantiles1 <- sapply(edot_estimates1, function(x) {
   qs <- quantile(x, probs = c(.025, .5, .975))
   m <- exp(mean(log(x)))
@@ -145,6 +154,7 @@ and then recalculate the fugacity:
 (this may take a while…)
 
 ``` r
+
 temperature2 <- units::set_units(rnorm(n, temperature, 50), degC)
 pressure2 <- units::set_units(rnorm(n, pressure, 100), MPa)
 fugacity2 <- ps_fugacity(pressure2, temperature2, future.seed = TRUE)
@@ -155,6 +165,7 @@ fugacity2 <- ps_fugacity(pressure2, temperature2, future.seed = TRUE)
 Visualize the distribution of the recalculated fugacity values:
 
 ``` r
+
 fug_bar <- log10(as.numeric(fugacity2))
 
 hist(fug_bar, xlab = bquote("f"["H"[2] * "O"] ~ "(bar)"), 
@@ -175,6 +186,7 @@ abline(v = quantile(fug_bar, probs = c(.025, .5, .975)), lty = 2, lwd = 2, col =
 Student’s T-test for normal distribution:
 
 ``` r
+
 t.test(as.numeric(fugacity2))
 #> 
 #>  One Sample t-test
@@ -206,6 +218,7 @@ t.test(log10(as.numeric(fugacity2)))
 Calculate strain rate values:
 
 ``` r
+
 edot_estimates2 <- lapply(
   models,
   function(m) {
@@ -225,6 +238,7 @@ edot_estimates2 <- lapply(
 Visualize the distribution of the new strian rate values:
 
 ``` r
+
 m <- "Hirth2001"
 edot_log2 <- log10(as.numeric(edot_estimates2[[m]]))
 
@@ -243,6 +257,7 @@ abline(v = quantile(edot_log2, probs = c(.025, .5, .975)), lty = 2, lwd = 2, col
 ![](comparison_files/figure-html/hist_strain-1.png)
 
 ``` r
+
 edot_quantiles2 <- sapply(edot_estimates2, function(x) {
   qs <- quantile(x, probs = c(.025, .5, .975))
   m <- exp(mean(log(x)))
@@ -262,6 +277,7 @@ propagation, considering the errors in the flow laws, and the
 uncertainties in the initial temperature and pressure values:
 
 ``` r
+
 bind_rows(edot_quantiles1, edot_quantiles2, edot_estimates0) |>
   mutate(
     # model = reorder(factor(model), `50%`),
