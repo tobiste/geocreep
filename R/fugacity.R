@@ -36,30 +36,94 @@ ps_coeff <- function() {
   )
 }
 
+# Package-level constants — built once at load time
+.PS_COEFFS <- list(
+  H2O = matrix(c(
+    0,              0,              0.24657688e6,   0.51359951e2,   0,              0,
+    0,              0,              0.58638965e0,  -0.28646939e-2,  0.31375577e-4,  0,
+    0,              0,             -0.62783840e1,   0.14791599e-1,  0.35779579e-3,  0.15432925e-7,
+    0,              0,              0,             -0.42719875e0,  -0.16325155e-4,  0,
+    0,              0,              0.56654978e4,  -0.16580167e2,   0.76560762e-1,  0,
+    0,              0,              0,              0.10917883e0,   0,              0,
+    0.38878656e13, -0.13494878e9,   0.30916564e6,   0.75591105e1,   0,              0,
+    0,              0,             -0.65537898e5,   0.18810675e3,   0,              0,
+    -0.14182435e14,  0.18165390e9,  -0.19769068e6,  -0.23530318e2,   0,              0,
+    0,              0,              0.92093375e5,   0.12246777e3,   0,              0
+  ), nrow = 10, ncol = 6, byrow = TRUE),
 
-ps_eos <- function(volume, temperature, targetP, phase = c("H2O", "CO2")) {
-  phase <- match.arg(phase)
-  # volume in cm3/mol, temperature in Kelvins, targetP in bars
-  # R_const <- 8314462.61815324 # ideal gas constant: Pa*cm3/K/mol
-  R_const <- gas_const() |>
-    set_units('Pa cm3 K-1 mol-1') |>
+  CO2 = matrix(c(
+    0,              0,              0.18261340e+7,  0.79224365e+2,  0,              0,
+    0,              0,              0,              0.66560660e-4,  0.57152798e-5,  0.30222363e-9,
+    0,              0,              0,              0.59957845e-2,  0.71669631e-4,  0.62416103e-8,
+    0,              0,             -0.13270279e+1, -0.15210731e+0,  0.53654244e-3,  0.71115142e-7,
+    0,              0,              0.12456776e+0,  0.49045367e+1,  0.98220560e-2,  0.55962121e-5,
+    0,              0,              0,              0.75522299e+0,  0,              0,
+    -0.39344644e+12, 0.90918237e+8,  0.42776716e+6, -0.22347856e+2,  0,              0,
+    0,              0,              0.40282608e+3,  0.11971627e+3,  0,              0,
+    0,              0.22995650e+8, -0.78971817e+5, -0.63376456e+2,  0,              0,
+    0,              0,              0.95029765e+5,  0.18038071e+2,  0,              0
+  ), nrow = 10, ncol = 6, byrow = TRUE)
+)
+
+
+# Initialised to NULL at build time; populated in .onLoad() after all
+# package functions are available
+.R_PACM3 <- NULL
+
+.onLoad <- function(libname, pkgname) {
+  .R_PACM3 <<- gas_const() |>
+    units::set_units('Pa cm3 K-1 mol-1') |>
     as.numeric()
+}
+
+ps_eos <- function(volume, temperature, targetP, coeff) {
+  # phase <- match.arg(phase)
+  # # volume in cm3/mol, temperature in Kelvins, targetP in bars
+  # # R_const <- 8314462.61815324 # ideal gas constant: Pa*cm3/K/mol
+  # R_const <- gas_const() |>
+  #   set_units('Pa cm3 K-1 mol-1') |>
+  #   as.numeric()
+  # den <- 1 / volume
+  # cv <- numeric(10)
+  # coeff <- ps_coeff()[[phase]]
+  # for (i in 1:10) {
+  #   cv[i] <- coeff[i, 1] * temperature^-4 +
+  #     coeff[i, 2] * temperature^-2 +
+  #     coeff[i, 3] * temperature^-1 +
+  #     coeff[i, 4] +
+  #     coeff[i, 5] * temperature +
+  #     coeff[i, 6] * temperature^2
+  # }
+  # pressure <- (den + cv[1] * den^2 - den^2 * ((cv[3] + 2 * cv[4] * den + 3 * cv[5] * den^2
+  #   + 4 * cv[6] * den^3) / (cv[2] + cv[3] * den + cv[4] * den^2 + cv[5] * den^3
+  #   + cv[6] * den^4)^2) + cv[7] * den^2 * exp(-cv[8] * den)
+  #   + cv[9] * den^2 * exp(-cv[10] * den)) * R_const * temperature / 1e5
+  # return(pressure - targetP) # bars
+
+  # Claude version
+  # volume in cm3/mol, temperature in K, targetP in bar
+  # coeff: pre-extracted 10×6 numeric matrix for the chosen phase
   den <- 1 / volume
-  cv <- numeric(10)
-  coeff <- ps_coeff()[[phase]]
-  for (i in 1:10) {
-    cv[i] <- coeff[i, 1] * temperature^-4 +
-      coeff[i, 2] * temperature^-2 +
-      coeff[i, 3] * temperature^-1 +
-      coeff[i, 4] +
-      coeff[i, 5] * temperature +
-      coeff[i, 6] * temperature^2
-  }
-  pressure <- (den + cv[1] * den^2 - den^2 * ((cv[3] + 2 * cv[4] * den + 3 * cv[5] * den^2
-    + 4 * cv[6] * den^3) / (cv[2] + cv[3] * den + cv[4] * den^2 + cv[5] * den^3
-    + cv[6] * den^4)^2) + cv[7] * den^2 * exp(-cv[8] * den)
-    + cv[9] * den^2 * exp(-cv[10] * den)) * R_const * temperature / 1e5
-  return(pressure - targetP) # bars
+
+  coeff  <- .PS_COEFFS[[phase]]
+
+  # Vectorised cv computation: replace for-loop with matrix × temperature-power vector
+  T_powers <- c(temperature^-4, temperature^-2, temperature^-1, 1,
+                temperature,    temperature^2)
+  cv <- coeff %*% T_powers  # 10-element vector
+
+  pressure <- (
+    den +
+      cv[1] * den^2 -
+      den^2 * (
+        (cv[3] + 2*cv[4]*den + 3*cv[5]*den^2 + 4*cv[6]*den^3) /
+          (cv[2] + cv[3]*den  +   cv[4]*den^2  +   cv[5]*den^3  + cv[6]*den^4)^2
+      ) +
+      cv[7] * den^2 * exp(-cv[8] * den) +
+      cv[9] * den^2 * exp(-cv[10] * den)
+  ) * .R_PACM3 * temperature / 1e5
+
+  pressure - targetP
 }
 
 
@@ -99,22 +163,50 @@ ps_eos <- function(volume, temperature, targetP, phase = c("H2O", "CO2")) {
 #'
 #' temperature2 <- units::set_units(300, degC)
 #' pressure2 <- units::set_units(400, MPa)
-#' ps_fugacity(pressure2, temperature2) # 37 MPa
+#' ps_fugacity(pressure2, temperature2) # 37 MPa (371 bar)
 #' ps_volume(pressure2, temperature2)
 NULL
 
 #' @rdname pitzer
 #' @export
 ps_volume <- function(pressure, temperature, phase = c("H2O", "CO2")) {
+  #phase <- match.arg(phase)
+  #
+  # # pressure in bars, temperature in Kelvins
+  #p_bar <- units::set_units(pressure, "bar") |>
+  #  as.numeric()
+  #t_k <- units::set_units(temperature, "K") |>
+  #  as.numeric()
+  #
+  # result <- nleqslv::nleqslv(10, ps_eos, temperature = t_K, targetP = p_bar, phase = phase)
+  # units::set_units(result$x, "cm3 / mol")
+
+  # Claude version
   phase <- match.arg(phase)
 
-  # pressure in bars, temperature in Kelvins
-  pressure <- units::set_units(pressure, "bar") |>
-    as.numeric()
-  temperature <- units::set_units(temperature, "K") |>
-    as.numeric()
+  p_bar <- units::set_units(pressure,    "bar") |> as.numeric()
+  t_K   <- units::set_units(temperature, "K")   |> as.numeric()
 
-  result <- nleqslv::nleqslv(10, ps_eos, temperature = temperature, targetP = pressure, phase = phase)
+  coeff  <- .PS_COEFFS[[phase]]
+  T_powers <- c(t_K^-4, t_K^-2, t_K^-1, 1, t_K, t_K^2)
+  cv     <- as.numeric(coeff %*% T_powers)
+
+  eos_fn <- function(volume) {
+    den <- 1 / volume
+    pressure_calc <- (
+      den +
+        cv[1] * den^2 -
+        den^2 * (
+          (cv[3] + 2*cv[4]*den + 3*cv[5]*den^2 + 4*cv[6]*den^3) /
+            (cv[2] + cv[3]*den  +   cv[4]*den^2  +   cv[5]*den^3  + cv[6]*den^4)^2
+        ) +
+        cv[7] * den^2 * exp(-cv[8] * den) +
+        cv[9] * den^2 * exp(-cv[10] * den)
+    ) * .R_PACM3 * t_K / 1e5
+    pressure_calc - p_bar
+  }
+
+  result <- nleqslv::nleqslv(10, eos_fn)
   units::set_units(result$x, "cm3 / mol")
 }
 
@@ -134,36 +226,62 @@ ps_fugacity <-  function(pressure, temperature, phase = c("H2O", "CO2"), ...) {
 }
 
 ps_fugacity1 <- function(pressure, temperature, phase = c("H2O", "CO2")) {
+  # phase <- match.arg(phase)
+  # # pressure in bars, temperature in Kelvins
+  # pressure <- units::set_units(pressure, "bar") |>
+  #   as.numeric()
+  # temperature <- units::set_units(temperature, "K") |>
+  #   as.numeric()
+  #
+  # # R_const <- 8314462.61815324 # ideal gas constant: Pa*cm3/K/mol
+  # R_const <- gas_const() |>
+  #   set_units('Pa cm3 K-1 mol-1') |>
+  #   as.numeric()
+  #
+  # coeff <- ps_coeff()[[phase]]
+  # cv <- numeric(10)
+  # for (i in 1:10) {
+  #   cv[i] <- coeff[i, 1] * temperature^-4 +
+  #     coeff[i, 2] * temperature^-2 +
+  #     coeff[i, 3] * temperature^-1 +
+  #     coeff[i, 4] +
+  #     coeff[i, 5] * temperature +
+  #     coeff[i, 6] * temperature^2
+  # }
+  # volume <- ps_volume(pressure, temperature, phase = phase) |>
+  #   as.numeric()
+  # den <- 1 / volume
+  # fug <- exp(log(den) + cv[1] * den + (1 / (cv[2] + cv[3] * den + cv[4] * den^2
+  #   + cv[5] * den^3 + cv[6] * den^4) - 1 / cv[2])
+  # - cv[7] / cv[8] * (exp(-cv[8] * den) - 1)
+  #   - cv[9] / cv[10] * (exp(-cv[10] * den) - 1)
+  #   + pressure * 1e5 / (den * R_const * temperature)
+  #   + log(R_const * temperature) - 1) / 1e5
+  # return(fug)
+  #
+  # Claude version
   phase <- match.arg(phase)
-  # pressure in bars, temperature in Kelvins
-  pressure <- units::set_units(pressure, "bar") |>
-    as.numeric()
-  temperature <- units::set_units(temperature, "K") |>
-    as.numeric()
 
-  # R_const <- 8314462.61815324 # ideal gas constant: Pa*cm3/K/mol
-  R_const <- gas_const() |>
-    set_units('Pa cm3 K-1 mol-1') |>
-    as.numeric()
+  p_bar <- units::set_units(pressure,    "bar") |> as.numeric()
+  t_K   <- units::set_units(temperature, "K")   |> as.numeric()
 
-  coeff <- ps_coeff()[[phase]]
-  cv <- numeric(10)
-  for (i in 1:10) {
-    cv[i] <- coeff[i, 1] * temperature^-4 +
-      coeff[i, 2] * temperature^-2 +
-      coeff[i, 3] * temperature^-1 +
-      coeff[i, 4] +
-      coeff[i, 5] * temperature +
-      coeff[i, 6] * temperature^2
-  }
-  volume <- ps_volume(pressure, temperature, phase = phase) |>
-    as.numeric()
-  den <- 1 / volume
-  fug <- exp(log(den) + cv[1] * den + (1 / (cv[2] + cv[3] * den + cv[4] * den^2
-    + cv[5] * den^3 + cv[6] * den^4) - 1 / cv[2])
-  - cv[7] / cv[8] * (exp(-cv[8] * den) - 1)
-    - cv[9] / cv[10] * (exp(-cv[10] * den) - 1)
-    + pressure * 1e5 / (den * R_const * temperature)
-    + log(R_const * temperature) - 1) / 1e5
-  return(fug)
+  # Extract once — reused for both cv computation and passed to ps_volume
+  coeff <- .PS_COEFFS[[phase]]
+
+  # Vectorised cv: matrix × temperature-power vector (replaces for-loop)
+  T_powers <- c(t_K^-4, t_K^-2, t_K^-1, 1, t_K, t_K^2)
+  cv <- coeff %*% T_powers
+
+  volume <- ps_volume(p_bar, t_K, phase = phase) |> as.numeric()
+  den    <- 1 / volume
+
+  exp(
+    log(den) +
+      cv[1] * den +
+      (1 / (cv[2] + cv[3]*den + cv[4]*den^2 + cv[5]*den^3 + cv[6]*den^4) - 1/cv[2]) -
+      cv[7]/cv[8]  * (exp(-cv[8]  * den) - 1) -
+      cv[9]/cv[10] * (exp(-cv[10] * den) - 1) +
+      p_bar * 1e5 / (den * .R_PACM3 * t_K) +
+      log(.R_PACM3 * t_K) - 1
+  ) / 1e5
 }
